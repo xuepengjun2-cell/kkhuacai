@@ -171,6 +171,41 @@ button,input,select,textarea{font-family:inherit;}
 .carousel-prev{left:10px;}.carousel-next{right:10px;}
 
 
+
+/* ── 我的报名 ── */
+.tab-bar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:rgba(255,255,255,.97);backdrop-filter:blur(10px);border-top:.5px solid var(--bd);display:flex;z-index:30;padding-bottom:env(safe-area-inset-bottom);}
+.tab-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px 0 6px;cursor:pointer;color:var(--mu);font-size:10px;gap:3px;transition:color .15s;}
+.tab-item i{font-size:20px;}
+.tab-item.on{color:var(--or);}
+.tab-bar-space{height:60px;}
+/* 查询页 */
+.qp{padding:0 16px 100px;}
+.qhd{background:linear-gradient(160deg,#1C1410,#3D1F08 55%,#5C2E0A);padding:20px 20px 28px;}
+.qhd-t{font-size:20px;font-weight:700;color:#fff;margin-bottom:4px;}
+.qhd-s{font-size:13px;color:rgba(255,255,255,.5);}
+.qbox{background:#fff;border-radius:14px;padding:16px;margin-top:-16px;box-shadow:0 4px 20px rgba(0,0,0,.08);margin-left:0;margin-right:0;}
+.qrow{display:flex;gap:8px;align-items:center;}
+.qinp{flex:1;background:var(--warm);border:.5px solid var(--bd);border-radius:10px;padding:11px 14px;font-size:14px;color:var(--tx);outline:none;}
+.qinp:focus{border-color:var(--or);}
+.qbtn{padding:11px 18px;background:linear-gradient(135deg,var(--or),var(--gold));color:#fff;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;}
+.qempty{text-align:center;padding:48px 20px;color:var(--mu);}
+.qempty-icon{font-size:48px;margin-bottom:12px;}
+.qempty-t{font-size:15px;font-weight:500;color:var(--tx);margin-bottom:6px;}
+.qempty-s{font-size:13px;line-height:1.6;}
+.ord-card{background:#fff;border-radius:14px;border:.5px solid var(--bd);overflow:hidden;margin-top:12px;}
+.ord-hd{padding:13px 14px;background:var(--warm);border-bottom:.5px solid var(--bd);display:flex;align-items:center;justify-content:space-between;}
+.ord-name{font-size:14px;font-weight:600;color:var(--tx);}
+.ord-status{font-size:11px;padding:3px 9px;border-radius:8px;}
+.st-confirmed{background:#D4F0DF;color:#1A6835;}
+.st-pending{background:#FEE8D0;color:#8C3A00;}
+.st-cancelled{background:#F0EDE8;color:var(--mu);}
+.ord-body{padding:13px 14px;}
+.ord-row{display:flex;justify-content:space-between;padding:5px 0;font-size:13px;border-bottom:.5px solid #F5F0EB;}
+.ord-row:last-child{border:none;}
+.ord-lbl{color:var(--mu);}
+.ord-val{font-weight:500;color:var(--tx);}
+.ord-price{color:var(--or);font-weight:700;}
+.ord-tip{font-size:11px;color:var(--mu);text-align:center;margin-top:16px;line-height:1.6;}
 </style>
 
 <!-- Supabase SDK -->
@@ -334,6 +369,7 @@ async function submitToSupabase(actId, name, phone, count, date, remark) {
     <div class="sr"><i class="ti ti-search"></i><input type="text" placeholder="搜索活动名称…" oninput="fSrch(this.value)" id="fsi"></div>
   </div>
   <div class="ag" id="ag"></div>
+  <div class="tab-bar-space"></div>
 </div>
 </div>
 
@@ -347,6 +383,40 @@ async function submitToSupabase(actId, name, phone, count, date, remark) {
     <button class="ctab" id="sbtn"><i class="ti ti-sparkles"></i>立即报名</button>
   </div></div>
 </div>
+</div>
+
+<!-- 我的报名页面 -->
+<div class="view" id="v-myorder">
+<div class="page">
+  <div class="qhd">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;cursor:pointer;" onclick="switchTab('home')">
+      <i class="ti ti-arrow-left" style="font-size:16px;color:rgba(255,255,255,.65);"></i>
+      <span style="font-size:13px;color:rgba(255,255,255,.65);">返回活动</span>
+    </div>
+    <div class="qhd-t">我的报名</div>
+    <div class="qhd-s">输入手机号查询报名记录</div>
+  </div>
+  <div class="qp">
+    <div class="qbox">
+      <div class="qrow">
+        <input class="qinp" id="q-phone" type="tel" placeholder="输入报名时的手机号码" maxlength="11">
+        <button class="qbtn" onclick="queryOrders()">查询</button>
+      </div>
+    </div>
+    <div id="q-result"></div>
+  </div>
+  <div class="tab-bar-space"></div>
+</div>
+</div>
+
+<!-- 底部 TabBar -->
+<div class="tab-bar" id="tab-bar">
+  <div class="tab-item on" id="tab-home" onclick="switchTab('home')">
+    <i class="ti ti-home"></i><span>活动</span>
+  </div>
+  <div class="tab-item" id="tab-myorder" onclick="switchTab('myorder')">
+    <i class="ti ti-clipboard-list"></i><span>我的报名</span>
+  </div>
 </div>
 
 <!-- 报名弹层 -->
@@ -717,6 +787,122 @@ rFront('全部');
 if (SUPABASE_URL !== 'YOUR_SUPABASE_URL') {
   loadRemoteData();
 }
+
+// ══ TabBar 切换 ══
+function switchTab(tab) {
+  // 隐藏所有view
+  ['v-home','v-detail','v-myorder'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.classList.remove('on');
+  });
+  // 更新tab高亮
+  document.querySelectorAll('.tab-item').forEach(el => el.classList.remove('on'));
+
+  if (tab === 'home') {
+    document.getElementById('v-home').classList.add('on');
+    document.getElementById('tab-home').classList.add('on');
+  } else if (tab === 'myorder') {
+    document.getElementById('v-myorder').classList.add('on');
+    document.getElementById('tab-myorder').classList.add('on');
+    document.getElementById('q-result').innerHTML = '';
+    document.getElementById('q-phone').value = '';
+    window.scrollTo(0, 0);
+  } else if (tab === 'detail') {
+    document.getElementById('v-detail').classList.add('on');
+    document.getElementById('tab-home').classList.add('on');
+  }
+}
+
+// ══ 覆盖 goHome / goDetail，兼容 TabBar ══
+function goHome() { switchTab('home'); }
+function goDetail() { switchTab('detail'); window.scrollTo(0, 0); }
+
+// ══ 报名记录查询 ══
+async function queryOrders() {
+  const phone = document.getElementById('q-phone').value.trim();
+  if (!phone || phone.length < 7) {
+    showT('请输入正确的手机号码');
+    return;
+  }
+  const resultEl = document.getElementById('q-result');
+  resultEl.innerHTML = '<div style="text-align:center;padding:30px;color:var(--mu);font-size:13px;">查询中…</div>';
+
+  // 优先从 Supabase 查询
+  if (SUPABASE_URL !== 'YOUR_SUPABASE_URL') {
+    try {
+      const { data, error } = await sb
+        .from('signups')
+        .select('*')
+        .eq('user_phone', phone)
+        .order('created_at', { ascending: false });
+      if (error) throw error;
+      renderOrderResult(data, phone);
+      return;
+    } catch (err) {
+      console.warn('Supabase查询失败，尝试本地:', err);
+    }
+  }
+
+  // 回退：查本地 localStorage
+  const local = JSON.parse(localStorage.getItem('kkh_sg') || '[]');
+  const filtered = local.filter(r => r.p && r.p.replace(/\*/g, '') !== '' &&
+    (r.p === phone || r.p.replace(/\*{4}/, '').replace(/(\d{3})(\d{4})/, '$1$2') === phone.slice(0,3) + phone.slice(-4)));
+  renderOrderResult(filtered.map(r => ({
+    activity_name: r.a,
+    people_count:  r.c,
+    event_date:    r.t,
+    status:        r.s || '待确认',
+    amount:        r.amt,
+    created_at:    r.t,
+    remark:        r.remark || ''
+  })), phone);
+}
+
+function renderOrderResult(orders, phone) {
+  const resultEl = document.getElementById('q-result');
+  if (!orders || !orders.length) {
+    resultEl.innerHTML = `
+      <div class="qempty">
+        <div class="qempty-icon">📋</div>
+        <div class="qempty-t">暂无报名记录</div>
+        <div class="qempty-s">手机号 ${phone} 尚未有报名记录<br>如有疑问请联系主理人</div>
+      </div>`;
+    return;
+  }
+
+  const statusMap = { '已确认':'st-confirmed','待确认':'st-pending','待支付':'st-pending','已取消':'st-cancelled' };
+
+  resultEl.innerHTML = `
+    <div style="font-size:13px;color:var(--mu);padding:14px 2px 6px;">
+      共找到 <b style="color:var(--or)">${orders.length}</b> 条报名记录
+    </div>` +
+    orders.map(o => {
+      const stCls = statusMap[o.status] || 'st-pending';
+      const dateStr = o.created_at ? new Date(o.created_at).toLocaleDateString('zh-CN') : (o.event_date || '—');
+      return `
+        <div class="ord-card">
+          <div class="ord-hd">
+            <div class="ord-name">${o.activity_name || '活动'}</div>
+            <span class="ord-status ${stCls}">${o.status || '待确认'}</span>
+          </div>
+          <div class="ord-body">
+            <div class="ord-row"><span class="ord-lbl">报名人数</span><span class="ord-val">${o.people_count || 1}人</span></div>
+            <div class="ord-row"><span class="ord-lbl">活动日期</span><span class="ord-val">${o.event_date || '待确认'}</span></div>
+            <div class="ord-row"><span class="ord-lbl">报名金额</span><span class="ord-val ord-price">${o.amount || '—'}</span></div>
+            <div class="ord-row"><span class="ord-lbl">报名时间</span><span class="ord-val">${dateStr}</span></div>
+            ${o.remark ? `<div class="ord-row"><span class="ord-lbl">备注</span><span class="ord-val">${o.remark}</span></div>` : ''}
+          </div>
+        </div>`;
+    }).join('') +
+    `<div class="ord-tip">如需修改或取消报名<br>请联系主理人处理</div>`;
+}
+
+// 回车触发查询
+document.addEventListener('DOMContentLoaded', () => {
+  const inp = document.getElementById('q-phone');
+  if (inp) inp.addEventListener('keydown', e => { if (e.key === 'Enter') queryOrders(); });
+});
+
 </script>
 </body>
 </html>
