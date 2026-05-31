@@ -484,10 +484,10 @@ async function uploadImageToSB(file, actId) {
       <!-- 数据总览 -->
       <div class="panel on" id="p-dash">
         <div class="stat-row">
-          <div class="sc"><div class="sc-icon i-or"><i class="ti ti-calendar-event"></i></div><div class="sc-num" id="st-total">0</div><div class="sc-lbl">活动总数</div><div class="sc-trend"><i class="ti ti-trending-up"></i>较上月 +5 款</div></div>
-          <div class="sc"><div class="sc-icon i-gr"><i class="ti ti-users"></i></div><div class="sc-num" id="st-sg">0</div><div class="sc-lbl">累计报名人次</div><div class="sc-trend"><i class="ti ti-trending-up"></i>环比增长 12%</div></div>
-          <div class="sc"><div class="sc-icon i-bl"><i class="ti ti-currency-yen"></i></div><div class="sc-num">¥8.6万</div><div class="sc-lbl">本月营收</div><div class="sc-trend"><i class="ti ti-trending-up"></i>环比增长 23%</div></div>
-          <div class="sc"><div class="sc-icon i-pu"><i class="ti ti-star"></i></div><div class="sc-num">4.9</div><div class="sc-lbl">平均满意度</div><div class="sc-trend"><i class="ti ti-mood-smile"></i>386 份评价</div></div>
+          <div class="sc"><div class="sc-icon i-or"><i class="ti ti-calendar-event"></i></div><div class="sc-num" id="st-total">0</div><div class="sc-lbl">活动总数</div><div class="sc-trend" id="st-acts-tip"><i class="ti ti-calendar-check"></i>全部已上架</div></div>
+          <div class="sc"><div class="sc-icon i-gr"><i class="ti ti-users"></i></div><div class="sc-num" id="st-sg">0</div><div class="sc-lbl">累计报名人次</div><div class="sc-trend" id="st-sg-tip"><i class="ti ti-users"></i>累计报名人次</div></div>
+          <div class="sc"><div class="sc-icon i-bl"><i class="ti ti-currency-yen"></i></div><div class="sc-num" id="st-revenue">¥0</div><div class="sc-lbl">累计确认营收</div><div class="sc-trend" id="st-revenue-tip"><i class="ti ti-info-circle"></i>报名确认后统计</div></div>
+          <div class="sc"><div class="sc-icon i-pu"><i class="ti ti-star"></i></div><div class="sc-num" id="st-orders">0</div><div class="sc-lbl">报名订单数</div><div class="sc-trend" id="st-orders-tip"><i class="ti ti-clipboard-list"></i>实时统计</div></div>
         </div>
         <div class="chart-row">
           <div class="chart-card"><div class="chart-title">各矩阵活动占比</div><div class="chart-wrap"><canvas id="cpie"></canvas></div></div>
@@ -978,21 +978,49 @@ function sp(el){
 }
 
 function updateStats(){
-  // 根据权限过滤数据
   const myActs=ACTS;
   const mySg=can('canViewAll')?SG:SG.filter(r=>r.ref===curUser.uname);
-  document.getElementById('st-total').textContent=myActs.length;
-  document.getElementById('st-sg').textContent=mySg.reduce((s,r)=>s+r.c,0).toLocaleString();
+  const totalPeople=mySg.reduce((s,r)=>s+(r.c||0),0);
+  const confirmedSg=mySg.filter(r=>r.s==='已确认');
+  const revenue=confirmedSg.reduce((s,r)=>{
+    const n=parseFloat((r.amt||'0').replace(/[¥,\/人双]/g,'').replace(/[^0-9.]/g,''));
+    return s+(isNaN(n)?0:n*(r.c||1));
+  },0);
+  const el_total=document.getElementById('st-total');
+  const el_sg=document.getElementById('st-sg');
+  const el_rev=document.getElementById('st-revenue');
+  const el_ord=document.getElementById('st-orders');
+  if(el_total) el_total.textContent=myActs.length;
+  if(el_sg)    el_sg.textContent=totalPeople.toLocaleString();
+  if(el_rev)   el_rev.textContent=revenue>0?'¥'+revenue.toLocaleString():'¥0';
+  if(el_ord)   el_ord.textContent=mySg.length;
 }
 
 // ══ 图表 ══
+function getRealTrendData(){
+  // 统计近6个月每月报名人次
+  const now=new Date();
+  const months=[];
+  for(let i=5;i>=0;i--){
+    const d=new Date(now.getFullYear(),now.getMonth()-i,1);
+    months.push({y:d.getFullYear(),m:d.getMonth(),count:0});
+  }
+  SG.forEach(r=>{
+    const t=new Date(r.t||r.created_at||'');
+    if(isNaN(t))return;
+    const idx=months.findIndex(mo=>mo.y===t.getFullYear()&&mo.m===t.getMonth());
+    if(idx>=0)months[idx].count+=(r.c||1);
+  });
+  return months.map(m=>m.count);
+}
+
 function initCharts(){
   if(typeof Chart==='undefined'){setTimeout(initCharts,500);return;}
   const cc={};ACTS.forEach(a=>{cc[a.cat]=(cc[a.cat]||0)+1;});
   const pc=document.getElementById('cpie');
   if(pc){if(pc._c)pc._c.destroy();pc._c=new Chart(pc,{type:'doughnut',data:{labels:Object.keys(cc),datasets:[{data:Object.values(cc),backgroundColor:['#FDDBB4','#B8E4C4','#D4B8F8','#FDDC8A','#A8D8F0'],borderWidth:0,borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:12},boxWidth:12,padding:12}}}}});}
   const lc=document.getElementById('cline');
-  if(lc){if(lc._c)lc._c.destroy();lc._c=new Chart(lc,{type:'line',data:{labels:['1月','2月','3月','4月','5月','6月'],datasets:[{label:'报名人次',data:[186,234,312,289,378,456],borderColor:'#E8600A',backgroundColor:'rgba(232,96,10,.08)',tension:.4,fill:true,pointBackgroundColor:'#E8600A',pointRadius:4,pointHoverRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,grid:{color:'#F0EDE8'},ticks:{font:{size:11}}},x:{grid:{display:false},ticks:{font:{size:11}}}}}});}
+  if(lc){if(lc._c)lc._c.destroy();lc._c=new Chart(lc,{type:'line',data:{labels:(function(){const now=new Date(),res=[];for(let i=5;i>=0;i--){const d=new Date(now.getFullYear(),now.getMonth()-i,1);res.push((d.getMonth()+1)+'月');}return res;})(),datasets:[{label:'报名人次',data:getRealTrendData(),borderColor:'#E8600A',backgroundColor:'rgba(232,96,10,.08)',tension:.4,fill:true,pointBackgroundColor:'#E8600A',pointRadius:4,pointHoverRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,grid:{color:'#F0EDE8'},ticks:{font:{size:11}}},x:{grid:{display:false},ticks:{font:{size:11}}}}}});}
 }
 
 // ══ 仪表板 ══
