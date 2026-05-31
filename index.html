@@ -785,7 +785,23 @@ rFront('全部');
 
 // 如果已配置 Supabase，异步加载云端数据
 if (SUPABASE_URL !== 'YOUR_SUPABASE_URL') {
-  loadRemoteData();
+  loadRemoteData().then(()=>{
+    // 加载完成后检查URL参数，支持分享链接直达
+    const params=new URLSearchParams(window.location.search);
+    const actId=params.get('act');
+    if(actId){
+      const a=ACTS.find(x=>x.id===parseInt(actId));
+      if(a) setTimeout(()=>openD(a.id),300);
+    }
+  });
+} else {
+  // 本地模式也检查URL参数
+  const params=new URLSearchParams(window.location.search);
+  const actId=params.get('act');
+  if(actId){
+    const a=ACTS.find(x=>x.id===parseInt(actId));
+    if(a) setTimeout(()=>openD(a.id),100);
+  }
 }
 
 // ══ TabBar 切换 ══
