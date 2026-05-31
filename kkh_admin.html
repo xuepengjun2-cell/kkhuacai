@@ -1,0 +1,1636 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>开开华彩 · 后台管理系统</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<script>(function(){var s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js';document.head.appendChild(s);})();</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --or:#E8600A;--gold:#F5A623;--dark:#1C1410;--bg:#F4F1ED;
+  --white:#fff;--bd:#E8E0D8;--mu:#9A8878;--tx:#1E1208;--sub:#6A5848;
+  --gr:#1A6835;--bl:#0A4070;--pu:#4A1899;--red:#C0200A;--teal:#0A7060;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;}
+button,input,select,textarea{font-family:inherit;}
+
+/* LOGIN */
+#loginPage{position:fixed;inset:0;background:linear-gradient(160deg,#1C1410,#3D1F08 55%,#5C2E0A);display:flex;align-items:center;justify-content:center;z-index:200;}
+#loginPage.h{display:none;}
+.lcard{background:rgba(255,255,255,.07);border:.5px solid rgba(255,255,255,.14);border-radius:24px;padding:36px 32px;width:380px;}
+.llogo{text-align:center;margin-bottom:28px;}
+.llm{width:60px;height:60px;background:linear-gradient(135deg,var(--gold),var(--or));border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:700;color:#fff;margin:0 auto 12px;}
+.lln{font-size:18px;font-weight:600;color:#fff;}
+.lls{font-size:12px;color:rgba(255,255,255,.4);margin-top:3px;}
+.lf{margin-bottom:14px;}
+.lf label{display:block;font-size:12px;color:rgba(255,255,255,.45);margin-bottom:5px;}
+.lf input{width:100%;background:rgba(255,255,255,.09);border:.5px solid rgba(255,255,255,.16);border-radius:10px;padding:12px 14px;color:#fff;font-size:14px;outline:none;}
+.lf input:focus{border-color:var(--gold);}
+.lf input::placeholder{color:rgba(255,255,255,.25);}
+.lbtn{width:100%;padding:13px;background:linear-gradient(135deg,var(--or),var(--gold));color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:600;cursor:pointer;margin-top:8px;}
+.lhint{text-align:center;font-size:11px;color:rgba(255,255,255,.25);margin-top:12px;}
+.lerr{color:#FF7070;font-size:12px;text-align:center;margin-top:8px;min-height:18px;}
+
+/* LAYOUT */
+#app{display:flex;min-height:100vh;}
+.sidebar{width:232px;background:var(--dark);flex-shrink:0;display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;overflow-y:auto;z-index:10;}
+.main{flex:1;margin-left:232px;display:flex;flex-direction:column;min-height:100vh;}
+
+/* SIDEBAR */
+.sb-logo{padding:22px 20px 18px;border-bottom:.5px solid rgba(255,255,255,.08);}
+.sb-lm{width:36px;height:36px;background:linear-gradient(135deg,var(--gold),var(--or));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#fff;margin-bottom:8px;}
+.sb-name{font-size:14px;font-weight:600;color:#fff;}
+.sb-sub{font-size:10px;color:rgba(255,255,255,.3);margin-top:2px;}
+.sb-user-tag{margin-top:8px;display:inline-flex;align-items:center;gap:5px;font-size:10px;padding:3px 8px;border-radius:8px;background:rgba(232,96,10,.25);color:var(--gold);}
+.sb-nav{padding:12px 0;flex:1;}
+.snlbl{font-size:10px;color:rgba(255,255,255,.22);letter-spacing:.1em;padding:8px 20px 4px;text-transform:uppercase;}
+.sni{display:flex;align-items:center;gap:10px;padding:10px 20px;font-size:13px;color:rgba(255,255,255,.52);cursor:pointer;transition:all .15s;border-left:2px solid transparent;user-select:none;}
+.sni i{font-size:17px;}
+.sni:hover{color:rgba(255,255,255,.85);background:rgba(255,255,255,.05);}
+.sni.on{color:#fff;background:rgba(232,96,10,.18);border-left-color:var(--or);}
+.sni.locked{opacity:.4;pointer-events:none;}
+.sni-badge{margin-left:auto;background:var(--or);color:#fff;font-size:9px;padding:1px 6px;border-radius:8px;}
+.sb-foot{padding:16px 20px;border-top:.5px solid rgba(255,255,255,.08);}
+.sb-user{display:flex;align-items:center;gap:10px;}
+.sb-av{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0;background:linear-gradient(135deg,var(--gold),var(--or));}
+.sb-info{flex:1;min-width:0;}
+.sb-un{font-size:12px;color:rgba(255,255,255,.75);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.sb-ur{font-size:10px;color:rgba(255,255,255,.3);}
+.sb-out{color:rgba(255,255,255,.35);cursor:pointer;font-size:17px;background:none;border:none;padding:4px;flex-shrink:0;}
+.sb-out:hover{color:rgba(255,255,255,.8);}
+
+/* TOPBAR */
+.topbar{background:var(--white);border-bottom:.5px solid var(--bd);height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;position:sticky;top:0;z-index:5;}
+.tb-title{font-size:16px;font-weight:600;color:var(--tx);display:flex;align-items:center;gap:10px;}
+.tb-right{display:flex;align-items:center;gap:10px;}
+.btn-pri{display:inline-flex;align-items:center;gap:5px;padding:8px 16px;background:linear-gradient(135deg,var(--or),var(--gold));color:#fff;border:none;border-radius:9px;font-size:13px;font-weight:500;cursor:pointer;}
+.btn-pri i{font-size:15px;}
+.btn-sec{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;background:transparent;color:var(--or);border:.5px solid var(--or);border-radius:9px;font-size:13px;cursor:pointer;}
+.btn-gr{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;background:transparent;color:var(--gr);border:.5px solid var(--gr);border-radius:9px;font-size:13px;cursor:pointer;}
+.btn-danger{background:transparent;color:var(--red);border:.5px solid var(--red);border-radius:9px;padding:7px 14px;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:5px;}
+
+/* CONTENT */
+.content{padding:24px;flex:1;}
+.panel{display:none;}.panel.on{display:block;}
+
+/* STAT CARDS */
+.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px;}
+.sc{background:var(--white);border-radius:14px;border:.5px solid var(--bd);padding:18px 20px;}
+.sc-icon{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;}
+.sc-icon i{font-size:22px;}
+.i-or{background:#FEE8D0;}.i-or i{color:var(--or);}
+.i-gr{background:#D4F0DF;}.i-gr i{color:var(--gr);}
+.i-bl{background:#D4E8F8;}.i-bl i{color:var(--bl);}
+.i-pu{background:#EAE0FC;}.i-pu i{color:var(--pu);}
+.sc-num{font-size:28px;font-weight:700;color:var(--tx);}
+.sc-lbl{font-size:12px;color:var(--mu);margin-top:4px;}
+.sc-trend{font-size:11px;color:var(--gr);margin-top:6px;display:flex;align-items:center;gap:3px;}
+
+/* CHARTS */
+.chart-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px;}
+.chart-card{background:var(--white);border-radius:14px;border:.5px solid var(--bd);padding:18px;}
+.chart-title{font-size:13px;font-weight:600;color:var(--tx);margin-bottom:14px;}
+.chart-wrap{height:200px;position:relative;}
+
+/* TABLE CARD */
+.tcard{background:var(--white);border-radius:14px;border:.5px solid var(--bd);overflow:hidden;margin-bottom:20px;}
+.tc-head{padding:16px 20px;border-bottom:.5px solid var(--bd);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+.tc-title{font-size:14px;font-weight:600;color:var(--tx);}
+.tc-sub{font-size:12px;color:var(--mu);margin-left:6px;}
+.sb2{display:flex;align-items:center;gap:8px;background:var(--bg);border:.5px solid var(--bd);border-radius:9px;padding:7px 12px;}
+.sb2 i{font-size:15px;color:var(--mu);}
+.sb2 input{background:none;border:none;outline:none;font-size:12px;color:var(--tx);width:160px;}
+table{width:100%;border-collapse:collapse;}
+th{background:#FAFAF8;padding:10px 16px;font-size:11px;color:var(--mu);font-weight:500;text-align:left;border-bottom:.5px solid var(--bd);white-space:nowrap;}
+td{padding:11px 16px;font-size:12px;color:var(--tx);border-bottom:.5px solid #F5F0EB;vertical-align:middle;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:#FDFCFB;}
+.td-name{font-weight:500;font-size:13px;}
+.badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:7px;}
+.b-on{background:#D4F0DF;color:#1A6835;}
+.b-off{background:#F0EDE8;color:var(--mu);}
+.b-draft{background:#FEE8D0;color:#8C3A00;}
+.b-admin{background:#FEE8D0;color:#8C3A00;}
+.b-editor{background:#D4E8F8;color:#0A4070;}
+.b-viewer{background:#F0EDE8;color:var(--mu);}
+.ab{padding:5px 10px;border-radius:7px;font-size:11px;cursor:pointer;border:none;white-space:nowrap;}
+.ab-e{background:#EAE0FC;color:#4A1899;}
+.ab-v{background:#D4E8F8;color:#0A4070;}
+.ab-p{background:#FEF0D0;color:#7A4A00;}
+.ab-off{background:#FEE8D0;color:#8C3A00;}
+.ab-on{background:#D4F0DF;color:#1A6835;}
+.ab-d{background:#FFE8E4;color:var(--red);}
+.ab-img{background:#E8F4FF;color:#0A5080;}
+.act-group{display:flex;gap:5px;align-items:center;flex-wrap:wrap;}
+
+/* CALENDAR */
+.cal-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+.cal-nav{display:flex;align-items:center;gap:12px;}
+.cal-nav button{background:var(--white);border:.5px solid var(--bd);border-radius:8px;padding:6px 12px;cursor:pointer;color:var(--tx);font-size:13px;}
+.cal-month{font-size:16px;font-weight:600;color:var(--tx);}
+.cal-card{background:var(--white);border-radius:14px;border:.5px solid var(--bd);overflow:hidden;}
+.cal-wdays{display:grid;grid-template-columns:repeat(7,1fr);background:#FAFAF8;border-bottom:.5px solid var(--bd);}
+.cal-wd{text-align:center;padding:10px 4px;font-size:12px;color:var(--mu);font-weight:500;}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);}
+.cal-day{min-height:80px;padding:8px 6px;border-right:.5px solid #F0EDE8;border-bottom:.5px solid #F0EDE8;cursor:pointer;transition:background .1s;}
+.cal-day:hover{background:#FAFAF8;}
+.cal-day:nth-child(7n){border-right:none;}
+.cal-dn{font-size:12px;font-weight:500;color:var(--tx);margin-bottom:4px;}
+.cal-day.today .cal-dn{color:var(--or);font-weight:700;}
+.cal-day.om .cal-dn{color:#D0C4B8;}
+.cal-ev{font-size:10px;background:linear-gradient(135deg,#FFF0E6,#FEE0C0);color:var(--or);border-radius:4px;padding:2px 5px;margin-bottom:2px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;border:.5px solid rgba(232,96,10,.2);}
+
+/* LINKS */
+.link-list{padding:16px;display:flex;flex-direction:column;gap:10px;}
+.lk-item{background:var(--bg);border-radius:11px;border:.5px solid var(--bd);padding:13px 16px;display:flex;align-items:center;gap:12px;}
+.lk-e{font-size:24px;flex-shrink:0;}
+.lk-info{flex:1;min-width:0;}
+.lk-name{font-size:13px;font-weight:500;color:var(--tx);margin-bottom:4px;}
+.lk-url{font-size:11px;color:var(--mu);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.lk-acts{display:flex;gap:6px;flex-shrink:0;}
+.lkb{padding:5px 10px;border-radius:7px;font-size:11px;cursor:pointer;border:none;}
+.lkb-cp{background:#D4E8F8;color:#0A4070;}
+.lkb-po{background:#FEF0D0;color:#7A4A00;}
+
+/* IMAGE UPLOAD */
+.img-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:12px;margin-top:12px;}
+.img-item{position:relative;aspect-ratio:4/3;border-radius:10px;overflow:hidden;border:.5px solid var(--bd);background:var(--bg);cursor:pointer;}
+.img-item img{width:100%;height:100%;object-fit:cover;}
+.img-del{position:absolute;top:5px;right:5px;width:22px;height:22px;background:rgba(192,32,10,.85);border:none;border-radius:50%;color:#fff;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .15s;}
+.img-item:hover .img-del{opacity:1;}
+.img-add{display:flex;flex-direction:column;align-items:center;justify-content:center;aspect-ratio:4/3;border-radius:10px;border:1.5px dashed var(--bd);background:var(--bg);cursor:pointer;color:var(--mu);font-size:12px;gap:6px;transition:border-color .15s;}
+.img-add:hover{border-color:var(--or);color:var(--or);}
+.img-add i{font-size:22px;}
+.img-add input{display:none;}
+
+/* SETTINGS */
+.set-section{background:var(--white);border-radius:14px;border:.5px solid var(--bd);overflow:hidden;margin-bottom:16px;}
+.set-hdr{padding:14px 20px;border-bottom:.5px solid var(--bd);font-size:13px;font-weight:600;color:var(--tx);display:flex;align-items:center;gap:8px;}
+.set-hdr i{font-size:16px;color:var(--or);}
+.set-row{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:.5px solid #F5F0EB;}
+.set-row:last-child{border-bottom:none;}
+.set-lbl{font-size:13px;color:var(--tx);}
+.set-sub{font-size:11px;color:var(--mu);margin-top:2px;}
+.set-input{background:var(--bg);border:.5px solid var(--bd);border-radius:8px;padding:7px 12px;font-size:13px;color:var(--tx);outline:none;min-width:240px;}
+.set-input:focus{border-color:var(--or);}
+.tog{width:42px;height:24px;background:#D8D0C8;border-radius:12px;cursor:pointer;position:relative;transition:background .2s;flex-shrink:0;}
+.tog.on{background:var(--or);}
+.tog::after{content:'';position:absolute;top:3px;left:3px;width:18px;height:18px;background:#fff;border-radius:50%;transition:left .2s;box-shadow:0 1px 4px rgba(0,0,0,.15);}
+.tog.on::after{left:21px;}
+
+/* ACCOUNTS */
+.acc-card{background:var(--white);border-radius:14px;border:.5px solid var(--bd);overflow:hidden;margin-bottom:16px;}
+.acc-row{display:flex;align-items:center;gap:14px;padding:14px 20px;border-bottom:.5px solid #F5F0EB;}
+.acc-row:last-child{border-bottom:none;}
+.acc-av{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#fff;flex-shrink:0;}
+.acc-info{flex:1;}
+.acc-name{font-size:13px;font-weight:500;color:var(--tx);}
+.acc-detail{font-size:11px;color:var(--mu);margin-top:2px;}
+.acc-acts{display:flex;gap:6px;align-items:center;flex-shrink:0;}
+
+/* SHARE STATS */
+.share-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px;}
+.share-card{background:var(--white);border-radius:14px;border:.5px solid var(--bd);padding:18px 20px;}
+.share-rank{font-size:22px;font-weight:700;margin-right:6px;}
+.share-name{font-size:14px;font-weight:600;color:var(--tx);}
+.share-sub{font-size:12px;color:var(--mu);margin-top:4px;}
+.share-num{font-size:24px;font-weight:700;margin-top:8px;}
+.share-bar{height:6px;background:var(--bg);border-radius:3px;margin-top:8px;overflow:hidden;}
+.share-bar-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--or),var(--gold));}
+
+/* MODAL */
+.modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:100;display:flex;align-items:flex-start;justify-content:center;overflow-y:auto;padding:24px;}
+.modal-ov.h{display:none;}
+.modal{background:var(--white);border-radius:20px;width:100%;max-width:640px;margin:auto;box-shadow:0 20px 60px rgba(0,0,0,.15);}
+.modal-hd{padding:20px 24px 16px;border-bottom:.5px solid var(--bd);display:flex;align-items:center;justify-content:space-between;}
+.modal-title{font-size:16px;font-weight:600;color:var(--tx);}
+.modal-close{font-size:22px;color:var(--mu);cursor:pointer;background:none;border:none;padding:4px;line-height:1;}
+.modal-body{padding:20px 24px;max-height:70vh;overflow-y:auto;}
+.form-row{margin-bottom:15px;}
+.form-row label{display:block;font-size:12px;color:var(--mu);margin-bottom:5px;font-weight:500;}
+.form-row label span.req{color:var(--or);}
+.form-row input,.form-row select,.form-row textarea{width:100%;background:var(--bg);border:.5px solid var(--bd);border-radius:9px;padding:10px 12px;font-size:13px;color:var(--tx);outline:none;transition:border-color .15s;}
+.form-row textarea{min-height:80px;resize:vertical;}
+.form-row input:focus,.form-row select:focus,.form-row textarea:focus{border-color:var(--or);}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.f3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+.form-section{font-size:12px;font-weight:600;color:var(--mu);letter-spacing:.05em;text-transform:uppercase;margin:18px 0 10px;padding-bottom:6px;border-bottom:.5px solid var(--bd);}
+.modal-ft{padding:16px 24px;border-top:.5px solid var(--bd);display:flex;gap:10px;justify-content:flex-end;}
+.btn-cancel{padding:9px 20px;background:var(--bg);border:none;border-radius:9px;font-size:13px;cursor:pointer;color:var(--tx);}
+.btn-save{padding:9px 20px;background:linear-gradient(135deg,var(--or),var(--gold));border:none;border-radius:9px;font-size:13px;font-weight:600;color:#fff;cursor:pointer;}
+
+/* IMG MODAL */
+.img-modal-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px;}
+.img-modal-item{position:relative;aspect-ratio:4/3;border-radius:8px;overflow:hidden;border:.5px solid var(--bd);}
+.img-modal-item img{width:100%;height:100%;object-fit:cover;}
+.img-modal-del{position:absolute;top:5px;right:5px;width:24px;height:24px;background:rgba(192,32,10,.9);border:none;border-radius:50%;color:#fff;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.img-drop{border:2px dashed var(--bd);border-radius:12px;padding:30px;text-align:center;cursor:pointer;transition:all .15s;margin-top:12px;}
+.img-drop:hover,.img-drop.drag{border-color:var(--or);background:rgba(232,96,10,.04);}
+.img-drop i{font-size:32px;color:var(--mu);margin-bottom:8px;}
+.img-drop p{font-size:13px;color:var(--mu);}
+.img-drop input{display:none;}
+
+/* POSTER */
+.poster-ov{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:110;display:flex;align-items:center;justify-content:center;padding:20px;flex-direction:column;gap:14px;}
+.poster-ov.h{display:none;}
+.poster-card{background:linear-gradient(160deg,#1C1410,#3D1F08 55%,#5C2E0A);border-radius:20px;width:300px;padding:28px 24px;position:relative;overflow:hidden;}
+.poster-card::before{content:'';position:absolute;top:-50px;right:-50px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(245,166,35,.2),transparent 70%);}
+.poster-acts{display:flex;gap:10px;width:300px;}
+.poster-btn{flex:1;padding:11px;border:none;border-radius:10px;font-size:13px;font-weight:500;cursor:pointer;}
+.pb-close{background:rgba(255,255,255,.15);color:#fff;}
+.pb-save{background:linear-gradient(135deg,var(--or),var(--gold));color:#fff;}
+
+/* PERMISSION TAG */
+.perm-tag{display:inline-flex;align-items:center;gap:4px;font-size:10px;padding:3px 8px;border-radius:6px;}
+.perm-all{background:#FEE8D0;color:#8C3A00;}
+.perm-act{background:#D4E8F8;color:#0A4070;}
+.perm-view{background:#F0EDE8;color:var(--mu);}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;right:24px;background:rgba(28,20,16,.92);color:#fff;padding:11px 20px;border-radius:11px;font-size:13px;z-index:300;opacity:0;transition:opacity .3s;pointer-events:none;max-width:340px;display:flex;align-items:center;gap:8px;}
+.toast.show{opacity:1;}
+.toast.ok{background:linear-gradient(135deg,#1A6835,#28A056);}
+.toast.err{background:linear-gradient(135deg,var(--red),#E03020);}
+.toast.info{background:linear-gradient(135deg,#0A4070,#1060A0);}
+
+@media(max-width:1000px){
+  .sidebar{display:none;}.main{margin-left:0;}
+  .stat-row{grid-template-columns:1fr 1fr;}.chart-row{grid-template-columns:1fr;}
+  .f2,.f3{grid-template-columns:1fr;}.share-cards{grid-template-columns:1fr;}
+}
+
+/* PERMISSION TAG */
+.perm-tag{display:inline-flex;align-items:center;gap:4px;font-size:10px;padding:3px 8px;border-radius:6px;}
+.perm-all{background:#FEE8D0;color:#8C3A00;}
+.perm-act{background:#D4E8F8;color:#0A4070;}
+.perm-view{background:#F0EDE8;color:var(--mu);}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;right:24px;background:rgba(28,20,16,.92);color:#fff;padding:11px 20px;border-radius:11px;font-size:13px;z-index:300;opacity:0;transition:opacity .3s;pointer-events:none;max-width:340px;display:flex;align-items:center;gap:8px;}
+.toast.show{opacity:1;}
+.toast.ok{background:linear-gradient(135deg,#1A6835,#28A056);}
+.toast.err{background:linear-gradient(135deg,var(--red),#E03020);}
+.toast.info{background:linear-gradient(135deg,#0A4070,#1060A0);}
+
+@media(max-width:1000px){
+  .sidebar{display:none;}.main{margin-left:0;}
+  .stat-row{grid-template-columns:1fr 1fr;}.chart-row{grid-template-columns:1fr;}
+  .f2,.f3{grid-template-columns:1fr;}.share-cards{grid-template-columns:1fr;}
+}
+
+</style>
+
+<!-- Supabase SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+// ============================================================
+// ⚙️  配置区：填入你的 Supabase 信息（和前台保持一致）
+// 后台用 service_role key（有完整读写权限）
+// Supabase Dashboard → Settings → API → service_role（secret）
+// ============================================================
+const SUPABASE_URL = 'https://zlkivrqahzkkbvirvgtf.supabase.co';
+const SUPABASE_KEY = 'sb_publishable__Y0pG-rf9L9e6zAvakh8Xw_xK35eLK7'; // publishable key，安全可公开  // ⚠️ 只在后台用，不要放前台
+
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+let SB_READY = false;
+
+// ── 从 Supabase 加载所有数据 ──
+async function loadFromSupabase() {
+  if (SUPABASE_URL === 'YOUR_SUPABASE_URL') return false;
+  try {
+    // 活动数据
+    const { data: acts, error: e1 } = await sb.from('activities').select('*').order('id');
+    if (e1) throw e1;
+    ACTS = acts.map(a => ({
+      id: a.id, name: a.name, cat: a.category, e: a.emoji||'✨',
+      min: a.min_people, max: a.max_people, dur: a.duration, price: a.price,
+      ven: a.venue||'', desc: a.description||'', mat: a.materials||'',
+      out: a.deliverables||'', imgs: a.images||[], st: a.status,
+      hot: a.is_hot, date: a.event_date||'', sg: a.signup_count||0
+    }));
+
+    // 账号数据
+    const { data: accs, error: e2 } = await sb.from('accounts').select('*').order('id');
+    if (e2) throw e2;
+    ACCS = accs.map(a => ({
+      id: a.id, uname: a.username, pwd: a.password, realname: a.realname,
+      role: a.role, phone: a.phone||'', note: a.note||'',
+      avatar: a.avatar||a.realname[0], color: a.color||'linear-gradient(135deg,#F5A623,#E8600A)'
+    }));
+
+    // 报名记录
+    const { data: sgs, error: e3 } = await sb.from('signups').select('*').order('created_at', { ascending: false });
+    if (e3) throw e3;
+    SG = sgs.map(s => ({
+      id: s.id, n: s.user_name, p: s.user_phone, a: s.activity_name,
+      aid: s.activity_id, c: s.people_count, amt: s.amount||'',
+      t: new Date(s.created_at).toLocaleString('zh-CN').replace(/\//g,'-'),
+      s: s.status, ref: s.ref_account||''
+    }));
+
+    // 站点配置
+    const { data: cfgs, error: e4 } = await sb.from('site_config').select('*');
+    if (e4) throw e4;
+    const cfg = {};
+    (cfgs||[]).forEach(c => { cfg[c.key] = c.value; });
+    // 填入配置字段
+    ['cfg-tag','cfg-name','cfg-sub','cfg-tel'].forEach(id => {
+      const el = document.getElementById(id);
+      const key = id==='cfg-tag'?'heroTag':id==='cfg-name'?'siteName':id==='cfg-sub'?'heroSub':'tel';
+      if (el && cfg[key] !== undefined) el.value = cfg[key];
+    });
+
+    SB_READY = true;
+    return true;
+  } catch (err) {
+    console.warn('Supabase加载失败:', err.message);
+    return false;
+  }
+}
+
+// ── 保存活动到 Supabase ──
+async function saveActToSB(actData, isNew) {
+  // 不依赖 SB_READY，直接使用 sb 客户端
+  const row = {
+    name: actData.name, category: actData.cat, emoji: actData.e,
+    min_people: actData.min, max_people: actData.max, duration: actData.dur,
+    price: actData.price, venue: actData.ven, description: actData.desc,
+    materials: actData.mat, deliverables: actData.out, images: actData.imgs||[],
+    status: actData.st, is_hot: actData.hot,
+    event_date: actData.date||null
+  };
+  if (isNew) {
+    const { data, error } = await sb.from('activities').insert(row).select().single();
+    if (error) throw error;
+    return data.id;
+  } else {
+    const { error } = await sb.from('activities').update(row).eq('id', actData.id);
+    if (error) throw error;
+  }
+}
+
+// ── 删除活动 ──
+async function deleteActFromSB(id) {
+  const { error } = await sb.from('activities').delete().eq('id', id);
+  if (error) throw error;
+}
+
+// ── 保存账号到 Supabase ──
+async function saveAccToSB(accData, isNew) {
+  const row = {
+    username: accData.uname, password: accData.pwd, realname: accData.realname,
+    role: accData.role, phone: accData.phone, note: accData.note,
+    avatar: accData.avatar, color: accData.color
+  };
+  if (isNew) {
+    const { error } = await sb.from('accounts').insert(row);
+    if (error) throw error;
+  } else {
+    const { error } = await sb.from('accounts').update(row).eq('id', accData.id);
+    if (error) throw error;
+  }
+}
+
+// ── 删除账号 ──
+async function deleteAccFromSB(id) {
+  const { error } = await sb.from('accounts').delete().eq('id', id);
+  if (error) throw error;
+}
+
+// ── 保存站点配置 ──
+async function saveCfgToSB(cfgObj) {
+  const rows = Object.entries(cfgObj).map(([key,value]) => ({ key, value }));
+  const { error } = await sb.from('site_config').upsert(rows, { onConflict: 'key' });
+  if (error) throw error;
+}
+
+// ── 上传图片到 Supabase Storage ──
+async function uploadImageToSB(file, actId) {
+  const ext = file.name.split('.').pop().toLowerCase();
+  const path = `activities/${actId}/${Date.now()}.${ext}`;
+  const { error } = await sb.storage.from('activity-images').upload(path, file, {
+    cacheControl: '3600', upsert: false
+  });
+  if (error) throw error;
+  const { data } = sb.storage.from('activity-images').getPublicUrl(path);
+  return data.publicUrl;
+}
+</script>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginPage">
+  <div class="lcard">
+    <div class="llogo">
+      <div class="llm">华</div>
+      <div class="lln">开开华彩</div>
+      <div class="lls">活动管理后台 · 请登录</div>
+    </div>
+    <div class="lf"><label>账号</label><input type="text" id="lu" placeholder="请输入账号" autocomplete="username"></div>
+    <div class="lf"><label>密码</label><input type="password" id="lp" placeholder="请输入密码" autocomplete="current-password"></div>
+    <div class="lerr" id="lerr"></div>
+    <button class="lbtn" onclick="doLogin()">登 录</button>
+    <div class="lhint">演示：admin/kkhuacai2025 · editor01/editor123 · viewer01/viewer123</div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <div class="sidebar" id="sidebar">
+    <div class="sb-logo">
+      <div class="sb-lm">华</div>
+      <div class="sb-name">开开华彩</div>
+      <div class="sb-sub">活动管理后台 v3.0</div>
+      <div class="sb-user-tag" id="sb-role-tag"><i class="ti ti-shield-check" style="font-size:12px;"></i><span id="sb-role-name">—</span></div>
+    </div>
+    <div class="sb-nav">
+      <div class="snlbl">数据概览</div>
+      <div class="sni on" data-p="p-dash" onclick="sp(this)"><i class="ti ti-dashboard"></i>数据总览</div>
+      <div class="snlbl" style="margin-top:8px">活动管理</div>
+      <div class="sni" data-p="p-acts" onclick="sp(this)"><i class="ti ti-calendar-event"></i>活动列表</div>
+      <div class="sni" data-p="p-cal" onclick="sp(this)"><i class="ti ti-calendar"></i>活动日历</div>
+      <div class="sni" data-p="p-links" onclick="sp(this)"><i class="ti ti-link"></i>链接管理</div>
+      <div class="sni" data-p="p-sgrec" onclick="sp(this)"><i class="ti ti-clipboard-list"></i>报名记录</div>
+      <div class="sni" data-p="p-share" onclick="sp(this)"><i class="ti ti-share"></i>分享归属<span class="sni-badge">NEW</span></div>
+      <div class="snlbl" style="margin-top:8px">系统配置</div>
+      <div class="sni" data-p="p-site" onclick="sp(this)"><i class="ti ti-layout"></i>前台配置</div>
+      <div class="sni" id="nav-acc" data-p="p-acc" onclick="sp(this)"><i class="ti ti-users"></i>账号管理</div>
+    </div>
+    <div class="sb-foot">
+      <div class="sb-user">
+        <div class="sb-av" id="sb-avatar">管</div>
+        <div class="sb-info">
+          <div class="sb-un" id="sb-uname">—</div>
+          <div class="sb-ur" id="sb-urole">—</div>
+        </div>
+        <button class="sb-out" onclick="logout()"><i class="ti ti-logout"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="topbar">
+      <div class="tb-title" id="pgTitle">数据总览</div>
+      <div class="tb-right">
+        <button class="btn-pri" id="btn-new" onclick="openActModal('new')"><i class="ti ti-plus"></i>新建活动</button>
+        <button class="btn-sec" onclick="showT('请在同一目录打开 kkh_front.html','info')"><i class="ti ti-external-link"></i>查看前台</button>
+      </div>
+    </div>
+    <div class="content">
+
+      <!-- 数据总览 -->
+      <div class="panel on" id="p-dash">
+        <div class="stat-row">
+          <div class="sc"><div class="sc-icon i-or"><i class="ti ti-calendar-event"></i></div><div class="sc-num" id="st-total">0</div><div class="sc-lbl">活动总数</div><div class="sc-trend"><i class="ti ti-trending-up"></i>较上月 +5 款</div></div>
+          <div class="sc"><div class="sc-icon i-gr"><i class="ti ti-users"></i></div><div class="sc-num" id="st-sg">0</div><div class="sc-lbl">累计报名人次</div><div class="sc-trend"><i class="ti ti-trending-up"></i>环比增长 12%</div></div>
+          <div class="sc"><div class="sc-icon i-bl"><i class="ti ti-currency-yen"></i></div><div class="sc-num">¥8.6万</div><div class="sc-lbl">本月营收</div><div class="sc-trend"><i class="ti ti-trending-up"></i>环比增长 23%</div></div>
+          <div class="sc"><div class="sc-icon i-pu"><i class="ti ti-star"></i></div><div class="sc-num">4.9</div><div class="sc-lbl">平均满意度</div><div class="sc-trend"><i class="ti ti-mood-smile"></i>386 份评价</div></div>
+        </div>
+        <div class="chart-row">
+          <div class="chart-card"><div class="chart-title">各矩阵活动占比</div><div class="chart-wrap"><canvas id="cpie"></canvas></div></div>
+          <div class="chart-card"><div class="chart-title">近6月报名趋势</div><div class="chart-wrap"><canvas id="cline"></canvas></div></div>
+        </div>
+        <div class="tcard">
+          <div class="tc-head"><div class="tc-title">近期活动</div></div>
+          <table id="dash-tbl"></table>
+        </div>
+      </div>
+
+      <!-- 活动列表 -->
+      <div class="panel" id="p-acts">
+        <div class="tcard">
+          <div class="tc-head">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <div class="tc-title">全部活动</div>
+              <span class="tc-sub" id="acts-count"></span>
+            </div>
+            <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+              <select id="cat-filter" onchange="renderActs()" style="background:var(--bg);border:.5px solid var(--bd);border-radius:8px;padding:7px 10px;font-size:12px;outline:none;cursor:pointer;">
+                <option value="">全部分类</option>
+                <option>美学声乐</option><option>同城社交</option><option>优雅品位</option><option>人文知性</option><option>活力康养</option>
+              </select>
+              <select id="st-filter" onchange="renderActs()" style="background:var(--bg);border:.5px solid var(--bd);border-radius:8px;padding:7px 10px;font-size:12px;outline:none;cursor:pointer;">
+                <option value="">全部状态</option>
+                <option value="on">已上架</option><option value="off">已下架</option><option value="draft">草稿</option>
+              </select>
+              <div class="sb2"><i class="ti ti-search"></i><input type="text" placeholder="搜索活动名称…" oninput="renderActs(this.value)"></div>
+            </div>
+          </div>
+          <div style="overflow-x:auto;"><table id="acts-tbl"></table></div>
+        </div>
+      </div>
+
+      <!-- 活动日历 -->
+      <div class="panel" id="p-cal">
+        <div class="cal-hdr">
+          <div class="cal-nav">
+            <button onclick="calPrev()"><i class="ti ti-chevron-left"></i></button>
+            <div class="cal-month" id="cal-title"></div>
+            <button onclick="calNext()"><i class="ti ti-chevron-right"></i></button>
+          </div>
+          <button class="btn-pri" onclick="openActModal('new')"><i class="ti ti-plus"></i>新建活动</button>
+        </div>
+        <div class="cal-card">
+          <div class="cal-wdays"><div class="cal-wd">周日</div><div class="cal-wd">周一</div><div class="cal-wd">周二</div><div class="cal-wd">周三</div><div class="cal-wd">周四</div><div class="cal-wd">周五</div><div class="cal-wd">周六</div></div>
+          <div class="cal-grid" id="cal-days"></div>
+        </div>
+      </div>
+
+      <!-- 链接管理 -->
+      <div class="panel" id="p-links">
+        <div style="background:linear-gradient(135deg,rgba(232,96,10,.08),rgba(245,166,35,.06));border:.5px solid rgba(232,96,10,.2);border-radius:12px;padding:14px 18px;margin-bottom:16px;display:flex;align-items:flex-start;gap:10px;">
+          <i class="ti ti-info-circle" style="font-size:18px;color:var(--or);flex-shrink:0;margin-top:1px;"></i>
+          <div style="font-size:13px;color:var(--sub);line-height:1.7;">
+            <b style="color:var(--tx);">分享归属机制：</b>每个账号都有专属分享链接（URL中含<code style="background:var(--bg);padding:1px 5px;border-radius:4px;">?ref=账号名</code>参数）。
+            用户通过某账号的链接进入并报名，该报名自动归属该账号，支持业绩统计与佣金核算。
+          </div>
+        </div>
+        <div class="tcard">
+          <div class="tc-head">
+            <div class="tc-title">活动链接管理</div>
+            <div style="display:flex;gap:8px;align-items:center;">
+              <select id="link-acc-filter" onchange="renderLinks()" style="background:var(--bg);border:.5px solid var(--bd);border-radius:8px;padding:7px 10px;font-size:12px;outline:none;cursor:pointer;">
+                <option value="">全部账号的链接</option>
+              </select>
+              <button class="btn-sec" onclick="copyAllLinks()"><i class="ti ti-copy"></i>批量复制</button>
+            </div>
+          </div>
+          <div class="link-list" id="links-list"></div>
+        </div>
+      </div>
+
+      <!-- 报名记录 -->
+      <div class="panel" id="p-sgrec">
+        <div class="tcard">
+          <div class="tc-head">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <div class="tc-title">报名记录</div>
+              <span class="tc-sub" id="sg-stat"></span>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+              <select id="sg-acc-filter" onchange="renderSgRec()" style="background:var(--bg);border:.5px solid var(--bd);border-radius:8px;padding:7px 10px;font-size:12px;outline:none;cursor:pointer;">
+                <option value="">全部来源</option>
+              </select>
+              <div class="sb2"><i class="ti ti-search"></i><input type="text" placeholder="搜索姓名/活动…" oninput="filterSg(this.value)"></div>
+              <button class="btn-gr" onclick="exportSg()"><i class="ti ti-download"></i>导出</button>
+              <button class="btn-danger" onclick="clearAllSg()"><i class="ti ti-trash"></i>清空测试数据</button>
+            </div>
+          </div>
+          <div style="overflow-x:auto;"><table id="sg-tbl"></table></div>
+        </div>
+      </div>
+
+      <!-- 分享归属统计 -->
+      <div class="panel" id="p-share">
+        <div class="share-cards" id="share-cards"></div>
+        <div class="tcard">
+          <div class="tc-head"><div class="tc-title">各账号分享业绩明细</div></div>
+          <div style="overflow-x:auto;"><table id="share-tbl"></table></div>
+        </div>
+      </div>
+
+      <!-- 前台配置 -->
+      <div class="panel" id="p-site">
+        <div class="set-section">
+          <div class="set-hdr"><i class="ti ti-layout-navbar"></i>顶部横幅文案</div>
+          <div class="set-row"><div><div class="set-lbl">小标签文字</div><div class="set-sub">标题上方小标签，如「✦ 社群主理人活动手册 2026」</div></div><input class="set-input" id="cfg-tag" value="✦ 社群主理人活动手册 2026"></div>
+          <div class="set-row"><div><div class="set-lbl">品牌名称</div><div class="set-sub">左上角 Logo 文字</div></div><input class="set-input" id="cfg-name" value="开开华彩"></div>
+          <div class="set-row"><div><div class="set-lbl">品牌 Slogan</div><div class="set-sub">标题下方副说明</div></div><input class="set-input" id="cfg-sub" value="线下文娱俱乐部 · 一起变年轻 · 用爱和科技为父母做好产品"></div>
+          <div class="set-row"><div><div class="set-lbl">联系电话</div><div class="set-sub">前台展示的主理人联系电话</div></div><input class="set-input" id="cfg-tel" value="138-xxxx-xxxx"></div>
+        </div>
+        <div class="set-section">
+          <div class="set-hdr"><i class="ti ti-eye"></i>前台展示控制</div>
+          <div class="set-row"><div><div class="set-lbl">显示活动价格</div><div class="set-sub">卡片上展示收费金额</div></div><div class="tog on" onclick="this.classList.toggle('on')"></div></div>
+          <div class="set-row"><div><div class="set-lbl">显示报名人数</div><div class="set-sub">实时显示已报名人次</div></div><div class="tog on" onclick="this.classList.toggle('on')"></div></div>
+          <div class="set-row"><div><div class="set-lbl">显示热门标签</div><div class="set-sub">🔥 标记热门活动</div></div><div class="tog on" onclick="this.classList.toggle('on')"></div></div>
+        </div>
+        <div class="set-section">
+          <div class="set-hdr"><i class="ti ti-bell"></i>报名通知</div>
+          <div class="set-row"><div><div class="set-lbl">满员自动关闭</div><div class="set-sub">达到最大人数后自动停止</div></div><div class="tog on" onclick="this.classList.toggle('on')"></div></div>
+          <div class="set-row"><div><div class="set-lbl">48h退款保障</div><div class="set-sub">报名后48小时内可全额退款</div></div><div class="tog on" onclick="this.classList.toggle('on')"></div></div>
+        </div>
+        <div style="display:flex;justify-content:flex-end;">
+          <button class="btn-pri" onclick="saveCfg()"><i class="ti ti-check"></i>保存配置并同步前台</button>
+        </div>
+      </div>
+
+      <!-- 账号管理 -->
+      <div class="panel" id="p-acc">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+          <div style="font-size:15px;font-weight:600;color:var(--tx);">账号列表</div>
+          <button class="btn-pri" id="btn-add-acc" onclick="openAccModal('new')"><i class="ti ti-user-plus"></i>新增账号</button>
+        </div>
+        <div class="acc-card" id="acc-list"></div>
+        <div class="set-section" style="margin-top:16px;">
+          <div class="set-hdr"><i class="ti ti-shield"></i>权限说明</div>
+          <div style="padding:14px 20px;">
+            <table style="width:100%;">
+              <thead><tr><th style="text-align:left;padding:8px 12px;font-size:12px;color:var(--mu);border-bottom:.5px solid var(--bd);">权限级别</th><th style="text-align:left;padding:8px 12px;font-size:12px;color:var(--mu);border-bottom:.5px solid var(--bd);">可操作内容</th><th style="text-align:left;padding:8px 12px;font-size:12px;color:var(--mu);border-bottom:.5px solid var(--bd);">分享归属</th></tr></thead>
+              <tbody>
+                <tr><td style="padding:10px 12px;"><span class="badge b-admin">超级管理员</span></td><td style="padding:10px 12px;font-size:12px;color:var(--sub);">全部功能：创建/编辑/删除活动、管理账号、修改配置、查看全部数据</td><td style="padding:10px 12px;font-size:12px;color:var(--sub);">可查看所有账号的报名归属统计</td></tr>
+                <tr><td style="padding:10px 12px;"><span class="badge b-editor">编辑者</span></td><td style="padding:10px 12px;font-size:12px;color:var(--sub);">新建/编辑活动、上传图片、查看报名记录（含自己归属的）</td><td style="padding:10px 12px;font-size:12px;color:var(--sub);">只能查看自己分享链接带来的报名</td></tr>
+                <tr><td style="padding:10px 12px;"><span class="badge b-viewer">查看者</span></td><td style="padding:10px 12px;font-size:12px;color:var(--sub);">仅查看数据总览和活动列表，不可修改任何内容</td><td style="padding:10px 12px;font-size:12px;color:var(--sub);">可查看自己的分享链接和报名数</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- 新建/编辑活动弹窗 -->
+<div class="modal-ov h" id="act-modal-ov">
+  <div class="modal">
+    <div class="modal-hd"><div class="modal-title" id="act-modal-title">新建活动</div><button class="modal-close" onclick="closeActModal()">×</button></div>
+    <div class="modal-body">
+      <div class="form-section">基本信息</div>
+      <div class="form-row"><label>活动名称 <span class="req">*</span></label><input type="text" id="f-name" placeholder="如：复古国潮肖像美拍活动"></div>
+      <div class="f2">
+        <div class="form-row"><label>矩阵分类 <span class="req">*</span></label><select id="f-cat"><option>美学声乐</option><option>同城社交</option><option>优雅品位</option><option>人文知性</option><option>活力康养</option></select></div>
+        <div class="form-row"><label>上架状态</label><select id="f-st"><option value="on">✅ 已上架</option><option value="draft">📝 草稿</option><option value="off">❌ 已下架</option></select></div>
+      </div>
+      <div class="f3">
+        <div class="form-row"><label>最低人数</label><input type="number" id="f-min" placeholder="15"></div>
+        <div class="form-row"><label>最高人数</label><input type="number" id="f-max" placeholder="40"></div>
+        <div class="form-row"><label>活动时长</label><input type="text" id="f-dur" placeholder="2.5小时"></div>
+      </div>
+      <div class="f2">
+        <div class="form-row"><label>收费价格 <span class="req">*</span></label><input type="text" id="f-price" placeholder="如：¥199/人"></div>
+        <div class="form-row"><label>活动日期</label><input type="date" id="f-date"></div>
+      </div>
+      <div class="f2">
+        <div class="form-row"><label>活动图标（Emoji）</label><input type="text" id="f-emoji" placeholder="📸"></div>
+        <div class="form-row"><label>标记为热门</label><select id="f-hot"><option value="false">否</option><option value="true">是 🔥</option></select></div>
+      </div>
+      <div class="form-row"><label>场地推荐</label><input type="text" id="f-ven" placeholder="如：高端国风茶室、艺术空间"></div>
+      <div class="form-section">活动内容</div>
+      <div class="form-row"><label>活动详情描述</label><textarea id="f-desc" placeholder="详细介绍活动内容、亮点、执行细节、适合人群…"></textarea></div>
+      <div class="form-row"><label>核心物料（顿号「、」分隔）</label><textarea id="f-mat" placeholder="如：专业摄影棚灯光、国风服饰道具、便携补光灯" style="min-height:60px;"></textarea></div>
+      <div class="form-row"><label>交付成果（顿号「、」分隔）</label><textarea id="f-out" placeholder="如：2张实体精修照、个人摄影纪念Vlog" style="min-height:60px;"></textarea></div>
+      <div class="form-section">活动图片</div>
+      <div style="font-size:12px;color:var(--mu);margin-bottom:10px;">上传活动现场图或宣传图，前台详情页将以轮播图形式展示（建议比例 4:3，最多6张）</div>
+      <div class="img-grid" id="modal-img-grid"></div>
+      <div class="img-add" id="img-add-btn" onclick="document.getElementById('img-file-input').click()">
+        <i class="ti ti-photo-plus"></i>
+        <span>点击上传图片</span>
+        <span style="font-size:11px;color:var(--mu);">支持 JPG / PNG / WEBP，单张最大 10MB</span>
+        <input type="file" id="img-file-input" accept="image/*" multiple onchange="handleImgUpload(event)">
+      </div>
+    </div>
+    <div class="modal-ft">
+      <button class="btn-cancel" onclick="closeActModal()">取消</button>
+      <button class="btn-save" onclick="saveAct()"><i class="ti ti-check" style="font-size:14px;margin-right:4px;"></i>保存并同步前台</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- 账号新建/编辑弹窗 -->
+<div class="modal-ov h" id="acc-modal-ov">
+  <div class="modal" style="max-width:500px;">
+    <div class="modal-hd"><div class="modal-title" id="acc-modal-title">新增账号</div><button class="modal-close" onclick="closeAccModal()">×</button></div>
+    <div class="modal-body">
+      <div class="form-row"><label>真实姓名 <span class="req">*</span></label><input type="text" id="acc-realname" placeholder="如：李主理人"></div>
+      <div class="f2">
+        <div class="form-row"><label>登录账号 <span class="req">*</span></label><input type="text" id="acc-username" placeholder="如：editor02" autocomplete="off"></div>
+        <div class="form-row"><label>登录密码 <span class="req">*</span></label><input type="password" id="acc-password" placeholder="至少6位" autocomplete="new-password"></div>
+      </div>
+      <div class="form-row"><label>权限级别 <span class="req">*</span></label>
+        <select id="acc-role">
+          <option value="admin">超级管理员 — 全部功能</option>
+          <option value="editor" selected>编辑者 — 可创建/编辑活动，查看自己归属报名</option>
+          <option value="viewer">查看者 — 仅查看，不可修改</option>
+        </select>
+      </div>
+      <div class="form-row"><label>手机号码</label><input type="tel" id="acc-phone" placeholder="用于接收报名通知（可选）"></div>
+      <div class="form-row"><label>备注说明</label><input type="text" id="acc-note" placeholder="如：负责美学声乐系列活动推广"></div>
+      <div style="background:rgba(232,96,10,.06);border:.5px solid rgba(232,96,10,.2);border-radius:10px;padding:12px 14px;margin-top:8px;font-size:12px;color:var(--sub);line-height:1.7;">
+        <b style="color:var(--tx);">分享归属说明：</b>创建账号后，系统自动为该账号生成专属分享链接参数（<code style="background:rgba(0,0,0,.06);padding:1px 5px;border-radius:4px;">?ref=账号名</code>）。用户通过该链接进入并报名，报名记录将自动归属该账号，可在「分享归属」模块查看统计。
+      </div>
+    </div>
+    <div class="modal-ft">
+      <button class="btn-cancel" onclick="closeAccModal()">取消</button>
+      <button class="btn-save" onclick="saveAcc()"><i class="ti ti-check" style="font-size:14px;margin-right:4px;"></i>保存账号</button>
+    </div>
+  </div>
+</div>
+
+<!-- 海报 -->
+<div class="poster-ov h" id="poster-ov">
+  <div style="width:100%;max-width:340px;">
+    <!-- 账号选择器 -->
+    <div style="background:rgba(255,255,255,.1);border-radius:12px;padding:10px 14px;margin-bottom:10px;display:flex;align-items:center;gap:10px;">
+      <span style="font-size:12px;color:rgba(255,255,255,.7);flex-shrink:0;">分享归属账号：</span>
+      <select id="poster-ref-sel" onchange="refreshPoster()" style="flex:1;background:rgba(255,255,255,.15);border:.5px solid rgba(255,255,255,.2);border-radius:8px;padding:6px 10px;color:#fff;font-size:12px;outline:none;">
+      </select>
+    </div>
+    <div class="poster-card" id="poster-card"></div>
+    <div class="poster-acts" style="margin-top:10px;">
+      <button class="poster-btn pb-close" onclick="closePoster()">关闭</button>
+      <button class="poster-btn pb-save" onclick="showT('请截图保存海报','ok')">截图保存</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════════
+// 数据层
+// ══════════════════════════════════════════════
+const DEFAULT_ACTS=[
+{id:1,name:"复古国潮肖像美拍",cat:"美学声乐",e:"📸",min:25,max:80,dur:"3小时",price:"¥199/人",ven:"高端国风茶室、艺术空间或专业肖像馆",desc:"专业摄影师+造型师双重服务，在国风场景拍摄专属美拍大片。播放经典金曲烘托氛围，卸下面对镜头的防御，留下最美银发风华。",mat:"专业摄影棚灯光、国风服饰道具、便携补光灯、拍立得相机",out:"2套妆造拍摄、2张实体精修照、额外选片¥300/张",st:"on",hot:true,date:"2026-06-15",sg:34,imgs:[]},
+{id:2,name:"80年代怀旧KTV大赛",cat:"美学声乐",e:"🎤",min:20,max:40,dur:"3小时",price:"¥69/人",ven:"同城高端KTV豪华大包厢",desc:"穿越回80年代，金曲大合唱，彩色闪光棒齐挥舞，用音乐唤醒青春记忆，每一首老歌都是一段人生故事。",mat:"立式麦克风、彩色闪光棒、大字金曲歌单",out:"个人副歌高光短视频、拉歌合唱纪念Vlog",st:"on",hot:false,date:"2026-06-20",sg:22,imgs:[]},
+{id:3,name:"母女两代温情美拍",cat:"美学声乐",e:"💞",min:10,max:20,dur:"3小时",price:"¥588/双人",ven:"阳光通透的美学独立咖啡厅",desc:"母女同框，两代温情。专业摄影记录最珍贵的家人时光，走心话题卡引导真实情感流露。",mat:"母女同色系改良装、大字号走心话题卡、两代人对比色温打光灯",out:"双人温情实体相册、互动纪实微电影",st:"on",hot:true,date:"2026-07-05",sg:9,imgs:[]},
+{id:4,name:"同城岁月歌神争霸赛",cat:"美学声乐",e:"🏆",min:30,max:80,dur:"4小时",price:"¥60/人",ven:"社区多功能厅或影剧院",desc:"大型歌唱比赛，专业评委打分，超大字号歌词提示大屏，让每一位银发歌手登上属于自己的舞台。",mat:"超大字号歌词提示大屏、评委大字打分牌、水晶奖杯",out:"岁月歌神荣誉证书、舞台独唱高清视频",st:"on",hot:false,date:"2026-06-28",sg:65,imgs:[]},
+{id:5,name:"银发超模街拍体验",cat:"美学声乐",e:"💃",min:12,max:25,dur:"3小时",price:"¥199/人",ven:"人文创意园区/古建筑平坦群落",desc:"专业摄影师全程跟拍，高功率补光灯让每位银发长者成为最美街拍主角，感受时尚的力量。",mat:"手持高功率补光灯、小蜜蜂麦克风、防暑急救药箱",out:"同城时尚街拍大片5张、微杂志封面电子版",st:"on",hot:false,date:"2026-07-12",sg:12,imgs:[]},
+{id:6,name:"经典影视对白配音秀",cat:"美学声乐",e:"🎬",min:10,max:20,dur:"2.5小时",price:"¥128/人",ven:"专业录音棚或静谧会议室",desc:"为《庐山恋》等经典影视配音，高保真麦克风记录最美声音，重温那个年代的珍贵记忆。",mat:"大字号台词剧本活页、高保真麦克风",out:"原片声轨替换配音个人高光视频",st:"on",hot:false,date:"2026-06-25",sg:8,imgs:[]},
+{id:7,name:"老照片故事分享会",cat:"美学声乐",e:"🖼️",min:12,max:24,dur:"2.5小时",price:"¥69/人",ven:"怀旧主题茶馆或艺术沙龙",desc:"带一张老照片来，讲一段人生故事。便携扫描仪当场数字化修复，让记忆重焕光彩。",mat:"便携扫描仪、高清投影、温和焦点灯光、湿纸巾",out:"老照片数字化高清修复、现场故事讲述音频",st:"on",hot:false,date:"2026-07-08",sg:14,imgs:[]},
+{id:8,name:"黑胶音乐温情鉴赏",cat:"美学声乐",e:"🎵",min:10,max:20,dur:"2.5小时",price:"¥199/人",ven:"高档音乐清吧或品牌音响馆",desc:"老式复古黑胶留声机配上经典唱片，在优雅环境中共赏音乐之美，大字号曲目简介让每位长者从容欣赏。",mat:"老式复古黑胶留声机、经典黑胶盘、大字号曲目简介",out:"复古音乐明信片、现场鉴赏优雅特写照",st:"on",hot:false,date:"2026-07-15",sg:11,imgs:[]},
+{id:9,name:"零基础非洲鼓欢聚",cat:"美学声乐",e:"🥁",min:20,max:50,dur:"2小时",price:"¥99/人",ven:"户外平坦草坪或宽敞舞蹈房",desc:"50面非洲鼓齐声敲响，彩色头带在风中飘动，用最原始的节奏释放退休生活的多巴胺。",mat:"标准非洲鼓50面、彩色头带、大字号节奏图谱",out:"多巴胺解压团队大合影、个人Solo动态短视频",st:"on",hot:false,date:"2026-06-22",sg:29,imgs:[]},
+{id:10,name:"岁月芳华合唱交友聚",cat:"美学声乐",e:"🎼",min:25,max:60,dur:"2.5小时",price:"¥79/人",ven:"专业合唱排练厅或多功能音响厅",desc:"专业指挥带领，钢琴伴奏，分声部演唱经典合唱曲目，在音乐中寻找共鸣与归属感。",mat:"调节谱架、钢琴、超大字号简谱单页、润喉糖",out:"多机位精美合唱MV（配超大字幕）、声部合影",st:"on",hot:false,date:"2026-07-18",sg:31,imgs:[]},
+{id:11,name:"遇见黄昏·精致单身社交派对",cat:"同城社交",e:"🌹",min:16,max:32,dur:"3.5小时",price:"¥398/人",ven:"格调高雅独立西餐厅或高档会所茶室",desc:"严执三不问刚性脚本，引导聚焦聊爱好与理想。后台盲选撮合，极致保护每位长者的尊严与隐私。",mat:"男女红蓝大字号胸牌、走心交流话题卡、盲选互选卡、无糖精致点心台",out:"个人高光社交肖像、私域专属一对一温情牵线服务",st:"on",hot:true,date:"2026-06-29",sg:28,imgs:[]},
+{id:12,name:"银发红娘包饺子聚",cat:"同城社交",e:"🥟",min:16,max:28,dur:"2.5小时",price:"¥128/人",ven:"宽敞卫生的烘焙工坊或私厨空间",desc:"围坐一桌共包饺子，人间烟火气里最容易打开心扉，银发破冰卡牌让陌生人秒变老朋友。",mat:"定制围裙、各色新鲜馅料、银发破冰卡牌",out:"人间烟火气欢聚大合影、精制手工饺礼盒",st:"on",hot:false,date:"2026-08-05",sg:0,imgs:[]},
+{id:13,name:"同城老乡温情半日聚",cat:"同城社交",e:"🏡",min:20,max:40,dur:"4小时",price:"¥150/人",ven:"地道地方菜馆包间或老字号茶楼",desc:"方言趣味竞猜、家乡老照片墙、定制老乡徽章，他乡遇故知的温暖在这里重现。",mat:"大字方言趣味竞猜卡、家乡老照片墙、定制老乡徽章",out:"老乡会专属微信通讯录、欢聚高光短视频",st:"on",hot:false,date:"2026-08-08",sg:0,imgs:[]},
+{id:14,name:"退休经验交换智慧大集",cat:"同城社交",e:"💡",min:20,max:50,dur:"3小时",price:"¥99/人",ven:"俱乐部基地或合作书店大厅",desc:"每人带来一项退休后的智慧技能，微型摊位展示交流，用经验换友谊，让知识在银发群体中流动。",mat:"微型摊位牌、彩色粉笔、职业技能标签贴、大字画布",out:"电子版智慧技能手册、个人分享高光照",st:"on",hot:true,date:"2026-08-10",sg:0,imgs:[]},
+{id:15,name:"心理健康与情感围炉",cat:"同城社交",e:"🕯️",min:8,max:15,dur:"2小时",price:"¥199/人",ven:"暖色调榻榻米茶室或私密冥想室",desc:"植物精油香薰、LED仿真烛光、暖毛毯，在安全温暖的小圈子里倾诉内心，专业引导化解退休后的心理落差。",mat:"植物精油香薰、LED仿真烛光、暖毛毯、倾诉卡",out:"定制舒压开运香囊、个人身心疗愈手记",st:"on",hot:false,date:"2026-08-12",sg:0,imgs:[]},
+{id:16,name:"高知退休生活茶话会",cat:"同城社交",e:"📖",min:12,max:25,dur:"2.5小时",price:"¥128/人",ven:"大学周边安静咖啡厅或图书馆",desc:"儒雅知性着装，大字名著语录书签，骨瓷茶具，实木意见交流看板，让同频高知长者找到精神共鸣。",mat:"大字名著语录书签、骨瓷茶具、实木意见交流看板",out:"高知同频知己合影、定制读书纪念书签",st:"on",hot:false,date:"2026-08-15",sg:0,imgs:[]},
+{id:17,name:"暖心主理人私厨家宴",cat:"同城社交",e:"🍽️",min:6,max:10,dur:"3小时",price:"¥268/人",ven:"主理人精心布置的私人大厨房",desc:"手写体欢迎信、大字版主厨养生菜单、精致骨瓷餐具，6-10人极致温馨私宴体验。",mat:"手写体欢迎信、大字版主厨养生菜单、精致骨瓷餐具",out:"暖心家宴纪实Vlog、与主理人亲密合影",st:"on",hot:true,date:"2026-06-21",sg:8,imgs:[]},
+{id:18,name:"同城银发麻将掼蛋赛",cat:"同城社交",e:"🀄",min:16,max:48,dur:"3小时",price:"¥88/人",ven:"高级棋牌会所或俱乐部活动厅",desc:"全自动静音麻将机，加厚扑克，大字号积分榜，让智力竞技成为银发社交最轻松的破冰方式。",mat:"全自动静音麻将机、加厚扑克、大字号积分榜",out:"智力赛荣誉奖状、老战友高光对局合影",st:"on",hot:false,date:"2026-08-17",sg:0,imgs:[]},
+{id:19,name:"岁月知己生日欢聚会",cat:"同城社交",e:"🎂",min:20,max:50,dur:"3小时",price:"¥199/人",ven:"俱乐部专属无障碍宴会厅",desc:"强对比定制生日墙、无糖健康大蛋糕、怀旧长寿面，让每位寿星感受到被整个圈子珍视的温度。",mat:"强对比定制生日墙、无糖健康大蛋糕、怀旧长寿面",out:"寿星集体高光电子相册、全场祝福短视频",st:"on",hot:true,date:"2026-08-19",sg:0,imgs:[]},
+{id:20,name:"新老会员迎新茶聚",cat:"同城社交",e:"🌟",min:15,max:35,dur:"2小时",price:"免费",ven:"同城开开华彩线下俱乐部基地",desc:"老带新欢迎徽章、俱乐部大地图、专属通关护照，零门槛破冰，让新会员第一天就感受到家的温暖。",mat:"老带新欢迎徽章、俱乐部大地图、专属通关护照",out:"开开华彩专属合伙人认证通关护照",st:"on",hot:false,date:"2026-08-22",sg:0,imgs:[]},
+{id:21,name:"精致微醺·红酒品鉴与礼仪",cat:"优雅品位",e:"🍷",min:12,max:24,dur:"2.5小时",price:"¥588/人",ven:"本地知名酒庄或西式私密美学空间",desc:"4款精选进口红酒+水晶高脚杯，用最通俗的大白话打消老人距离感，传授站姿坐姿与碰杯礼仪，微醺状态下自由社交。",mat:"4款精选进口红酒、水晶高脚杯、超大字号红酒风味图谱画布",out:"权威纸质红酒优雅生活家认证证书、高光社交侧颜美照",st:"on",hot:true,date:"2026-07-03",sg:19,imgs:[]},
+{id:22,name:"私房菜主厨品鉴",cat:"优雅品位",e:"🍱",min:8,max:16,dur:"3小时",price:"¥498/人",ven:"本地黑珍珠级特色私房菜馆",desc:"主厨特制养生大字菜单、食材溯源高对比度展架，低调奢华的高端小团美食探索之旅，筛选高净值客户。",mat:"主厨特制养生大字菜单、食材溯源高对比度展架",out:"主厨亲笔签名合影、菜品美学视觉海报",st:"on",hot:true,date:"2026-08-24",sg:0,imgs:[]},
+{id:23,name:"银发西点烘焙社交",cat:"优雅品位",e:"🧁",min:10,max:20,dur:"2.5小时",price:"¥198/人",ven:"烤箱防护到位的专业烘焙坊",desc:"进口无水奶油、木糖醇面粉、大字号步骤图，低糖健康烘焙，甜蜜是银发社交最美的破冰方式。",mat:"进口无水奶油、木糖醇面粉、大字号步骤图",out:"低糖健康西点礼盒、烘焙俏皮工作现场照",st:"on",hot:false,date:"2026-08-26",sg:0,imgs:[]},
+{id:24,name:"多肉种植与园艺沙龙",cat:"优雅品位",e:"🪴",min:15,max:30,dur:"2小时",price:"¥128/人",ven:"采光良好的温室或合作阳光花园",desc:"饱满多肉植物、创意瓷盆、圆头迷你工具，亲手栽种带走，让每个家中都多一抹绿意和生机。",mat:"饱满多肉植物、创意瓷盆、圆头迷你工具、防污袖套",out:"亲手栽种的多肉盆栽、劳作治愈系特写照",st:"on",hot:false,date:"2026-08-29",sg:0,imgs:[]},
+{id:25,name:"非遗围炉煮茶",cat:"优雅品位",e:"🍵",min:12,max:24,dur:"2.5小时",price:"¥168/人",ven:"新中式复古庭院茶空间",desc:"安全无烟电炭炉、老白茶、烤红薯、拍立得，在新中式茶空间里慢下来，感受时光温柔。",mat:"安全无烟电炭炉、老白茶、烤红薯、拍立得",out:"拍立得复古实体照、慢生活朋友圈九宫格",st:"on",hot:false,date:"2026-06-18",sg:16,imgs:[]},
+{id:26,name:"插花艺术与空间美学",cat:"优雅品位",e:"💐",min:15,max:28,dur:"2.5小时",price:"¥198/人",ven:"鲜花环绕的美学工作室/阳光房",desc:"时令鲜花+中式古朴瓷花器，专业安全圆头剪刀，让每位长者都能创作出属于自己的高雅插花作品。",mat:"时令鲜花、中式古朴瓷花器、专业安全圆头剪刀",out:"个人专属高档插花花器成品、艺术微笑照片",st:"on",hot:false,date:"2026-08-31",sg:0,imgs:[]},
+{id:27,name:"明星咖啡拉花体验课",cat:"优雅品位",e:"☕",min:10,max:18,dur:"2小时",price:"¥150/人",ven:"精品意式咖啡馆（铺满防烫垫）",desc:"半自动咖啡机、高品质鲜奶、大字体风味科普板，让每位长者都能拉出属于自己的第一杯艺术咖啡。",mat:"半自动咖啡机、高品质鲜奶、大字体风味科普板",out:"拉花作品高光图、个人拉花动感精辑短视频",st:"on",hot:true,date:"2026-09-02",sg:0,imgs:[]},
+{id:28,name:"香道与舒压冥想坊",cat:"优雅品位",e:"🧘",min:8,max:16,dur:"2小时",price:"¥199/人",ven:"铺设厚地毯的专业隔音冥想室",desc:"海南天然沉香、香炉、加厚冥想垫、真丝眼罩，身心彻底放空，体验中国传统香道的极致禅意。",mat:"海南天然沉香、香炉、加厚冥想垫、真丝眼罩",out:"自制沉香线香礼盒、身心放空舒压特写照",st:"on",hot:false,date:"2026-07-01",sg:9,imgs:[]},
+{id:29,name:"旗袍定制与色彩搭配",cat:"优雅品位",e:"👗",min:15,max:30,dur:"2.5小时",price:"¥299/人",ven:"高档旗袍高定工坊或美学馆",desc:"各色面料色块、专业色彩测试卡、超大防眩光穿衣镜，让每位长者找到最适合自己的色彩与风格。",mat:"各色面料色块、专业色彩测试卡、超大防眩光穿衣镜",out:"专属色彩搭配报告、量体裁衣气质照",st:"on",hot:false,date:"2026-09-05",sg:0,imgs:[]},
+{id:30,name:"零基础丙烯油画沙龙",cat:"优雅品位",e:"🎨",min:12,max:24,dur:"3小时",price:"¥198/人",ven:"光线充足的独立画室（无障碍）",desc:"高档全棉画布框、无毒无味颜料、大字号渐进模板，零基础也能完成一幅可直接挂客厅的个人油画。",mat:"高档全棉画布框、无毒无味颜料、大字号渐进模板",out:"可直接挂客厅的个人油画框、创作纪实照",st:"on",hot:false,date:"2026-09-07",sg:0,imgs:[]},
+{id:31,name:"市博物馆名师导览",cat:"人文知性",e:"🏛️",min:20,max:40,dur:"3小时",price:"¥128/人",ven:"市级大型博物馆/美术馆（走直梯）",desc:"骨传导无线耳机调大音量，名师深度导览，折叠便携轻量凳随身携带，让文化之旅轻松无负担。",mat:"骨传导无线耳机（调大音量）、折叠便携轻量凳",out:"同城看展知性风画册电子版、专属文化手记",st:"on",hot:false,date:"2026-09-09",sg:0,imgs:[]},
+{id:32,name:"繁花时代读书分享会",cat:"人文知性",e:"📚",min:12,max:25,dur:"2小时",price:"¥88/人",ven:"复古风格历史书店沙龙区",desc:"致敬90年代复古风，大字号活页单页，金属年代书签，绿罩台灯，在书香中重温激情岁月。",mat:"大字号活页单页、金属年代书签、绿罩台灯",out:"开开华彩定制书香徽章、个人分享走心金句海报",st:"on",hot:false,date:"2026-09-12",sg:0,imgs:[]},
+{id:33,name:"非遗扎染蓝染体验",cat:"人文知性",e:"🎋",min:15,max:25,dur:"3小时",price:"¥228/人",ven:"专业非遗传承基地/大工作室",desc:"纯植物染料、白丝巾、特厚防污围裙、高防滑套鞋，亲手创作独一无二的非遗扎染作品，感受匠心温度。",mat:"纯植物染料、白丝巾、特厚防污围裙、高防滑套鞋",out:"独一无二的非遗扎染成品丝巾、匠心纪实视频",st:"on",hot:true,date:"2026-09-14",sg:0,imgs:[]},
+{id:34,name:"丹青雅集国画书法沙龙",cat:"人文知性",e:"🖌️",min:10,max:20,dur:"3小时",price:"¥150/人",ven:"笔墨纸砚齐全的高档画廊",desc:"加厚一得阁墨、生宣、特大字名家模板、吸墨毛毡，在专业画廊里感受中国传统书画的魅力，现场装裱带走。",mat:"加厚一得阁墨、生宣、特大字名家模板、吸墨毛毡",out:"现场专业装裱的个人字画成品、研墨挥毫照",st:"on",hot:false,date:"2026-09-16",sg:0,imgs:[]},
+{id:35,name:"手机数码摄影与修图课",cat:"人文知性",e:"📱",min:15,max:35,dur:"3小时",price:"¥128/人",ven:"全平坦城市公园或多媒体厅",desc:"大字彩印手机操作手册、大旋钮三脚架，让每位银发长者轻松掌握手机摄影与修图技巧，拍出人生最美大片。",mat:"九宫格辅助线手机操作大字彩印手册、大旋钮三脚架",out:"个人摄影前后对比海报、手机摄影结业证书",st:"on",hot:false,date:"2026-09-19",sg:0,imgs:[]},
+{id:36,name:"地方志建筑寻根读书会",cat:"人文知性",e:"🗺️",min:15,max:30,dur:"2.5小时",price:"¥99/人",ven:"城市受保护历史建筑内礼堂",desc:"同城旧地图复刻版、地方志节选大字活页、金属放大镜，在历史建筑中追寻城市记忆与文化根脉。",mat:"同城旧地图复刻版、地方志节选大字活页、金属放大镜",out:"精美古建筑手绘地图电子版、个人人文底蕴证言照",st:"on",hot:false,date:"2026-09-21",sg:0,imgs:[]},
+{id:37,name:"神医养生·药膳工作坊",cat:"人文知性",e:"🌿",min:20,max:40,dur:"3小时",price:"¥258/人",ven:"老字号国医馆/高端中医养生会所",desc:"名老中医现场传授食疗秘诀，人手一台中药克重台秤，亲手抓药调配专属养生茶饮，7天定制茶包带走。",mat:"高精度中药克重台秤（人手一台）、四季时令名贵药材、大字号药膳配方手册",out:"7天定制养生药膳包、名医出具个人体质食疗调理方案书",st:"on",hot:true,date:"2026-07-17",sg:37,imgs:[]},
+{id:38,name:"收藏家私人藏品分享会",cat:"人文知性",e:"🏺",min:10,max:20,dur:"2.5小时",price:"¥199/人",ven:"警备完善的私人收藏馆红木厅",desc:"专业高倍放大镜、无菌全棉白手套、加厚防爆展柜，近距离感受珍藏之美，开启高净值银发鉴赏之旅。",mat:"专业高倍放大镜、无菌全棉白手套、加厚防爆展柜",out:"高端文玩鉴赏指南小册子、尊享老会员特写照",st:"on",hot:false,date:"2026-09-23",sg:0,imgs:[]},
+{id:39,name:"银发智能生活与防骗课",cat:"人文知性",e:"🛡️",min:20,max:60,dur:"2小时",price:"¥50/人",ven:"社区大学或俱乐部基地大教室",desc:"大红箭头手机操作步骤手册、新型AI防诈骗案例库，让每位长者都能安全畅游数字世界。",mat:"大红箭头手机操作步骤手册、新型AI防诈骗案例库",out:"开开华彩·智能生活通关正式证书",st:"on",hot:false,date:"2026-09-26",sg:0,imgs:[]},
+{id:40,name:"诗歌朗诵与形体美学课",cat:"人文知性",e:"🎭",min:15,max:30,dur:"2小时",price:"¥120/人",ven:"铺设温暖地暖的无镜面大练功房",desc:"舒婷经典诗大字朗诵本、高敏无线领夹麦，在诗意中展现形体之美，找回优雅从容的自我。",mat:"舒婷经典诗大字朗诵本、高敏无线领夹麦、温和降噪音响",out:"个人高保真配乐朗诵录音轨、形体优雅特写照",st:"on",hot:true,date:"2026-09-28",sg:0,imgs:[]},
+{id:41,name:"森林氧吧·银发轻量徒步",cat:"活力康养",e:"🌲",min:30,max:50,dur:"全天",price:"¥298/人",ven:"国家级森林公园全平坦木栈道",desc:"专业领队八段锦热身，严格控制总步数低于6000步，50万高额意外险保障，林间野餐+老歌合唱。",mat:"定制轻量碳素登山杖、专业急救药箱、大字号路标手旗、高颜值轻冷餐",out:"全员森林大团圆航拍合影、个人治愈系高光九宫格",st:"on",hot:true,date:"2026-06-23",sg:45,imgs:[]},
+{id:42,name:"名山古刹一日禅修游",cat:"活力康养",e:"🏯",min:20,max:40,dur:"全天",price:"¥398/人",ven:"车程1.5小时以内的名山静谧古寺",desc:"统一棉麻禅修宽松外罩，大字号宣纸抄经帖，软质厚实拜垫，无糖素斋，在山间梵音中找回内心宁静。",mat:"统一棉麻禅修宽松外罩、大字号宣纸抄经帖、软质厚实拜垫、无糖素斋",out:"手抄经书成品、古刹禅意古风长者肖像",st:"on",hot:true,date:"2026-09-30",sg:0,imgs:[]},
+{id:43,name:"春季采摘与农家乐",cat:"活力康养",e:"🍓",min:25,max:50,dur:"全天",price:"¥260/人",ven:"道路全平整的高标准大棚有机园",desc:"定制小竹篮、品牌标贴保鲜盒、一次性防滑加厚鞋套，亲手采摘新鲜果实，感受乡村向往的慢生活。",mat:"定制小竹篮、品牌标贴保鲜盒、一次性防滑加厚鞋套",out:"亲手采摘果实礼盒、乡村向往的生活短视频",st:"on",hot:false,date:"2026-10-03",sg:0,imgs:[]},
+{id:44,name:"逆龄太极八段锦户外训",cat:"活力康养",e:"🥋",min:30,max:100,dur:"1.5小时",price:"¥60/人",ven:"空气清新的城市广场户外场地",desc:"总部定制白色高档练功服，大功率无线低音炮伴奏，从零学起，强身健体同时拓展银发社交圈。",mat:"总部定制白色高档练功服、大功率无线低音炮、不锈钢运动水杯",out:"九宫格动作太极形体照、团队太极震撼大合影",st:"on",hot:false,date:"2026-07-26",sg:68,imgs:[]},
+{id:45,name:"近郊房车露营篝火晚会",cat:"活力康养",e:"🏕️",min:16,max:32,dur:"一日",price:"¥880/人",ven:"近郊成熟营地全草坪",desc:"房车+大天幕+吉他+氛围灯串+安全冷焰火，轻奢露营风格，高净值银发群体的专属浪漫夜晚。",mat:"房车、大天幕、吉他、氛围灯串、安全冷焰火",out:"星空露营纪实画册电子版、露营时光音乐MV",st:"on",hot:true,date:"2026-07-20",sg:23,imgs:[]},
+{id:46,name:"温泉舒压康养半日游",cat:"活力康养",e:"♨️",min:20,max:40,dur:"4小时",price:"¥398/人",ven:"军工防滑地垫的五星级温泉度假村",desc:"定制高防滑温泉大拖鞋+超大加厚吸水毯+中药汤包，安全享受温泉疗愈时光，带走专属健康管理指南。",mat:"定制高防滑温泉大拖鞋、超大加厚吸水毯、中药汤包",out:"度假优雅贵妇风照卡、专属健康管理指南",st:"on",hot:false,date:"2026-10-05",sg:0,imgs:[]},
+{id:47,name:"城市公园风筝联谊节",cat:"活力康养",e:"🪁",min:20,max:50,dur:"3小时",price:"¥99/人",ven:"地势开阔、周边无高压线的风筝草坪",desc:"全白DIY大风筝、彩色丙烯马克笔、加粗防割手线轮，在蓝天下放飞心愿，让快乐如风筝一样高飞。",mat:"全白DIY大风筝、彩色丙烯马克笔、加粗防割手线轮",out:"心愿涂鸦风筝纪念品、风筝入云动态捕捉抓拍照",st:"on",hot:false,date:"2026-10-07",sg:0,imgs:[]},
+{id:48,name:"历史老街区文化漫步",cat:"活力康养",e:"🚶",min:15,max:35,dur:"3小时",price:"¥128/人",ven:"平路平坦、每500米有洗手间的古老街区",desc:"无线导览耳机、遮阳帽、盖章打卡手绘大地图，在历史老街中漫步，用脚步丈量城市的文化厚度。",mat:"无线导览耳机、遮阳帽、盖章打卡手绘大地图",out:"城市漫步人文电子画册、老街街拍美学图",st:"on",hot:false,date:"2026-10-10",sg:0,imgs:[]},
+{id:49,name:"银发垂钓与天幕野餐会",cat:"活力康养",e:"🎣",min:16,max:36,dur:"4小时",price:"¥220/人",ven:"防护设施完善、地面硬化无泥泞的垂钓园",desc:"轻量高碳素鱼竿、靠背高弹钓鱼椅、轻奢户外冷餐垫，钓一条大鱼，享一顿野餐，银发休闲的最美模样。",mat:"轻量高碳素鱼竿、靠背高弹钓鱼椅、轻奢户外冷餐垫",out:"手捧大鱼爆护高光照、天幕野餐温情合影",st:"on",hot:true,date:"2026-10-12",sg:0,imgs:[]},
+{id:50,name:"跟着诗词去周边古镇行",cat:"活力康养",e:"⛵",min:20,max:40,dur:"两日一夜",price:"¥1280/人",ven:"商业配套成熟、无石板陡坡的江南古镇",desc:"汉服+乌篷船包船+古镇诗词打卡护照，两日一夜深度游，感受水乡古镇的诗意与温情。",mat:"古镇诗词打卡护照、乌篷船包船、防滑登船踏板、汉服",out:"水乡古风精美个人写真集、诗意游高光纪录长片",st:"on",hot:false,date:"2026-10-14",sg:29,imgs:[]}
+];
+
+const DEFAULT_ACCS=[
+  {id:1,uname:"admin",pwd:"kkhuacai2025",realname:"超级管理员",role:"admin",phone:"",note:"系统超级管理员",avatar:"管",color:"linear-gradient(135deg,#F5A623,#E8600A)"},
+  {id:2,uname:"editor01",pwd:"editor123",realname:"李主理人",role:"editor",phone:"138-0001-0001",note:"负责美学声乐与同城社交系列",avatar:"李",color:"linear-gradient(135deg,#28A056,#1A6835)"},
+  {id:3,uname:"editor02",pwd:"editor123",realname:"王运营",role:"editor",phone:"138-0002-0002",note:"负责优雅品位与人文知性系列",avatar:"王",color:"linear-gradient(135deg,#1060A0,#0A4070)"},
+  {id:4,uname:"viewer01",pwd:"viewer123",realname:"张数据",role:"viewer",phone:"",note:"数据分析岗，只读权限",avatar:"张",color:"linear-gradient(135deg,#8060C0,#5040A0)"}
+];
+
+const DEFAULT_SG=[
+  {id:1,n:"王阿姨",p:"138****1234",a:"复古国潮肖像美拍",aid:1,c:1,amt:"¥199",t:"2026-06-10 14:32",s:"已确认",ref:"editor01"},
+  {id:2,n:"李大伯",p:"139****5678",a:"遇见黄昏·精致单身社交派对",aid:11,c:1,amt:"¥398",t:"2026-06-11 09:15",s:"已确认",ref:"editor01"},
+  {id:3,n:"张女士",p:"137****9012",a:"精致微醺·红酒品鉴与礼仪",aid:21,c:2,amt:"¥1176",t:"2026-06-12 16:48",s:"待支付",ref:"editor02"},
+  {id:4,n:"刘先生",p:"136****3456",a:"森林氧吧·银发轻量徒步",aid:41,c:2,amt:"¥596",t:"2026-06-13 11:20",s:"已确认",ref:"editor01"},
+  {id:5,n:"赵阿姨",p:"135****7890",a:"神医养生·药膳工作坊",aid:37,c:1,amt:"¥258",t:"2026-06-14 10:05",s:"已确认",ref:"editor02"},
+  {id:6,n:"陈大爷",p:"134****2345",a:"80年代怀旧KTV大赛",aid:2,c:3,amt:"¥207",t:"2026-06-14 15:30",s:"已确认",ref:"editor01"},
+  {id:7,n:"孙女士",p:"133****6789",a:"近郊房车露营篝火晚会",aid:45,c:1,amt:"¥880",t:"2026-06-15 08:45",s:"待支付",ref:"editor02"},
+  {id:8,n:"周先生",p:"132****0123",a:"逆龄太极八段锦户外训",aid:44,c:1,amt:"¥60",t:"2026-06-15 14:22",s:"已确认",ref:"editor01"},
+  {id:9,n:"吴女士",p:"131****1111",a:"复古国潮肖像美拍",aid:1,c:2,amt:"¥398",t:"2026-06-16 09:00",s:"已确认",ref:"editor02"},
+  {id:10,n:"郑先生",p:"130****2222",a:"遇见黄昏·精致单身社交派对",aid:11,c:1,amt:"¥398",t:"2026-06-16 14:30",s:"已确认",ref:"admin"}
+];
+
+function loadD(k,def){
+  try{
+    const r=localStorage.getItem(k);
+    if(r){
+      const saved=JSON.parse(r);
+      // 活动数据：如果本地少于内置，强制刷新
+      if(k==='kkh_acts'&&Array.isArray(saved)&&Array.isArray(def)&&saved.length<def.length){
+        localStorage.setItem(k,JSON.stringify(def));
+        return def;
+      }
+      return saved;
+    }
+    return def;
+  }catch(e){return def;}
+}
+function saveD(k,d){localStorage.setItem(k,JSON.stringify(d));}
+
+let ACTS=loadD('kkh_acts',DEFAULT_ACTS);
+let ACCS=loadD('kkh_accs',DEFAULT_ACCS);
+let SG=loadD('kkh_sg',DEFAULT_SG);
+let curUser=null;
+let editActId=null,editAccId=null;
+let modalImgs=[];
+let calY=new Date().getFullYear(),calM=new Date().getMonth();
+
+// ══ 权限控制 ══
+const ROLE_LABELS={admin:'超级管理员',editor:'编辑者',viewer:'查看者'};
+const ROLE_PERMS={
+  admin:{canEdit:true,canDelete:true,canManageAcc:true,canViewAll:true},
+  editor:{canEdit:true,canDelete:false,canManageAcc:false,canViewAll:false},
+  viewer:{canEdit:false,canDelete:false,canManageAcc:false,canViewAll:false}
+};
+function can(perm){return curUser&&ROLE_PERMS[curUser.role]&&ROLE_PERMS[curUser.role][perm];}
+
+// ══ 登录 ══
+async function doLogin(){
+  const u=document.getElementById('lu').value.trim();
+  const p=document.getElementById('lp').value;
+  const errEl=document.getElementById('lerr');
+  errEl.textContent='验证中…';
+
+  try {
+    // 优先从 Supabase accounts 表验证
+    const {data, error} = await sb.from('accounts')
+      .select('*').eq('username', u).eq('password', p).single();
+
+    if(error || !data){
+      // 回退到本地默认账号
+      ACCS=loadD('kkh_accs',DEFAULT_ACCS);
+      const acc=ACCS.find(a=>a.uname===u&&a.pwd===p);
+      if(!acc){
+        errEl.textContent='账号或密码错误，请重试';
+        document.getElementById('lp').value='';
+        document.getElementById('lp').focus();
+        return;
+      }
+      curUser=acc;
+    } else {
+      // Supabase 验证成功
+      curUser={
+        id:data.id, uname:data.username, pwd:data.password,
+        realname:data.realname, role:data.role,
+        phone:data.phone||'', note:data.note||'',
+        avatar:data.avatar||data.realname[0],
+        color:data.color||'linear-gradient(135deg,#F5A623,#E8600A)'
+      };
+    }
+    errEl.textContent='';
+    document.getElementById('loginPage').classList.add('h');
+    applyPermUI();
+    initApp();
+  } catch(e) {
+    // 网络错误，回退本地
+    ACCS=loadD('kkh_accs',DEFAULT_ACCS);
+    const acc=ACCS.find(a=>a.uname===u&&a.pwd===p);
+    if(acc){
+      curUser=acc;
+      errEl.textContent='';
+      document.getElementById('loginPage').classList.add('h');
+      applyPermUI();
+      initApp();
+    } else {
+      errEl.textContent='账号或密码错误，请重试';
+      document.getElementById('lp').value='';
+    }
+  }
+}
+document.getElementById('lp').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
+document.getElementById('lu').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('lp').focus();});
+
+function logout(){
+  curUser=null;
+  document.getElementById('loginPage').classList.remove('h');
+  document.getElementById('lp').value='';
+  document.getElementById('lu').value='';
+  document.getElementById('lerr').textContent='';
+}
+
+function applyPermUI(){
+  // 更新侧边栏用户信息
+  document.getElementById('sb-uname').textContent=curUser.realname;
+  document.getElementById('sb-urole').textContent=ROLE_LABELS[curUser.role]||curUser.role;
+  document.getElementById('sb-role-name').textContent=ROLE_LABELS[curUser.role]||curUser.role;
+  document.getElementById('sb-avatar').textContent=curUser.avatar||curUser.realname[0];
+  document.getElementById('sb-avatar').style.background=curUser.color||'linear-gradient(135deg,#F5A623,#E8600A)';
+  // 账号管理仅管理员可见
+  const navAcc=document.getElementById('nav-acc');
+  if(!can('canManageAcc'))navAcc.classList.add('locked');
+  else navAcc.classList.remove('locked');
+  // 新建按钮
+  const btnNew=document.getElementById('btn-new');
+  if(!can('canEdit'))btnNew.style.display='none';
+  else btnNew.style.display='';
+  // 账号管理新增按钮
+  const btnAddAcc=document.getElementById('btn-add-acc');
+  if(btnAddAcc){if(!can('canManageAcc'))btnAddAcc.style.display='none';}
+}
+
+// ══ 初始化 ══
+async function initApp(){
+  // 先用本地数据快速渲染
+  ACTS=loadD('kkh_acts',DEFAULT_ACTS);
+  SG=loadD('kkh_sg',DEFAULT_SG);
+  ACCS=loadD('kkh_accs',DEFAULT_ACCS);
+  updateStats();renderDash();renderActs();renderCalendar();
+  renderLinks();renderSgRec();renderShare();renderAccList();
+  loadCfgFields();populateAccFilters();setTimeout(initCharts,400);
+
+  // 再从 Supabase 加载最新数据
+  if (typeof SUPABASE_KEY !== 'undefined' && SUPABASE_KEY !== 'YOUR_KEY') {
+    showT('正在从云端加载数据…','info');
+    const ok = await loadFromSupabase();
+    if (ok) {
+      // 同步到localStorage作为缓存
+      saveD('kkh_acts', ACTS); saveD('kkh_accs', ACCS); saveD('kkh_sg', SG);
+      updateStats();renderDash();renderActs();renderCalendar();
+      renderLinks();renderSgRec();renderShare();renderAccList();
+      populateAccFilters();initCharts();
+      showT('✅ 云端数据已加载','ok');
+    }
+  }
+}
+
+function sp(el){
+  if(el.classList.contains('locked')){showT('您的权限不足，无法访问此功能','err');return;}
+  document.querySelectorAll('.sni').forEach(i=>i.classList.remove('on'));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('on'));
+  el.classList.add('on');
+  const pid=el.dataset.p;
+  document.getElementById(pid).classList.add('on');
+  const titles={
+    'p-dash':'数据总览','p-acts':'活动列表','p-cal':'活动日历',
+    'p-links':'链接管理','p-sgrec':'报名记录','p-share':'分享归属统计',
+    'p-site':'前台配置','p-acc':'账号管理'
+  };
+  document.getElementById('pgTitle').textContent=titles[pid]||'';
+  if(pid==='p-cal')renderCalendar();
+  if(pid==='p-share')renderShare();
+}
+
+function updateStats(){
+  // 根据权限过滤数据
+  const myActs=ACTS;
+  const mySg=can('canViewAll')?SG:SG.filter(r=>r.ref===curUser.uname);
+  document.getElementById('st-total').textContent=myActs.length;
+  document.getElementById('st-sg').textContent=mySg.reduce((s,r)=>s+r.c,0).toLocaleString();
+}
+
+// ══ 图表 ══
+function initCharts(){
+  if(typeof Chart==='undefined'){setTimeout(initCharts,500);return;}
+  const cc={};ACTS.forEach(a=>{cc[a.cat]=(cc[a.cat]||0)+1;});
+  const pc=document.getElementById('cpie');
+  if(pc){if(pc._c)pc._c.destroy();pc._c=new Chart(pc,{type:'doughnut',data:{labels:Object.keys(cc),datasets:[{data:Object.values(cc),backgroundColor:['#FDDBB4','#B8E4C4','#D4B8F8','#FDDC8A','#A8D8F0'],borderWidth:0,borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:12},boxWidth:12,padding:12}}}}});}
+  const lc=document.getElementById('cline');
+  if(lc){if(lc._c)lc._c.destroy();lc._c=new Chart(lc,{type:'line',data:{labels:['1月','2月','3月','4月','5月','6月'],datasets:[{label:'报名人次',data:[186,234,312,289,378,456],borderColor:'#E8600A',backgroundColor:'rgba(232,96,10,.08)',tension:.4,fill:true,pointBackgroundColor:'#E8600A',pointRadius:4,pointHoverRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,grid:{color:'#F0EDE8'},ticks:{font:{size:11}}},x:{grid:{display:false},ticks:{font:{size:11}}}}}});}
+}
+
+// ══ 仪表板 ══
+function renderDash(){
+  const sl={on:'<span class="badge b-on">已上架</span>',off:'<span class="badge b-off">已下架</span>',draft:'<span class="badge b-draft">草稿</span>'};
+  document.getElementById('dash-tbl').innerHTML=
+    '<thead><tr><th>活动名称</th><th>分类</th><th>日期</th><th>价格</th><th>图片</th><th>报名</th><th>状态</th></tr></thead><tbody>'+
+    ACTS.slice(0,8).map(a=>`<tr>
+      <td class="td-name">${a.e} ${a.name}</td><td>${a.cat}</td>
+      <td style="color:var(--mu)">${a.date||'—'}</td>
+      <td style="color:var(--or);font-weight:600">${a.price}</td>
+      <td style="color:var(--bl)">${(a.imgs||[]).length}张</td>
+      <td style="color:var(--gr);font-weight:600">${a.sg||0}</td>
+      <td>${sl[a.st]||''}</td>
+    </tr>`).join('')+'</tbody>';
+}
+
+// ══ 活动列表 ══
+function renderActs(kw){
+  if(typeof kw==='undefined')kw='';
+  const catF=document.getElementById('cat-filter').value;
+  const stF=document.getElementById('st-filter').value;
+  let list=[...ACTS];
+  if(catF)list=list.filter(a=>a.cat===catF);
+  if(stF)list=list.filter(a=>a.st===stF);
+  if(kw)list=list.filter(a=>a.name.toLowerCase().includes(kw.toLowerCase())||a.cat.includes(kw));
+  document.getElementById('acts-count').textContent='共 '+list.length+' 条';
+  const sl={on:'<span class="badge b-on">已上架</span>',off:'<span class="badge b-off">已下架</span>',draft:'<span class="badge b-draft">草稿</span>'};
+  const canEdit=can('canEdit'),canDel=can('canDelete');
+  document.getElementById('acts-tbl').innerHTML=
+    '<thead><tr><th>#</th><th>活动名称</th><th>分类</th><th>人数</th><th>日期</th><th>价格</th><th>图片</th><th>报名</th><th>热门</th><th>状态</th><th>操作</th></tr></thead><tbody>'+
+    list.map(a=>`<tr>
+      <td style="color:var(--mu);font-size:11px">#${a.id}</td>
+      <td class="td-name">${a.e} ${a.name}</td>
+      <td>${a.cat}</td><td>${a.min}–${a.max}人</td>
+      <td style="color:var(--mu)">${a.date||'—'}</td>
+      <td style="color:var(--or);font-weight:600">${a.price}</td>
+      <td><span style="color:var(--bl);font-size:12px;">${(a.imgs||[]).length?'<i class="ti ti-photo" style="font-size:13px;vertical-align:-2px;color:var(--bl);"></i> '+(a.imgs||[]).length+'张':'—'}</span></td>
+      <td style="color:var(--gr);font-weight:600">${a.sg||0}</td>
+      <td style="text-align:center">${a.hot?'🔥':'—'}</td>
+      <td>${sl[a.st]||''}</td>
+      <td><div class="act-group">
+        ${canEdit?`<button class="ab ab-e" onclick="openActModal('edit',${a.id})">编辑</button>`:''}
+        <button class="ab ab-img" onclick="openActModal('img',${a.id})"><i class="ti ti-photo" style="font-size:12px;vertical-align:-1px;"></i> 图片</button>
+        <button class="ab ab-p" onclick="showPoster(${a.id})">海报</button>
+        ${canEdit?`<button class="ab ${a.st==='on'?'ab-off':'ab-on'}" onclick="toggleSt(${a.id})">${a.st==='on'?'下架':'上架'}</button>`:''}
+        ${canDel?`<button class="ab ab-d" onclick="delAct(${a.id})">删除</button>`:''}
+      </div></td>
+    </tr>`).join('')+'</tbody>';
+}
+
+// ══ 日历 ══
+function renderCalendar(){
+  const ns=['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月'];
+  document.getElementById('cal-title').textContent=calY+'年 '+ns[calM];
+  const fd=new Date(calY,calM,1).getDay(),days=new Date(calY,calM+1,0).getDate(),td=new Date();
+  let h='';
+  for(let i=0;i<fd;i++){h+=`<div class="cal-day om"><div class="cal-dn">${new Date(calY,calM,1-fd+i).getDate()}</div></div>`;}
+  for(let d=1;d<=days;d++){
+    const it=td.getFullYear()===calY&&td.getMonth()===calM&&td.getDate()===d;
+    const ds=`${calY}-${String(calM+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const evs=ACTS.filter(a=>a.date===ds&&a.st==='on');
+    h+=`<div class="cal-day${it?' today':''}" onclick="calClick('${ds}')">
+      <div class="cal-dn">${d}</div>
+      ${evs.map(e=>`<div class="cal-ev" title="${e.name}">${e.e} ${e.name.slice(0,5)}…</div>`).join('')}
+    </div>`;
+  }
+  document.getElementById('cal-days').innerHTML=h;
+}
+function calPrev(){calM--;if(calM<0){calM=11;calY--;}renderCalendar();}
+function calNext(){calM++;if(calM>11){calM=0;calY++;}renderCalendar();}
+function calClick(ds){if(!can('canEdit')){showT('您没有创建活动的权限','err');return;}openActModal('new');document.getElementById('f-date').value=ds;}
+
+// ══ 链接管理（含账号分享链接）══
+function populateAccFilters(){
+  const opts='<option value="">全部账号的链接</option>'+ACCS.map(a=>`<option value="${a.uname}">${a.realname}（${a.uname}）</option>`).join('');
+  const sgOpts='<option value="">全部来源</option>'+ACCS.map(a=>`<option value="${a.uname}">${a.realname}（${a.uname}）</option>`).join('');
+  document.getElementById('link-acc-filter').innerHTML=opts;
+  document.getElementById('sg-acc-filter').innerHTML=sgOpts;
+}
+
+function renderLinks(){
+  const filterAcc=document.getElementById('link-acc-filter').value;
+  // 展示每个活动 × 每个账号的专属分享链接
+  const showAccs=filterAcc?ACCS.filter(a=>a.uname===filterAcc):ACCS;
+  let html='';
+  ACTS.forEach(act=>{
+    showAccs.forEach(acc=>{
+      const url=`https://kaikaihuacai.com/act/${act.id}?ref=${acc.uname}`;
+      const sgCnt=SG.filter(r=>r.aid===act.id&&r.ref===acc.uname).reduce((s,r)=>s+r.c,0);
+      html+=`<div class="lk-item">
+        <span class="lk-e">${act.e}</span>
+        <div class="lk-info">
+          <div class="lk-name">${act.name} <span style="font-size:10px;background:#EAE0FC;color:#4A1899;padding:1px 6px;border-radius:5px;margin-left:4px;">${acc.realname}</span> <span style="font-size:10px;color:var(--gr);margin-left:4px;">报名 ${sgCnt} 人</span></div>
+          <div class="lk-url">${url}</div>
+        </div>
+        <div class="lk-acts">
+          <button class="lkb lkb-cp" onclick="cpT('${url}','链接已复制')">复制</button>
+          <button class="lkb lkb-po" onclick="showPoster(${act.id})">海报</button>
+        </div>
+      </div>`;
+    });
+  });
+  document.getElementById('links-list').innerHTML=html||'<div style="padding:20px;text-align:center;color:var(--mu);font-size:13px;">暂无数据</div>';
+}
+
+function copyAllLinks(){
+  const filterAcc=document.getElementById('link-acc-filter').value;
+  const showAccs=filterAcc?ACCS.filter(a=>a.uname===filterAcc):ACCS;
+  const lines=[];
+  ACTS.forEach(act=>showAccs.forEach(acc=>{
+    lines.push(`${act.name}（${acc.realname}）: https://kaikaihuacai.com/act/${act.id}?ref=${acc.uname}`);
+  }));
+  navigator.clipboard&&navigator.clipboard.writeText(lines.join('\n')).catch(()=>{});
+  showT(`已复制 ${lines.length} 条分享链接`,'ok');
+}
+
+// ══ 报名记录 ══
+function renderSgRec(){
+  const filterAcc=document.getElementById('sg-acc-filter').value;
+  let list=can('canViewAll')?SG:SG.filter(r=>r.ref===curUser.uname);
+  if(filterAcc)list=list.filter(r=>r.ref===filterAcc);
+  document.getElementById('sg-stat').textContent=`共 ${list.length} 条 · 合计 ${list.reduce((s,r)=>s+r.c,0)} 人`;
+  const sl={'已确认':'<span class="badge b-on">已确认</span>','待支付':'<span class="badge b-draft">待支付</span>','已取消':'<span class="badge b-off">已取消</span>'};
+  document.getElementById('sg-tbl').innerHTML=
+    '<thead><tr><th>#</th><th>姓名</th><th>手机</th><th>活动名称</th><th>人数</th><th>金额</th><th>分享来源</th><th>时间</th><th>状态</th></tr></thead><tbody>'+
+    list.map(r=>{
+      const acc=ACCS.find(a=>a.uname===r.ref);
+      return `<tr>
+        <td style="color:var(--mu);font-size:11px">${r.id}</td>
+        <td class="td-name">${r.n}</td>
+        <td style="color:var(--mu)">${r.p}</td>
+        <td>${r.a}</td>
+        <td>${r.c}人</td>
+        <td style="color:var(--or);font-weight:600">${r.amt}</td>
+        <td><span style="font-size:11px;background:#EAE0FC;color:#4A1899;padding:2px 7px;border-radius:6px;">${acc?acc.realname:r.ref||'直接访问'}</span></td>
+        <td style="color:var(--mu)">${r.t}</td>
+        <td>${sl[r.s]||r.s}</td>
+      </tr>`;
+    }).join('')+'</tbody>';
+}
+function clearAllSg(){
+  if(!confirm('确定要清空所有报名记录吗？此操作不可恢复！')) return;
+  // 清空本地
+  SG = [];
+  saveD('kkh_sg', []);
+  // 清空 Supabase
+  if(typeof SUPABASE_KEY !== 'undefined' && SUPABASE_KEY !== 'YOUR_KEY'){
+    sb.from('signups').delete().neq('id', 0)
+      .then(({error}) => {
+        if(error) showT('云端清空失败: '+error.message, 'err');
+        else showT('✅ 报名记录已全部清空', 'ok');
+      });
+  } else {
+    showT('✅ 本地报名记录已清空', 'ok');
+  }
+  renderSgRec();
+  updateStats();
+}
+
+function exportSg(){
+  // 生成CSV
+  const headers = ['序号','姓名','手机','活动名称','人数','金额','分享来源','报名时间','状态'];
+  const rows = SG.map((r,i) => [
+    i+1, r.n, r.p, r.a, r.c, r.amt,
+    ACCS.find(a=>a.uname===r.ref)?.realname || r.ref || '直接访问',
+    r.t, r.s
+  ]);
+  const csv = [headers, ...rows].map(r => r.map(c => `"${String(c||'').replace(/"/g,'""')}"`).join(',')).join('\n');
+  const blob = new Blob(['\uFEFF'+csv], {type:'text/csv;charset=utf-8'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = '开开华彩报名记录_'+new Date().toLocaleDateString('zh-CN').replace(/\//g,'-')+'.csv';
+  a.click();
+  showT('导出成功', 'ok');
+}
+
+function filterSg(v){
+  // 筛选并重渲
+  const filterAcc=document.getElementById('sg-acc-filter').value;
+  let list=can('canViewAll')?SG:SG.filter(r=>r.ref===curUser.uname);
+  if(filterAcc)list=list.filter(r=>r.ref===filterAcc);
+  if(v)list=list.filter(r=>r.n.includes(v)||r.a.includes(v));
+  const sl={'已确认':'<span class="badge b-on">已确认</span>','待支付':'<span class="badge b-draft">待支付</span>','已取消':'<span class="badge b-off">已取消</span>'};
+  document.getElementById('sg-tbl').innerHTML=
+    '<thead><tr><th>#</th><th>姓名</th><th>手机</th><th>活动名称</th><th>人数</th><th>金额</th><th>分享来源</th><th>时间</th><th>状态</th></tr></thead><tbody>'+
+    list.map(r=>{
+      const acc=ACCS.find(a=>a.uname===r.ref);
+      return `<tr><td style="color:var(--mu);font-size:11px">${r.id}</td><td class="td-name">${r.n}</td><td style="color:var(--mu)">${r.p}</td><td>${r.a}</td><td>${r.c}人</td><td style="color:var(--or);font-weight:600">${r.amt}</td><td><span style="font-size:11px;background:#EAE0FC;color:#4A1899;padding:2px 7px;border-radius:6px;">${acc?acc.realname:r.ref||'直接'}</span></td><td style="color:var(--mu)">${r.t}</td><td>${sl[r.s]||r.s}</td></tr>`;
+    }).join('')+'</tbody>';
+}
+
+// ══ 分享归属统计 ══
+function renderShare(){
+  // 按账号汇总
+  const stats=ACCS.map(acc=>{
+    const mine=SG.filter(r=>r.ref===acc.uname);
+    const total=mine.reduce((s,r)=>s+r.c,0);
+    const revenue=mine.filter(r=>r.s==='已确认').reduce((s,r)=>{
+      const n=parseFloat((r.amt||'0').replace(/[¥,]/g,''));
+      return s+(isNaN(n)?0:n);
+    },0);
+    return {acc,count:mine.length,total,revenue};
+  }).sort((a,b)=>b.total-a.total);
+  const maxTotal=stats[0]?stats[0].total:1;
+  // 顶部卡片
+  document.getElementById('share-cards').innerHTML=stats.map((s,i)=>`
+    <div class="share-card">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+        <div style="width:34px;height:34px;border-radius:50%;background:${s.acc.color||'linear-gradient(135deg,#F5A623,#E8600A)'};display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;">${s.acc.avatar||s.acc.realname[0]}</div>
+        <div>
+          <div class="share-name">${s.acc.realname}</div>
+          <div class="share-sub">${s.acc.uname} · <span class="badge ${s.acc.role==='admin'?'b-admin':s.acc.role==='editor'?'b-editor':'b-viewer'}">${ROLE_LABELS[s.acc.role]||s.acc.role}</span></div>
+        </div>
+        ${i===0?'<div style="margin-left:auto;font-size:18px;">🥇</div>':i===1?'<div style="margin-left:auto;font-size:18px;">🥈</div>':i===2?'<div style="margin-left:auto;font-size:18px;">🥉</div>':''}
+      </div>
+      <div style="display:flex;gap:16px;margin-top:10px;">
+        <div><div style="font-size:22px;font-weight:700;color:var(--or);">${s.total}</div><div style="font-size:11px;color:var(--mu);">报名人次</div></div>
+        <div><div style="font-size:22px;font-weight:700;color:var(--gr);">¥${s.revenue.toLocaleString()}</div><div style="font-size:11px;color:var(--mu);">已确认营收</div></div>
+        <div><div style="font-size:22px;font-weight:700;color:var(--bl);">${s.count}</div><div style="font-size:11px;color:var(--mu);">报名订单数</div></div>
+      </div>
+      <div class="share-bar" style="margin-top:12px;"><div class="share-bar-fill" style="width:${Math.round(s.total/maxTotal*100)}%"></div></div>
+    </div>`).join('');
+  // 明细表格
+  document.getElementById('share-tbl').innerHTML=
+    '<thead><tr><th>账号</th><th>姓名</th><th>权限</th><th>报名订单</th><th>报名人次</th><th>已确认营收</th><th>转化率</th></tr></thead><tbody>'+
+    stats.map(s=>`<tr>
+      <td style="font-family:monospace;font-size:12px;">${s.acc.uname}</td>
+      <td class="td-name">${s.acc.realname}</td>
+      <td><span class="badge ${s.acc.role==='admin'?'b-admin':s.acc.role==='editor'?'b-editor':'b-viewer'}">${ROLE_LABELS[s.acc.role]}</span></td>
+      <td style="font-weight:600">${s.count}</td>
+      <td style="color:var(--or);font-weight:600">${s.total}人</td>
+      <td style="color:var(--gr);font-weight:600">¥${s.revenue.toLocaleString()}</td>
+      <td style="color:var(--bl)">${s.count>0?Math.round(s.total/s.count*10)/10+'人/单':'—'}</td>
+    </tr>`).join('')+'</tbody>';
+}
+
+// ══ 账号管理 ══
+function renderAccList(){
+  if(!can('canManageAcc'))return;
+  const roleColors={admin:'linear-gradient(135deg,#F5A623,#E8600A)',editor:'linear-gradient(135deg,#28A056,#1A6835)',viewer:'linear-gradient(135deg,#8060C0,#5040A0)'};
+  document.getElementById('acc-list').innerHTML=ACCS.map(acc=>`
+    <div class="acc-row">
+      <div class="acc-av" style="background:${acc.color||roleColors[acc.role]||'#888'}">${acc.avatar||acc.realname[0]}</div>
+      <div class="acc-info">
+        <div class="acc-name">${acc.realname} <span class="badge ${acc.role==='admin'?'b-admin':acc.role==='editor'?'b-editor':'b-viewer'}" style="margin-left:6px;">${ROLE_LABELS[acc.role]||acc.role}</span></div>
+        <div class="acc-detail">账号：${acc.uname} ${acc.phone?'· 手机：'+acc.phone:''} ${acc.note?'· '+acc.note:''}</div>
+      </div>
+      <div class="acc-acts">
+        ${acc.uname!=='admin'?`
+          <button class="ab ab-e" onclick="openAccModal('edit',${acc.id})">编辑</button>
+          <button class="ab ab-d" onclick="delAcc(${acc.id})">删除</button>
+        `:'<span style="font-size:11px;color:var(--mu);">系统账号</span>'}
+      </div>
+    </div>`).join('');
+}
+
+function openAccModal(mode,id){
+  if(!can('canManageAcc')){showT('权限不足','err');return;}
+  editAccId=id||null;
+  document.getElementById('acc-modal-title').textContent=mode==='edit'?'编辑账号':'新增账号';
+  ['acc-realname','acc-username','acc-password','acc-phone','acc-note'].forEach(x=>document.getElementById(x).value='');
+  document.getElementById('acc-role').value='editor';
+  if(mode==='edit'&&id){
+    const acc=ACCS.find(a=>a.id===id);
+    if(acc){
+      document.getElementById('acc-realname').value=acc.realname;
+      document.getElementById('acc-username').value=acc.uname;
+      document.getElementById('acc-password').placeholder='不修改请留空';
+      document.getElementById('acc-role').value=acc.role;
+      document.getElementById('acc-phone').value=acc.phone||'';
+      document.getElementById('acc-note').value=acc.note||'';
+    }
+  }
+  document.getElementById('acc-modal-ov').classList.remove('h');
+}
+function closeAccModal(){document.getElementById('acc-modal-ov').classList.add('h');}
+
+function saveAcc(){
+  const realname=document.getElementById('acc-realname').value.trim();
+  const uname=document.getElementById('acc-username').value.trim();
+  const pwd=document.getElementById('acc-password').value;
+  const role=document.getElementById('acc-role').value;
+  const phone=document.getElementById('acc-phone').value.trim();
+  const note=document.getElementById('acc-note').value.trim();
+  if(!realname||!uname){showT('请填写姓名和账号','err');return;}
+  const roleColors={admin:'linear-gradient(135deg,#F5A623,#E8600A)',editor:'linear-gradient(135deg,#28A056,#1A6835)',viewer:'linear-gradient(135deg,#8060C0,#5040A0)'};
+  if(editAccId){
+    const acc=ACCS.find(a=>a.id===editAccId);
+    if(acc){
+      acc.realname=realname;acc.uname=uname;if(pwd)acc.pwd=pwd;
+      acc.role=role;acc.phone=phone;acc.note=note;
+      acc.avatar=realname[0];acc.color=roleColors[role];
+    }
+    showT('账号「'+realname+'」已更新','ok');
+  }else{
+    if(ACCS.find(a=>a.uname===uname)){showT('账号名已存在，请换一个','err');return;}
+    if(!pwd||pwd.length<6){showT('密码至少6位','err');return;}
+    const newId=Math.max(0,...ACCS.map(a=>a.id))+1;
+    ACCS.push({id:newId,uname,pwd,realname,role,phone,note,avatar:realname[0],color:roleColors[role]});
+    showT('账号「'+realname+'」已创建，分享链接参数：?ref='+uname,'ok');
+  }
+  saveD('kkh_accs',ACCS);
+  if(typeof SUPABASE_KEY!=='undefined'&&SUPABASE_KEY!=='YOUR_KEY'){ saveAccToSB(editAccId?{...{uname:uname,pwd:pwd,realname:realname,role:role,phone:phone,note:note,avatar:realname[0],color:roleColors[role]},id:editAccId}:{uname:uname,pwd:pwd,realname:realname,role:role,phone:phone,note:note,avatar:realname[0],color:roleColors[role]},!editAccId).catch(e=>console.warn('acc sync:',e)); }
+  closeAccModal();
+  renderAccList();
+  populateAccFilters();
+  renderShare();
+}
+
+function delAcc(id){
+  const acc=ACCS.find(a=>a.id===id);
+  if(!acc||acc.uname==='admin'){showT('系统管理员账号不可删除','err');return;}
+  if(!confirm('确定要删除账号「'+acc.realname+'」吗？该账号的分享归属数据将保留。'))return;
+  ACCS=ACCS.filter(a=>a.id!==id);
+  saveD('kkh_accs',ACCS);
+  renderAccList();
+  populateAccFilters();
+  showT('账号「'+acc.realname+'」已删除','ok');
+}
+
+// ══ 活动 CRUD ══
+function openActModal(mode,id){
+  if(mode!=='img'&&!can('canEdit')){showT('您没有编辑权限','err');return;}
+  editActId=id||null;
+  modalImgs=[];
+  if(mode==='img'&&id){
+    // 纯图片管理模式
+    const a=ACTS.find(x=>x.id===id);
+    if(!a)return;
+    document.getElementById('act-modal-title').textContent='「'+a.name+'」图片管理';
+    // 清空并只显示图片区域
+    ['f-name','f-min','f-max','f-dur','f-price','f-date','f-emoji','f-ven','f-desc','f-mat','f-out'].forEach(x=>document.getElementById(x).value='');
+    document.getElementById('f-name').value=a.name;
+    document.getElementById('f-cat').value=a.cat;
+    document.getElementById('f-st').value=a.st;
+    document.getElementById('f-min').value=a.min;
+    document.getElementById('f-max').value=a.max;
+    document.getElementById('f-dur').value=a.dur;
+    document.getElementById('f-price').value=a.price;
+    document.getElementById('f-date').value=a.date||'';
+    document.getElementById('f-emoji').value=a.e||'';
+    document.getElementById('f-hot').value=String(a.hot||false);
+    document.getElementById('f-ven').value=a.ven||'';
+    document.getElementById('f-desc').value=a.desc||'';
+    document.getElementById('f-mat').value=a.mat||'';
+    document.getElementById('f-out').value=a.out||'';
+    modalImgs=[...(a.imgs||[])];
+    renderModalImgs();
+    document.getElementById('act-modal-ov').classList.remove('h');
+    // 滚动到图片区域
+    setTimeout(()=>{document.getElementById('modal-img-grid').scrollIntoView({behavior:'smooth'});},300);
+    return;
+  }
+  document.getElementById('act-modal-title').textContent=mode==='edit'?'编辑活动':'新建活动';
+  ['f-name','f-min','f-max','f-dur','f-price','f-date','f-emoji','f-ven','f-desc','f-mat','f-out'].forEach(x=>document.getElementById(x).value='');
+  document.getElementById('f-cat').value='美学声乐';
+  document.getElementById('f-st').value='on';
+  document.getElementById('f-hot').value='false';
+  if(mode==='edit'&&id){
+    const a=ACTS.find(x=>x.id===id);
+    if(a){
+      document.getElementById('f-name').value=a.name;document.getElementById('f-cat').value=a.cat;
+      document.getElementById('f-st').value=a.st;document.getElementById('f-min').value=a.min;
+      document.getElementById('f-max').value=a.max;document.getElementById('f-dur').value=a.dur;
+      document.getElementById('f-price').value=a.price;document.getElementById('f-date').value=a.date||'';
+      document.getElementById('f-emoji').value=a.e||'';document.getElementById('f-hot').value=String(a.hot||false);
+      document.getElementById('f-ven').value=a.ven||'';document.getElementById('f-desc').value=a.desc||'';
+      document.getElementById('f-mat').value=a.mat||'';document.getElementById('f-out').value=a.out||'';
+      modalImgs=[...(a.imgs||[])];
+    }
+  }
+  renderModalImgs();
+  document.getElementById('act-modal-ov').classList.remove('h');
+}
+function closeActModal(){document.getElementById('act-modal-ov').classList.add('h');modalImgs=[];}
+
+// ══ 图片处理 ══
+function handleImgUpload(e){
+  const files=Array.from(e.target.files);
+  if(modalImgs.length+files.length>6){showT('最多上传6张图片','err');return;}
+  files.forEach(f=>{
+    if(f.size>10*1024*1024){showT('图片「'+f.name+'」超过10MB，已跳过','err');return;}
+    const reader=new FileReader();
+    reader.onload=ev=>{
+      modalImgs.push(ev.target.result);
+      renderModalImgs();
+    };
+    reader.readAsDataURL(f);
+  });
+  e.target.value='';
+}
+
+function renderModalImgs(){
+  const grid=document.getElementById('modal-img-grid');
+  grid.innerHTML=modalImgs.map((src,i)=>`
+    <div class="img-item">
+      <img src="${src}" alt="活动图片${i+1}">
+      <button class="img-del" onclick="removeImg(${i})"><i class="ti ti-x"></i></button>
+    </div>`).join('');
+  document.getElementById('img-add-btn').style.display=modalImgs.length>=6?'none':'';
+}
+function removeImg(i){modalImgs.splice(i,1);renderModalImgs();}
+
+// ══ 图片上传区拖拽 ══
+const imgDrop=document.getElementById('img-add-btn');
+imgDrop.addEventListener('dragover',e=>{e.preventDefault();imgDrop.classList.add('drag');});
+imgDrop.addEventListener('dragleave',()=>imgDrop.classList.remove('drag'));
+imgDrop.addEventListener('drop',e=>{
+  e.preventDefault();imgDrop.classList.remove('drag');
+  const files=Array.from(e.dataTransfer.files).filter(f=>f.type.startsWith('image/'));
+  if(!files.length)return;
+  const input=document.getElementById('img-file-input');
+  // 模拟change事件
+  const dt=new DataTransfer();
+  files.forEach(f=>dt.items.add(f));
+  input.files=dt.files;
+  handleImgUpload({target:input});
+});
+
+function saveAct(){
+  const name=document.getElementById('f-name').value.trim();
+  // 图片管理模式：仅保存图片，跳过必填校验，直接关闭
+  if(document.getElementById('act-modal-title').textContent.includes('图片管理')){
+    if(editActId){
+      const a=ACTS.find(x=>x.id===editActId);
+      if(a){a.imgs=modalImgs;saveD('kkh_acts',ACTS);}
+      showT('图片已保存 · '+modalImgs.length+' 张 · 已同步前台','ok');
+    }
+    closeActModal();
+    renderActs();renderDash();
+    return;
+  }
+  if(!name){showT('请填写活动名称','err');return;}
+  const price=document.getElementById('f-price').value.trim();
+  if(!price){showT('请填写收费价格','err');return;}
+  const data={
+    name,cat:document.getElementById('f-cat').value,st:document.getElementById('f-st').value,
+    min:parseInt(document.getElementById('f-min').value)||15,
+    max:parseInt(document.getElementById('f-max').value)||40,
+    dur:document.getElementById('f-dur').value||'2小时',price,
+    date:document.getElementById('f-date').value,
+    e:document.getElementById('f-emoji').value||'✨',
+    ven:document.getElementById('f-ven').value,
+    desc:document.getElementById('f-desc').value,
+    mat:document.getElementById('f-mat').value,
+    out:document.getElementById('f-out').value,
+    hot:document.getElementById('f-hot').value==='true',
+    imgs:modalImgs
+  };
+  if(editActId){
+    const idx=ACTS.findIndex(x=>x.id===editActId);
+    if(idx>-1)ACTS[idx]={...ACTS[idx],...data};
+    showT('活动「'+name+'」已更新 · 图片 '+modalImgs.length+' 张 · 已同步前台','ok');
+  }else{
+    const newId=Math.max(0,...ACTS.map(x=>x.id))+1;
+    ACTS.push({id:newId,...data,sg:0});
+    showT('活动「'+name+'」已创建上架 · 图片 '+modalImgs.length+' 张','ok');
+  }
+  saveD('kkh_acts',ACTS);
+  // 同步到Supabase（异步不阻塞）
+
+  closeActModal();
+  renderActs();renderDash();renderLinks();renderCalendar();updateStats();initCharts();
+}
+
+function toggleSt(id){
+  const a=ACTS.find(x=>x.id===id);
+  if(a){a.st=a.st==='on'?'off':'on';saveD('kkh_acts',ACTS);renderActs();renderDash();showT((a.st==='on'?'已上架：':'已下架：')+a.name,'ok');}
+}
+function delAct(id){
+  const a=ACTS.find(x=>x.id===id);if(!a)return;
+  if(!confirm('确定要删除活动「'+a.name+'」吗？'))return;
+  ACTS=ACTS.filter(x=>x.id!==id);saveD('kkh_acts',ACTS);
+  renderActs();renderDash();renderLinks();updateStats();showT('活动「'+a.name+'」已删除','ok');
+}
+
+// ══ 前台配置 ══
+function loadCfgFields(){
+  const c=loadD('kkh_cfg',{});
+  document.getElementById('cfg-tag').value=c.heroTag||'✦ 社群主理人活动手册 2026';
+  document.getElementById('cfg-name').value=c.siteName||'开开华彩';
+  document.getElementById('cfg-sub').value=c.heroSub||'线下文娱俱乐部 · 一起变年轻 · 用爱和科技为父母做好产品';
+  document.getElementById('cfg-tel').value=c.tel||'138-xxxx-xxxx';
+
+}
+function saveCfg(){
+  const d={
+    heroTag:document.getElementById('cfg-tag').value.trim(),
+    siteName:document.getElementById('cfg-name').value.trim(),
+    heroSub:document.getElementById('cfg-sub').value.trim(),
+    tel:document.getElementById('cfg-tel').value.trim()
+  };
+  saveD('kkh_cfg',d);
+  if(typeof SUPABASE_KEY!=='undefined'&&SUPABASE_KEY!=='YOUR_KEY'){ saveCfgToSB(d).catch(e=>showT('配置同步失败:'+e.message,'err')); }
+  showT('前台配置已保存并同步到云端','ok');
+}
+
+// ══ 海报 ══
+function showPoster(id,refOverride){
+  var a=ACTS.find(function(x){return x.id===id;});
+  if(!a)return;
+  window._posterActId=id;
+  // 填充账号选择器
+  var sel=document.getElementById('poster-ref-sel');
+  if(sel){
+    sel.innerHTML=ACCS.map(function(acc){
+      return '<option value="'+acc.uname+'">'+acc.realname+' ('+acc.uname+')</option>';
+    }).join('');
+    if(refOverride) sel.value=refOverride;
+    else if(curUser) sel.value=curUser.uname;
+  }
+  renderPosterCard(id);
+  document.getElementById('poster-ov').classList.remove('h');
+}
+function refreshPoster(){
+  if(window._posterActId) renderPosterCard(window._posterActId);
+}
+function renderPosterCard(id){
+  var a=ACTS.find(function(x){return x.id===id;});
+  if(!a) return;
+  var sel=document.getElementById('poster-ref-sel');
+  var ref=sel?sel.value:'';
+  var accObj=ACCS.find(function(x){return x.uname===ref;});
+  var refName=accObj?(accObj.realname+'（'+ref+'）'):'';
+  var url='https://kaikaihuacai.com/act/'+id+(ref?'?ref='+ref:'');
+  buildPosterHTML('poster-card', a, url, ref, refName);
+}
+
+function closePoster(){document.getElementById('poster-ov').classList.add('h');}
+
+
+// ══ 工具 ══
+function cpT(t,m){navigator.clipboard&&navigator.clipboard.writeText(t).catch(()=>{});showT(m||'已复制','ok');}
+function showT(m,type){
+  const t=document.getElementById('toast');
+  t.innerHTML=(type==='ok'?'<i class="ti ti-check"></i>':type==='err'?'<i class="ti ti-x"></i>':type==='info'?'<i class="ti ti-info-circle"></i>':'')+' '+m;
+  t.className='toast show'+(type?' '+type:'');
+  clearTimeout(t._timer);
+  t._timer=setTimeout(()=>t.classList.remove('show'),3500);
+}
+// ── 通用海报构建函数 ──
+function buildPosterHTML(containerId, a, url, ref, refName){
+  var container = document.getElementById(containerId);
+  if(!container) return;
+
+  var qrId  = 'qr-img-'+Date.now();
+  var qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=110x110&color=1C1410&bgcolor=FFFFFF&margin=6&data='+encodeURIComponent(url);
+
+  var html = '';
+
+  // Logo
+  html += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">';
+  html += '<div style="width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,#F5A623,#E8600A);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;">华</div>';
+  html += '<div style="font-size:13px;font-weight:600;color:#fff;">开开华彩</div>';
+  html += '</div>';
+
+  // 活动图 or emoji
+  if(a.imgs && a.imgs.length){
+    html += '<div style="width:100%;height:96px;border-radius:10px;overflow:hidden;margin-bottom:12px;">';
+    html += '<img src="'+a.imgs[0]+'" style="width:100%;height:100%;object-fit:cover;"></div>';
+  } else {
+    html += '<div style="font-size:44px;margin-bottom:12px;">'+a.e+'</div>';
+  }
+
+  // 分类 + 名称
+  html += '<div style="font-size:10px;color:#F5A623;letter-spacing:.1em;margin-bottom:5px;">'+a.cat.toUpperCase()+'</div>';
+  html += '<div style="font-size:19px;font-weight:700;color:#fff;line-height:1.3;margin-bottom:10px;">'+a.name+'</div>';
+  html += '<div style="height:.5px;background:rgba(255,255,255,.15);margin:10px 0;"></div>';
+
+  // 三项数据
+  html += '<div style="display:flex;justify-content:space-between;margin-bottom:12px;">';
+  html += '<div style="text-align:center;"><div style="font-size:14px;font-weight:600;color:#fff;">'+a.min+'–'+a.max+'</div><div style="font-size:10px;color:rgba(255,255,255,.5);">人数</div></div>';
+  html += '<div style="text-align:center;"><div style="font-size:14px;font-weight:600;color:#fff;">'+a.dur+'</div><div style="font-size:10px;color:rgba(255,255,255,.5);">时长</div></div>';
+  html += '<div style="text-align:center;"><div style="font-size:14px;font-weight:600;color:#fff;">'+(a.sg||0)+'</div><div style="font-size:10px;color:rgba(255,255,255,.5);">已报名</div></div>';
+  html += '</div>';
+
+  // 价格栏
+  html += '<div style="background:rgba(245,166,35,.15);border:.5px solid rgba(245,166,35,.3);border-radius:10px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">';
+  html += '<div><div style="font-size:22px;font-weight:700;color:#F5A623;">'+a.price+'</div><div style="font-size:11px;color:rgba(255,255,255,.5);">活动收费</div></div>';
+  html += '<div style="font-size:11px;color:rgba(255,255,255,.5);text-align:right;">报名后48h<br>可全额退款</div>';
+  html += '</div>';
+
+  // ── 二维码 + 链接 左右50% 白底卡片 ──
+  html += '<div style="background:#fff;border-radius:14px;padding:14px;display:flex;align-items:stretch;margin-bottom:8px;">';
+
+  // 左50%：二维码占位，JS加载
+  html += '<div style="width:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding-right:10px;border-right:1px solid #EDE5DC;">';
+  html += '<div id="'+qrId+'" style="width:110px;height:110px;background:#F5F0EB;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:32px;">⏳</div>';
+  html += '<div style="font-size:10px;font-weight:600;color:#3A2010;text-align:center;">扫码立即报名</div>';
+  html += '</div>';
+
+  // 右50%：说明 + 链接 + 复制
+  html += '<div style="width:50%;display:flex;flex-direction:column;justify-content:center;padding-left:12px;gap:8px;">';
+  html += '<div style="font-size:11px;font-weight:600;color:#1A1008;line-height:1.6;">扫描左侧二维码<br>直接进入报名页</div>';
+  html += '<div style="background:#FEF3E2;border:.5px solid #F0C888;border-radius:8px;padding:7px 9px;">';
+  html += '<div style="font-size:9px;color:#9A7040;margin-bottom:3px;font-weight:500;">活动专属链接</div>';
+  html += '<div style="font-size:9px;color:#7A5020;word-break:break-all;line-height:1.5;">'+url+'</div>';
+  html += '</div>';
+  html += '<button id="cp-btn-'+qrId+'" style="width:100%;padding:8px;background:linear-gradient(135deg,#E8600A,#F5A623);color:#fff;border:none;border-radius:8px;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;">复制专属链接</button>';
+  html += '</div>';
+  html += '</div>';
+
+  // 分享人标注
+  if(refName){
+    html += '<div style="text-align:center;font-size:10px;color:rgba(255,255,255,.35);margin-top:4px;">分享人：'+refName+'</div>';
+  }
+
+  container.innerHTML = html;
+
+  // JS异步加载二维码图片（完全避免引号嵌套）
+  var qrEl  = document.getElementById(qrId);
+  var cpBtn = document.getElementById('cp-btn-'+qrId);
+
+  if(cpBtn){
+    cpBtn.addEventListener('click', function(){
+      cpT(url, '链接已复制');
+      cpBtn.textContent = '✅ 已复制！';
+      setTimeout(function(){ cpBtn.textContent = '复制专属链接'; }, 2000);
+    });
+  }
+
+  if(qrEl){
+    var img = new Image();
+    img.onload = function(){
+      img.style.cssText = 'display:block;width:110px;height:110px;border-radius:6px;';
+      qrEl.style.cssText = 'width:110px;height:110px;border-radius:8px;overflow:hidden;background:#fff;';
+      qrEl.innerHTML = '';
+      qrEl.appendChild(img);
+    };
+    img.onerror = function(){
+      qrEl.innerHTML = '📲';
+      qrEl.style.cssText = 'width:110px;height:110px;background:#F0EDE8;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:36px;';
+    };
+    img.src = qrUrl;
+  }
+}
+
+</script>
+</body>
+</html>
