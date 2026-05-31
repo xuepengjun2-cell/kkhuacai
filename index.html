@@ -180,8 +180,8 @@ button,input,select,textarea{font-family:inherit;}
 // ⚙️  配置区：填入你的 Supabase 信息
 // Supabase Dashboard → Settings → API
 // ============================================================
-const SUPABASE_URL  = 'YOUR_SUPABASE_URL';   // 如 https://xxxx.supabase.co
-const SUPABASE_ANON = 'YOUR_ANON_KEY';       // anon public key
+const SUPABASE_URL  = 'https://zlkivrqahzkkbvirvgtf.supabase.co';   // 如 https://xxxx.supabase.co
+const SUPABASE_ANON = 'sb_publishable__Y0pG-rf9L9e6zAvakh8Xw_xK35eLK7';       // anon public key
 
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 
@@ -541,7 +541,12 @@ function subSU(id){
   const remark=document.getElementById('suno')?document.getElementById('suno').value:'';
   // 提交到 Supabase（异步，不阻塞UI）
   if(SUPABASE_URL !== 'YOUR_SUPABASE_URL'){
-    submitToSupabase(id,n,p,c,d,remark).catch(err=>console.warn('报名上传失败:',err));
+    submitToSupabase(id,n,p,c,d,remark)
+      .then(()=>console.log('✅ 报名已同步到Supabase'))
+      .catch(err=>{
+        console.error('❌ 报名同步失败:', err);
+        console.error('错误详情:', JSON.stringify(err));
+      });
   }
   if(a){a.sg=(a.sg||0)+c;localStorage.setItem('kkh_acts',JSON.stringify(ACTS));
     try{
