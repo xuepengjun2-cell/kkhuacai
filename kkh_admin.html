@@ -359,7 +359,8 @@ async function saveActToSB(actData, isNew) {
     price: actData.price, venue: actData.ven, description: actData.desc,
     materials: actData.mat, deliverables: actData.out, images: actData.imgs||[],
     status: actData.st, is_hot: actData.hot,
-    event_date: actData.date||null
+    event_date: actData.date||null,
+    created_by: actData.created_by||null
   };
   if (isNew) {
     const { data, error } = await sb.from('activities').insert(row).select().single();
@@ -576,7 +577,6 @@ async function uploadImageToSB(file, actId) {
               </select>
               <div class="sb2"><i class="ti ti-search"></i><input type="text" placeholder="搜索姓名/活动…" oninput="filterSg(this.value)"></div>
               <button class="btn-gr" onclick="exportSg()"><i class="ti ti-download"></i>导出</button>
-              <button class="btn-danger" onclick="clearAllSg()"><i class="ti ti-trash"></i>清空测试数据</button>
             </div>
           </div>
           <div style="overflow-x:auto;"><table id="sg-tbl"></table></div>
@@ -845,10 +845,16 @@ let calY=new Date().getFullYear(),calM=new Date().getMonth();
 // ══ 权限控制 ══
 const ROLE_LABELS={admin:'超级管理员',editor:'编辑者',viewer:'查看者'};
 const ROLE_PERMS={
-  admin:{canEdit:true,canDelete:true,canManageAcc:true,canViewAll:true},
-  editor:{canEdit:true,canDelete:false,canManageAcc:false,canViewAll:false},
-  viewer:{canEdit:false,canDelete:false,canManageAcc:false,canViewAll:false}
+  admin:{canEdit:true,canDelete:true,canManageAcc:true,canViewAll:true,canEditAll:true},
+  editor:{canEdit:true,canDelete:false,canManageAcc:false,canViewAll:false,canEditAll:false},
+  viewer:{canEdit:false,canDelete:false,canManageAcc:false,canViewAll:false,canEditAll:false}
 };
+function canEditAct(act){
+  if(!curUser)return false;
+  if(can('canEditAll'))return true; // admin可编辑所有
+  // editor只能编辑自己创建的活动
+  return act&&act.created_by===curUser.uname;
+}
 function can(perm){return curUser&&ROLE_PERMS[curUser.role]&&ROLE_PERMS[curUser.role][perm];}
 
 // ══ 登录 ══
@@ -1063,11 +1069,11 @@ function renderActs(kw){
       <td style="text-align:center">${a.hot?'🔥':'—'}</td>
       <td>${sl[a.st]||''}</td>
       <td><div class="act-group">
-        ${canEdit?`<button class="ab ab-e" onclick="openActModal('edit',${a.id})">编辑</button>`:''}
+        ${canEditAct(a)?`<button class="ab ab-e" onclick="openActModal('edit',${a.id})">编辑</button>`:''}
         <button class="ab ab-img" onclick="openActModal('img',${a.id})"><i class="ti ti-photo" style="font-size:12px;vertical-align:-1px;"></i> 图片</button>
         <button class="ab ab-p" onclick="showPoster(${a.id})">海报</button>
-        ${canEdit?`<button class="ab ${a.st==='on'?'ab-off':'ab-on'}" onclick="toggleSt(${a.id})">${a.st==='on'?'下架':'上架'}</button>`:''}
-        ${canDel?`<button class="ab ab-d" onclick="delAct(${a.id})">删除</button>`:''}
+        ${canEditAct(a)?`<button class="ab ${a.st==='on'?'ab-off':'ab-on'}" onclick="toggleSt(${a.id})">${a.st==='on'?'下架':'上架'}</button>`:''}
+        ${can('canDelete')&&canEditAct(a)?`<button class="ab ab-d" onclick="delAct(${a.id})">删除</button>`:''}
       </div></td>
     </tr>`).join('')+'</tbody>';
 }
@@ -1109,7 +1115,7 @@ function renderLinks(){
   let html='';
   ACTS.forEach(act=>{
     showAccs.forEach(acc=>{
-      const url=`https://kaikaihuacai.com/act/${act.id}?ref=${acc.uname}`;
+      const url=`https://xuepengjun2-cell.github.io/kkhuacai/?act=${act.id}&ref=${acc.uname}`;
       const sgCnt=SG.filter(r=>r.aid===act.id&&r.ref===acc.uname).reduce((s,r)=>s+r.c,0);
       html+=`<div class="lk-item">
         <span class="lk-e">${act.e}</span>
@@ -1132,7 +1138,7 @@ function copyAllLinks(){
   const showAccs=filterAcc?ACCS.filter(a=>a.uname===filterAcc):ACCS;
   const lines=[];
   ACTS.forEach(act=>showAccs.forEach(acc=>{
-    lines.push(`${act.name}（${acc.realname}）: https://kaikaihuacai.com/act/${act.id}?ref=${acc.uname}`);
+    lines.push(`${act.name}（${acc.realname}）: https://xuepengjun2-cell.github.io/kkhuacai/?act=${act.id}&ref=${acc.uname}`);
   }));
   navigator.clipboard&&navigator.clipboard.writeText(lines.join('\n')).catch(()=>{});
   showT(`已复制 ${lines.length} 条分享链接`,'ok');
@@ -1162,7 +1168,7 @@ function renderSgRec(){
       </tr>`;
     }).join('')+'</tbody>';
 }
-function clearAllSg(){
+function _clearAllSg_hidden(){
   if(!confirm('确定要清空所有报名记录吗？此操作不可恢复！')) return;
   // 清空本地
   SG = [];
@@ -1337,6 +1343,8 @@ function delAcc(id){
   if(!confirm('确定要删除账号「'+acc.realname+'」吗？该账号的分享归属数据将保留。'))return;
   ACCS=ACCS.filter(a=>a.id!==id);
   saveD('kkh_accs',ACCS);
+  // 同步删除Supabase
+  deleteAccFromSB(id).catch(e=>console.warn('删除账号DB同步失败:',e));
   renderAccList();
   populateAccFilters();
   showT('账号「'+acc.realname+'」已删除','ok');
@@ -1345,6 +1353,10 @@ function delAcc(id){
 // ══ 活动 CRUD ══
 function openActModal(mode,id){
   if(mode!=='img'&&!can('canEdit')){showT('您没有编辑权限','err');return;}
+  if(mode==='edit'&&id){
+    const checkAct=ACTS.find(x=>x.id===id);
+    if(checkAct&&!canEditAct(checkAct)){showT('您只能编辑自己创建的活动','err');return;}
+  }
   editActId=id||null;
   modalImgs=[];
   if(mode==='img'&&id){
@@ -1447,8 +1459,13 @@ function saveAct(){
   if(document.getElementById('act-modal-title').textContent.includes('图片管理')){
     if(editActId){
       const a=ACTS.find(x=>x.id===editActId);
-      if(a){a.imgs=modalImgs;saveD('kkh_acts',ACTS);}
-      showT('图片已保存 · '+modalImgs.length+' 张 · 已同步前台','ok');
+      if(a){
+        a.imgs=modalImgs;
+        saveD('kkh_acts',ACTS);
+        saveActToSB({...a,imgs:modalImgs},false)
+          .then(()=>showT('图片已保存 · '+modalImgs.length+' 张 · 已同步数据库 ✅','ok'))
+          .catch(e=>showT('图片本地已保存，数据库同步失败: '+e.message,'err'));
+      }
     }
     closeActModal();
     renderActs();renderDash();
@@ -1477,24 +1494,56 @@ function saveAct(){
     showT('活动「'+name+'」已更新 · 图片 '+modalImgs.length+' 张 · 已同步前台','ok');
   }else{
     const newId=Math.max(0,...ACTS.map(x=>x.id))+1;
-    ACTS.push({id:newId,...data,sg:0});
+    ACTS.push({id:newId,...data,sg:0,created_by:curUser?curUser.uname:'admin'});
     showT('活动「'+name+'」已创建上架 · 图片 '+modalImgs.length+' 张','ok');
   }
   saveD('kkh_acts',ACTS);
-  // 同步到Supabase（异步不阻塞）
-
+  // 同步到Supabase
+  (async()=>{
+    try{
+      if(editActId){
+        // 编辑：更新数据库
+        await saveActToSB({...data,id:editActId},false);
+        showT('活动「'+name+'」已更新并同步到数据库 ✅','ok');
+      }else{
+        // 新建：插入数据库，获取真实ID
+        const newId=await saveActToSB(data,true);
+        if(newId){
+          // 用数据库返回的真实ID替换本地临时ID
+          const last=ACTS[ACTS.length-1];
+          last.id=newId;
+          saveD('kkh_acts',ACTS);
+        }
+        showT('活动「'+name+'」已新建并同步到数据库 ✅','ok');
+      }
+      renderActs();renderDash();renderLinks();
+    }catch(e){
+      showT('数据库同步失败: '+e.message,'err');
+    }
+  })();
   closeActModal();
   renderActs();renderDash();renderLinks();renderCalendar();updateStats();initCharts();
 }
 
 function toggleSt(id){
   const a=ACTS.find(x=>x.id===id);
-  if(a){a.st=a.st==='on'?'off':'on';saveD('kkh_acts',ACTS);renderActs();renderDash();showT((a.st==='on'?'已上架：':'已下架：')+a.name,'ok');}
+  if(a){
+    a.st=a.st==='on'?'off':'on';
+    saveD('kkh_acts',ACTS);
+    // 同步到Supabase
+    sb.from('activities').update({status:a.st}).eq('id',id)
+      .then(({error})=>{
+        if(error) showT('状态同步失败: '+error.message,'err');
+        else showT((a.st==='on'?'已上架：':'已下架：')+a.name,'ok');
+      });
+    renderActs();renderDash();
+  }
 }
 function delAct(id){
   const a=ACTS.find(x=>x.id===id);if(!a)return;
   if(!confirm('确定要删除活动「'+a.name+'」吗？'))return;
   ACTS=ACTS.filter(x=>x.id!==id);saveD('kkh_acts',ACTS);
+  deleteActFromSB(id).catch(e=>console.warn('删除活动DB失败:',e));
   renderActs();renderDash();renderLinks();updateStats();showT('活动「'+a.name+'」已删除','ok');
 }
 
@@ -1546,7 +1595,7 @@ function renderPosterCard(id){
   var ref=sel?sel.value:'';
   var accObj=ACCS.find(function(x){return x.uname===ref;});
   var refName=accObj?(accObj.realname+'（'+ref+'）'):'';
-  var url='https://kaikaihuacai.com/act/'+id+(ref?'?ref='+ref:'');
+  var url='https://xuepengjun2-cell.github.io/kkhuacai/?act='+id+(ref?'&ref='+ref:'');
   buildPosterHTML('poster-card', a, url, ref, refName);
 }
 
