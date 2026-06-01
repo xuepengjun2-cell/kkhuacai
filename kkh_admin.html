@@ -1660,40 +1660,39 @@ function saveAct(){
     imgs:modalImgs
   };
   if(editActId){
+    // ── 编辑活动 ──
     const idx=ACTS.findIndex(x=>x.id===editActId);
-    if(idx>-1)ACTS[idx]={...ACTS[idx],...data};
-    showT('活动「'+name+'」已更新 · 图片 '+modalImgs.length+' 张 · 已同步前台','ok');
+    if(idx>-1) ACTS[idx]={...ACTS[idx],...data};
+    saveD('kkh_acts',ACTS);
+    closeActModal();
+    renderActs();renderDash();renderLinks();renderCalendar();updateStats();
+    // 异步同步到Supabase
+    saveActToSB({...data,id:editActId},false)
+      .then(()=>showT('活动「'+name+'」已更新并同步数据库 ✅','ok'))
+      .catch(e=>showT('本地已更新，数据库同步失败: '+e.message,'err'));
   }else{
-    const newId=Math.max(0,...ACTS.map(x=>x.id))+1;
-    ACTS.push({id:newId,...data,sg:0,created_by:curUser?curUser.uname:'admin'});
-    showT('活动「'+name+'」已创建上架 · 图片 '+modalImgs.length+' 张','ok');
+    // ── 新建活动：先上传Supabase获取真实ID，再存本地 ──
+    closeActModal();
+    showT('正在创建活动，请稍候…','info');
+    const actWithCreator={...data,sg:0,created_by:curUser?curUser.uname:'admin'};
+    saveActToSB(actWithCreator,true)
+      .then(function(realId){
+        actWithCreator.id=realId;
+        ACTS.push(actWithCreator);
+        saveD('kkh_acts',ACTS);
+        renderActs();renderDash();renderLinks();renderCalendar();updateStats();initCharts();
+        showT('活动「'+name+'」已创建并同步数据库 ✅','ok');
+      })
+      .catch(function(e){
+        // Supabase失败时回退：用本地临时ID
+        const tmpId=Math.max(0,...ACTS.map(x=>x.id))+1;
+        actWithCreator.id=tmpId;
+        ACTS.push(actWithCreator);
+        saveD('kkh_acts',ACTS);
+        renderActs();renderDash();renderLinks();renderCalendar();updateStats();
+        showT('活动已本地保存，数据库同步失败（'+e.message+'）','err');
+      });
   }
-  saveD('kkh_acts',ACTS);
-  // 同步到Supabase
-  (async()=>{
-    try{
-      if(editActId){
-        // 编辑：更新数据库
-        await saveActToSB({...data,id:editActId},false);
-        showT('活动「'+name+'」已更新并同步到数据库 ✅','ok');
-      }else{
-        // 新建：插入数据库，获取真实ID
-        const newId=await saveActToSB(data,true);
-        if(newId){
-          // 用数据库返回的真实ID替换本地临时ID
-          const last=ACTS[ACTS.length-1];
-          last.id=newId;
-          saveD('kkh_acts',ACTS);
-        }
-        showT('活动「'+name+'」已新建并同步到数据库 ✅','ok');
-      }
-      renderActs();renderDash();renderLinks();
-    }catch(e){
-      showT('数据库同步失败: '+e.message,'err');
-    }
-  })();
-  closeActModal();
-  renderActs();renderDash();renderLinks();renderCalendar();updateStats();initCharts();
 }
 
 function toggleSt(id){
