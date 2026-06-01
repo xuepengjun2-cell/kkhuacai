@@ -504,11 +504,14 @@ function loadData(){
     const raw=localStorage.getItem('kkh_acts');
     if(raw){
       const saved=JSON.parse(raw);
+      if(!Array.isArray(saved)||saved.length===0) return DEFAULT_ACTS;
       // 如果本地存储的活动数量少于内置数量，说明是旧数据，强制用最新的
       if(saved.length < DEFAULT_ACTS.length){
         localStorage.setItem('kkh_acts',JSON.stringify(DEFAULT_ACTS));
         return DEFAULT_ACTS;
       }
+      // 确保每条活动都有 st 字段
+      saved.forEach(a=>{ if(!a.st) a.st='on'; });
       return saved;
     }
     return DEFAULT_ACTS;
@@ -562,9 +565,11 @@ function goDetail(){
 }
 
 function rFront(cat,kw=''){
+  // 保护：ACTS 为空时用默认数据
+  if(!ACTS||!ACTS.length){ ACTS=DEFAULT_ACTS; }
   let list=cat==='全部'?ACTS:ACTS.filter(a=>a.cat===cat);
   if(kw)list=list.filter(a=>a.name.includes(kw)||a.cat.includes(kw));
-  list=list.filter(a=>a.st==='on');
+  list=list.filter(a=>a.st==='on'||!a.st); // st不存在时也显示
   const g=document.getElementById('ag');
   if(!list.length){g.innerHTML='<div style="text-align:center;padding:40px;color:var(--mu);font-size:13px;">暂无活动</div>';return;}
   g.innerHTML=list.map(a=>{
@@ -814,6 +819,20 @@ const _origSubSU=window.subSU;
 
 
 // 优先展示本地默认数据，再异步加载远程数据
+// 强制刷新：清掉可能过期的localStorage缓存，确保显示最新50条
+(function(){
+  try{
+    const cached = JSON.parse(localStorage.getItem('kkh_acts')||'[]');
+    // 只有当缓存条数和DEFAULT_ACTS完全一致且有st字段时才用缓存
+    const valid = cached.length >= DEFAULT_ACTS.length &&
+                  cached.every(a=>a.st&&a.name&&a.id);
+    if(!valid){
+      localStorage.setItem('kkh_acts', JSON.stringify(DEFAULT_ACTS));
+    }
+  }catch(e){
+    localStorage.setItem('kkh_acts', JSON.stringify(DEFAULT_ACTS));
+  }
+})();
 ACTS = loadData();
 applyCfg();
 rFront('全部');

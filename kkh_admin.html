@@ -867,29 +867,34 @@ function can(perm){return curUser&&ROLE_PERMS[curUser.role]&&ROLE_PERMS[curUser.
 
 // ══ 登录 ══
 // ══ 页面加载时检查登录态（刷新不退出）══
-(function checkSession(){
+function checkSession(){
   try{
     const saved = sessionStorage.getItem('kkh_session');
-    if(!saved) return;
+    if(!saved) return false;
     const user = JSON.parse(saved);
-    if(!user || !user.uname) return;
+    if(!user || !user.uname) return false;
     // 恢复登录态
     ACCS = loadD('kkh_accs', DEFAULT_ACCS);
-    // 验证账号仍然有效
     const acc = ACCS.find(a => a.uname === user.uname);
     if(acc){
       curUser = acc;
       document.getElementById('loginPage').classList.add('h');
       applyPermUI();
       initApp();
+      return true;
     } else {
-      // 账号可能从Supabase删除了，清掉session
       sessionStorage.removeItem('kkh_session');
+      return false;
     }
   } catch(e){
     sessionStorage.removeItem('kkh_session');
+    return false;
   }
-})();
+}
+// DOM加载完成后自动检查
+document.addEventListener('DOMContentLoaded', function(){
+  checkSession();
+});
 
 async function doLogin(){
   const u=document.getElementById('lu').value.trim();
