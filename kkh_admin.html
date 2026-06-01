@@ -1180,25 +1180,34 @@ function populateAccFilters(){
 }
 
 function renderLinks(){
-  const filterAcc=document.getElementById('link-acc-filter').value;
-  // 展示每个活动 × 每个账号的专属分享链接
-  const showAccs=filterAcc?ACCS.filter(a=>a.uname===filterAcc):ACCS;
+  // 非admin且筛选器为空时，自动设置为当前账号
+  const sel=document.getElementById('link-acc-filter');
+  if(sel&&!sel.value&&curUser&&curUser.role!=='admin'){
+    sel.value=curUser.uname;
+  }
+  const filterAcc=sel?sel.value:'';
+  // 默认显示当前登录账号；admin可切换查看所有账号
+  const myAcc=filterAcc||( curUser?curUser.uname:'' );
+  const showAccs=myAcc?ACCS.filter(a=>a.uname===myAcc):ACCS;
   let html='';
-  ACTS.forEach(act=>{
+  ACTS.filter(a=>a.st==='on').forEach(act=>{
     showAccs.forEach(acc=>{
-      const url=`https://xuepengjun2-cell.github.io/kkhuacai/?act=${act.id}&ref=${acc.uname}`;
-      const sgCnt=SG.filter(r=>r.aid===act.id&&r.ref===acc.uname).reduce((s,r)=>s+r.c,0);
-      html+=`<div class="lk-item">
-        <span class="lk-e">${act.e}</span>
-        <div class="lk-info">
-          <div class="lk-name">${act.name} <span style="font-size:10px;background:#EAE0FC;color:#4A1899;padding:1px 6px;border-radius:5px;margin-left:4px;">${acc.realname}</span> <span style="font-size:10px;color:var(--gr);margin-left:4px;">报名 ${sgCnt} 人</span></div>
-          <div class="lk-url">${url}</div>
-        </div>
-        <div class="lk-acts">
-          <button class="lkb lkb-cp" onclick="cpT('${url}','链接已复制')">复制</button>
-          <button class="lkb lkb-po" onclick="showPoster(${act.id})">海报</button>
-        </div>
-      </div>`;
+      const url='https://xuepengjun2-cell.github.io/kkhuacai/?act='+act.id+'&ref='+acc.uname;
+      const sgCnt=SG.filter(r=>r.aid===act.id&&r.ref===acc.uname).reduce((s,r)=>s+(r.c||0),0);
+      html+='<div class="lk-item">'
+        +'<span class="lk-e">'+act.e+'</span>'
+        +'<div class="lk-info">'
+        +'<div class="lk-name">'+act.name
+        +' <span style="font-size:10px;background:#EAE0FC;color:#4A1899;padding:1px 6px;border-radius:5px;margin-left:4px;">'+acc.realname+'</span>'
+        +(sgCnt>0?' <span style="font-size:10px;color:var(--gr);margin-left:4px;">已报名 '+sgCnt+' 人</span>':'')
+        +'</div>'
+        +'<div class="lk-url">'+url+'</div>'
+        +'</div>'
+        +'<div class="lk-acts">'
+        +'<button class="lkb lkb-cp" onclick="cpT(''+url+'','链接已复制')">复制</button>'
+        +'<button class="lkb lkb-po" onclick="showPoster('+act.id+',''+acc.uname+'')">海报</button>'
+        +'</div>'
+        +'</div>';
     });
   });
   document.getElementById('links-list').innerHTML=html||'<div style="padding:20px;text-align:center;color:var(--mu);font-size:13px;">暂无数据</div>';
@@ -1482,38 +1491,57 @@ async function handleMediaUpload(e){
 
     try{
       let uploadFile=f;
-      let previewUrl='';
 
       if(isImg){
         // 图片压缩：Canvas缩放，最长边1200px，质量0.82
         uploadFile=await compressImage(f,1200,0.82);
-        previewUrl=URL.createObjectURL(uploadFile);
       }else if(isVideo){
-        // 视频压缩：超过10MB则用MediaRecorder降码率
+        // 视频压缩：超过10MB则降码率
         if(f.size>10*1024*1024){
           if(progTip) progTip.textContent='压缩视频中，请稍候…';
           uploadFile=await compressVideo(f,10*1024*1024);
         }
-        previewUrl=URL.createObjectURL(uploadFile);
       }
 
       if(progBar) progBar.style.width=((i+1)/files.length*60)+'%';
       if(progTip) progTip.textContent='上传至云端：'+f.name;
 
       // 上传到 Supabase Storage
-      const url=await uploadToStorage(uploadFile, isVideo?'video':'image');
-      if(url){
-        modalImgs.push(url);
-        renderModalImgs();
-        if(progBar) progBar.style.width=((i+1)/files.length*100)+'%';
+      let finalUrl=null;
+      try{
+        finalUrl=await uploadToStorage(uploadFile, isVideo?'video':'image');
+      }catch(storageErr){
+        console.warn('Storage上传失败，回退base64:',storageErr);
       }
-    }catch(err){
-      // 如果Storage上传失败，回退到base64本地存储
-      console.warn('Storage上传失败，使用本地存储:',err);
-      const reader=new FileReader();
-      await new Promise(res=>{reader.onload=ev=>{modalImgs.push(ev.target.result);res();};reader.readAsDataURL(f);});
+
+      if(finalUrl){
+        // Storage上传成功：图片排在视频前面
+        if(isImg){
+          // 图片插入到第一个视频之前
+          const firstVideoIdx=modalImgs.findIndex(s=>s.includes('/video/')||s.match(/\.(mp4|webm|mov)($|\?)/i));
+          if(firstVideoIdx>=0) modalImgs.splice(firstVideoIdx,0,finalUrl);
+          else modalImgs.push(finalUrl);
+        }else{
+          modalImgs.push(finalUrl);
+        }
+      }else{
+        // 回退base64
+        const reader=new FileReader();
+        const b64=await new Promise(res=>{reader.onload=ev=>res(ev.target.result);reader.readAsDataURL(uploadFile);});
+        if(isImg){
+          const firstVideoIdx=modalImgs.findIndex(s=>s.startsWith('data:video'));
+          if(firstVideoIdx>=0) modalImgs.splice(firstVideoIdx,0,b64);
+          else modalImgs.push(b64);
+        }else{
+          modalImgs.push(b64);
+        }
+        showT('网络上传失败，已本地暂存','info');
+      }
       renderModalImgs();
-      showT('网络上传失败，已本地暂存','info');
+      if(progBar) progBar.style.width=((i+1)/files.length*100)+'%';
+    }catch(err){
+      console.error('上传处理出错:',err);
+      showT('上传失败: '+err.message,'err');
     }
   }
 
@@ -1605,7 +1633,8 @@ async function compressVideo(file, maxBytes){
 
 // 上传到 Supabase Storage
 async function uploadToStorage(file, type){
-  if(typeof SUPABASE_KEY==='undefined'||SUPABASE_KEY==='YOUR_KEY') return null;
+  // 直接用 sb 客户端，无需额外检查
+  if(!sb) return null;
   const ext=file.name.split('.').pop().toLowerCase()||'jpg';
   const path=type+'/'+Date.now()+'-'+Math.random().toString(36).slice(2)+'.'+ext;
   const {error}=await sb.storage.from('activity-media').upload(path,file,{
