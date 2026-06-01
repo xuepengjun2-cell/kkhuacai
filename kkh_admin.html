@@ -873,31 +873,58 @@ async function doLogin(){
   errEl.textContent='验证中…';
 
   try {
-    // 优先从 Supabase accounts 表验证
+    // 先用本地账号快速验证（毫秒级响应）
+    ACCS=loadD('kkh_accs',DEFAULT_ACCS);
+    const localAcc=ACCS.find(a=>a.uname===u&&a.pwd===p);
+
+    if(localAcc){
+      // 本地验证通过，立即登录
+      curUser=localAcc;
+      errEl.textContent='';
+      document.getElementById('loginPage').classList.add('h');
+      applyPermUI();
+      initApp();
+      // 后台异步从Supabase同步最新账号信息
+      sb.from('accounts').select('*').eq('username',u).eq('password',p).single()
+        .then(({data})=>{
+          if(data){
+            curUser={
+              id:data.id, uname:data.username, pwd:data.password,
+              realname:data.realname, role:data.role,
+              phone:data.phone||'', note:data.note||'',
+              avatar:data.avatar||data.realname[0],
+              color:data.color||'linear-gradient(135deg,#F5A623,#E8600A)'
+            };
+            // 更新本地缓存
+            const idx=ACCS.findIndex(a=>a.uname===u);
+            if(idx>=0)ACCS[idx]=curUser;
+            saveD('kkh_accs',ACCS);
+          }
+        }).catch(()=>{});
+      return;
+    }
+
+    // 本地没有则从Supabase查（新增账号场景）
+    errEl.textContent='验证中…';
     const {data, error} = await sb.from('accounts')
       .select('*').eq('username', u).eq('password', p).single();
 
     if(error || !data){
-      // 回退到本地默认账号
-      ACCS=loadD('kkh_accs',DEFAULT_ACCS);
-      const acc=ACCS.find(a=>a.uname===u&&a.pwd===p);
-      if(!acc){
-        errEl.textContent='账号或密码错误，请重试';
-        document.getElementById('lp').value='';
-        document.getElementById('lp').focus();
-        return;
-      }
-      curUser=acc;
-    } else {
-      // Supabase 验证成功
-      curUser={
-        id:data.id, uname:data.username, pwd:data.password,
-        realname:data.realname, role:data.role,
-        phone:data.phone||'', note:data.note||'',
-        avatar:data.avatar||data.realname[0],
-        color:data.color||'linear-gradient(135deg,#F5A623,#E8600A)'
-      };
+      errEl.textContent='账号或密码错误，请重试';
+      document.getElementById('lp').value='';
+      document.getElementById('lp').focus();
+      return;
     }
+    curUser={
+      id:data.id, uname:data.username, pwd:data.password,
+      realname:data.realname, role:data.role,
+      phone:data.phone||'', note:data.note||'',
+      avatar:data.avatar||data.realname[0],
+      color:data.color||'linear-gradient(135deg,#F5A623,#E8600A)'
+    };
+    // 缓存到本地，下次秒登录
+    ACCS.push(curUser);
+    saveD('kkh_accs',ACCS);
     errEl.textContent='';
     document.getElementById('loginPage').classList.add('h');
     applyPermUI();
@@ -1159,66 +1186,41 @@ function renderSgRec(){
   const filterAcc=document.getElementById('sg-acc-filter').value;
   let list=can('canViewAll')?SG:SG.filter(r=>r.ref===curUser.uname);
   if(filterAcc)list=list.filter(r=>r.ref===filterAcc);
-  document.getElementById('sg-stat').textContent=`共 ${list.length} 条 · 合计 ${list.reduce((s,r)=>s+r.c,0)} 人`;
-  const sl={'已确认':'<span class="badge b-on">已确认</span>','待支付':'<span class="badge b-draft">待支付</span>','已取消':'<span class="badge b-off">已取消</span>'};
+  const totalPeople=list.reduce((s,r)=>s+(r.c||0),0);
+  const confirmedAmt=list.filter(r=>r.s==='已确认').reduce((s,r)=>{
+    const n=parseFloat((r.amt||'0').replace(/[^0-9.]/g,''));
+    return s+(isNaN(n)?0:n*(r.c||1));
+  },0);
+  document.getElementById('sg-stat').textContent='共 '+list.length+' 条 · '+totalPeople+' 人 · 已确认营收 ¥'+confirmedAmt.toLocaleString();
+  const rows=list.map(function(r){
+    const acc=ACCS.find(function(a){return a.uname===r.ref;});
+    const stBadge=r.s==='已确认'?'<span class="badge b-on">已确认</span>'
+                 :r.s==='已取消'?'<span class="badge b-off">已取消</span>'
+                 :'<span class="badge b-draft">待确认</span>';
+    const btns=(r.s==='待确认'||r.s==='待支付')
+      ?'<button class="ab ab-on" onclick="confirmSg('+r.id+')">确认</button>'
+       +'<button class="ab ab-d" style="margin-left:4px;" onclick="cancelSg('+r.id+')">取消</button>'
+      :r.s==='已确认'
+      ?'<span style="font-size:11px;color:var(--gr);">✅已确认</span>'
+       +'<button class="ab ab-d" style="margin-left:4px;" onclick="cancelSg('+r.id+')">退款</button>'
+      :'<span style="font-size:11px;color:var(--mu);">已取消</span>';
+    return '<tr>'
+      +'<td style="color:var(--mu);font-size:11px">'+r.id+'</td>'
+      +'<td class="td-name">'+r.n+'</td>'
+      +'<td style="color:var(--mu)">'+r.p+'</td>'
+      +'<td>'+r.a+'</td>'
+      +'<td>'+r.c+'人</td>'
+      +'<td style="color:var(--or);font-weight:600">'+r.amt+'</td>'
+      +'<td><span style="font-size:11px;background:#EAE0FC;color:#4A1899;padding:2px 7px;border-radius:6px;">'+(acc?acc.realname:r.ref||'直接访问')+'</span></td>'
+      +'<td style="color:var(--mu)">'+r.t+'</td>'
+      +'<td>'+stBadge+'</td>'
+      +'<td><div style="display:flex;gap:4px;align-items:center;">'+btns+'</div></td>'
+      +'</tr>';
+  }).join('');
   document.getElementById('sg-tbl').innerHTML=
-    '<thead><tr><th>#</th><th>姓名</th><th>手机</th><th>活动名称</th><th>人数</th><th>金额</th><th>分享来源</th><th>时间</th><th>状态</th></tr></thead><tbody>'+
-    list.map(r=>{
-      const acc=ACCS.find(a=>a.uname===r.ref);
-      return `<tr>
-        <td style="color:var(--mu);font-size:11px">${r.id}</td>
-        <td class="td-name">${r.n}</td>
-        <td style="color:var(--mu)">${r.p}</td>
-        <td>${r.a}</td>
-        <td>${r.c}人</td>
-        <td style="color:var(--or);font-weight:600">${r.amt}</td>
-        <td><span style="font-size:11px;background:#EAE0FC;color:#4A1899;padding:2px 7px;border-radius:6px;">${acc?acc.realname:r.ref||'直接访问'}</span></td>
-        <td style="color:var(--mu)">${r.t}</td>
-        <td>${sl[r.s]||r.s}</td>
-        <td><div style="display:flex;gap:5px;">
-          ${r.s==='待确认'?`<button class="ab ab-on" onclick="confirmSg(${r.id})">确认</button>`:''}
-          ${r.s==='已确认'?`<span style="font-size:11px;color:var(--gr);">✅已确认</span>`:''}
-          ${r.s!=='已取消'?`<button class="ab ab-d" onclick="cancelSg(${r.id})">取消</button>`:''}
-        </div></td>
-      </tr>\`; 
-    }).join('')+'</tbody>';
+    '<thead><tr><th>#</th><th>姓名</th><th>手机</th><th>活动名称</th><th>人数</th><th>金额</th><th>分享来源</th><th>时间</th><th>状态</th><th>操作</th></tr></thead>'
+    +'<tbody>'+rows+'</tbody>';
 }
-function _clearAllSg_hidden(){
-  if(!confirm('确定要清空所有报名记录吗？此操作不可恢复！')) return;
-  // 清空本地
-  SG = [];
-  saveD('kkh_sg', []);
-  // 清空 Supabase
-  if(typeof SUPABASE_KEY !== 'undefined' && SUPABASE_KEY !== 'YOUR_KEY'){
-    sb.from('signups').delete().neq('id', 0)
-      .then(({error}) => {
-        if(error) showT('云端清空失败: '+error.message, 'err');
-        else showT('✅ 报名记录已全部清空', 'ok');
-      });
-  } else {
-    showT('✅ 本地报名记录已清空', 'ok');
-  }
-  renderSgRec();
-  updateStats();
-}
-
-function exportSg(){
-  // 生成CSV
-  const headers = ['序号','姓名','手机','活动名称','人数','金额','分享来源','报名时间','状态'];
-  const rows = SG.map((r,i) => [
-    i+1, r.n, r.p, r.a, r.c, r.amt,
-    ACCS.find(a=>a.uname===r.ref)?.realname || r.ref || '直接访问',
-    r.t, r.s
-  ]);
-  const csv = [headers, ...rows].map(r => r.map(c => `"${String(c||'').replace(/"/g,'""')}"`).join(',')).join('\n');
-  const blob = new Blob(['\uFEFF'+csv], {type:'text/csv;charset=utf-8'});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = '开开华彩报名记录_'+new Date().toLocaleDateString('zh-CN').replace(/\//g,'-')+'.csv';
-  a.click();
-  showT('导出成功', 'ok');
-}
-
 function filterSg(v){
   // 筛选并重渲
   const filterAcc=document.getElementById('sg-acc-filter').value;
