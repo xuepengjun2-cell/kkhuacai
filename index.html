@@ -238,7 +238,7 @@ async function loadRemoteData() {
     if (e2) throw e2;
 
     // 转换格式（Supabase字段名 → 系统字段名）
-    ACTS = acts.map(a => ({
+    const remoteActs = (acts||[]).map(a => ({
       id:    a.id,
       name:  a.name,
       cat:   a.category,
@@ -257,6 +257,15 @@ async function loadRemoteData() {
       date:  a.event_date || '',
       sg:    a.signup_count || 0
     }));
+
+    // 空数组保护：Supabase返回空时不覆盖本地数据
+    if(remoteActs.length > 0){
+      ACTS = remoteActs;
+      // 缓存到localStorage，断网时可用
+      try{ localStorage.setItem('kkh_acts', JSON.stringify(ACTS)); }catch(e){}
+    } else {
+      console.warn('Supabase返回空活动列表，保留本地数据');
+    }
 
     // 应用配置
     const cfg = {};

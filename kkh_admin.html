@@ -866,6 +866,31 @@ function canEditAct(act){
 function can(perm){return curUser&&ROLE_PERMS[curUser.role]&&ROLE_PERMS[curUser.role][perm];}
 
 // ══ 登录 ══
+// ══ 页面加载时检查登录态（刷新不退出）══
+(function checkSession(){
+  try{
+    const saved = sessionStorage.getItem('kkh_session');
+    if(!saved) return;
+    const user = JSON.parse(saved);
+    if(!user || !user.uname) return;
+    // 恢复登录态
+    ACCS = loadD('kkh_accs', DEFAULT_ACCS);
+    // 验证账号仍然有效
+    const acc = ACCS.find(a => a.uname === user.uname);
+    if(acc){
+      curUser = acc;
+      document.getElementById('loginPage').classList.add('h');
+      applyPermUI();
+      initApp();
+    } else {
+      // 账号可能从Supabase删除了，清掉session
+      sessionStorage.removeItem('kkh_session');
+    }
+  } catch(e){
+    sessionStorage.removeItem('kkh_session');
+  }
+})();
+
 async function doLogin(){
   const u=document.getElementById('lu').value.trim();
   const p=document.getElementById('lp').value;
@@ -881,6 +906,7 @@ async function doLogin(){
       // 本地验证通过，立即登录
       curUser=localAcc;
       errEl.textContent='';
+      try{ sessionStorage.setItem('kkh_session', JSON.stringify(curUser)); }catch(e){}
       document.getElementById('loginPage').classList.add('h');
       applyPermUI();
       initApp();
@@ -926,6 +952,7 @@ async function doLogin(){
     ACCS.push(curUser);
     saveD('kkh_accs',ACCS);
     errEl.textContent='';
+    try{ sessionStorage.setItem('kkh_session', JSON.stringify(curUser)); }catch(e){}
     document.getElementById('loginPage').classList.add('h');
     applyPermUI();
     initApp();
@@ -950,6 +977,8 @@ document.getElementById('lu').addEventListener('keydown',e=>{if(e.key==='Enter')
 
 function logout(){
   curUser=null;
+  // 清除登录态，真正退出
+  try{ sessionStorage.removeItem('kkh_session'); }catch(e){}
   document.getElementById('loginPage').classList.remove('h');
   document.getElementById('lp').value='';
   document.getElementById('lu').value='';
