@@ -2,9 +2,10 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>开开华彩 · 活动手册</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/fonts/tabler-icons.min.css">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 :root{--or:#E8600A;--gold:#F5A623;--dark:#1C1410;--cream:#FFF8F0;--warm:#FEF3E2;--bd:#F0E8DF;--mu:#A08060;--tx:#2C1A0A;--sub:#7A6050;--gr:#1E7040;}
@@ -207,141 +208,13 @@ button,input,select,textarea{font-family:inherit;}
 .ord-price{color:var(--or);font-weight:700;}
 .ord-tip{font-size:11px;color:var(--mu);text-align:center;margin-top:16px;line-height:1.6;}
 </style>
-
-<!-- Supabase SDK -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-// ============================================================
-// ⚙️  配置区：填入你的 Supabase 信息
-// Supabase Dashboard → Settings → API
-// ============================================================
-const SUPABASE_URL  = 'https://zlkivrqahzkkbvirvgtf.supabase.co';   // 如 https://xxxx.supabase.co
-const SUPABASE_ANON = 'sb_publishable__Y0pG-rf9L9e6zAvakh8Xw_xK35eLK7';       // anon public key
-
-const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
-
-// ── 数据加载：从 Supabase 读取活动和配置 ──
-async function loadRemoteData() {
-  try {
-    // 读取活动（已上架的）
-    const { data: acts, error: e1 } = await sb
-      .from('activities')
-      .select('*')
-      .eq('status', 'on')
-      .order('id');
-    if (e1) throw e1;
-
-    // 读取站点配置
-    const { data: cfgs, error: e2 } = await sb
-      .from('site_config')
-      .select('*');
-    if (e2) throw e2;
-
-    // 转换格式（Supabase字段名 → 系统字段名）
-    const remoteActs = (acts||[]).map(a => ({
-      id:    a.id,
-      name:  a.name,
-      cat:   a.category,
-      e:     a.emoji || '✨',
-      min:   a.min_people,
-      max:   a.max_people,
-      dur:   a.duration,
-      price: a.price,
-      ven:   a.venue || '',
-      desc:  a.description || '',
-      mat:   a.materials || '',
-      out:   a.deliverables || '',
-      imgs:  a.images || [],
-      st:    a.status,
-      hot:   a.is_hot,
-      date:  a.event_date || '',
-      sg:    a.signup_count || 0
-    }));
-
-    // 空数组保护：Supabase返回空时不覆盖本地数据
-    if(remoteActs.length > 0){
-      ACTS = remoteActs;
-      // 缓存到localStorage，断网时可用
-      try{ localStorage.setItem('kkh_acts', JSON.stringify(ACTS)); }catch(e){}
-    } else {
-      console.warn('Supabase返回空活动列表，保留本地数据');
-    }
-
-    // 应用配置
-    const cfg = {};
-    (cfgs || []).forEach(c => { cfg[c.key] = c.value; });
-    applyRemoteCfg(cfg);
-
-    // 渲染
-    rFront('全部');
-    updateStats();
-    startFrontPolling(); // 启动轮询
-  } catch (err) {
-    console.warn('Supabase读取失败，使用本地数据:', err.message);
-    // 回退到本地数据
-    ACTS = loadData();
-    applyCfg();
-    rFront('全部');
-  }
-}
-
-function applyRemoteCfg(cfg) {
-  const heroTag = document.getElementById('heroTag');
-  const siteName = document.getElementById('siteName');
-  const heroSub  = document.getElementById('heroSub');
-  const heroTel  = document.getElementById('heroTel');
-  const heroTelNum = document.getElementById('heroTelNum');
-  if (heroTag)  heroTag.textContent  = cfg.heroTag  || '✦ 社群主理人活动手册 2026';
-  if (siteName) siteName.textContent = cfg.siteName || '开开华彩';
-  if (heroSub)  heroSub.textContent  = cfg.heroSub  || '';
-  const tel = (cfg.tel || '').trim();
-  if (heroTel && heroTelNum) {
-    if (tel) { heroTelNum.textContent = tel; heroTel.style.display = 'flex'; }
-    else { heroTel.style.display = 'none'; }
-  }
-}
-
-function updateStats() {
-  const total = ACTS.filter(a => a.st === 'on').length;
-  const sgs   = ACTS.reduce((s, a) => s + (a.sg || 0), 0);
-  const fsT = document.getElementById('fs-t');
-  const fsS = document.getElementById('fs-s');
-  if (fsT) fsT.textContent = total;
-  if (fsS) fsS.textContent = sgs.toLocaleString();
-}
-
-// ── 报名提交到 Supabase ──
-async function submitToSupabase(actId, name, phone, count, date, remark) {
-  const a = ACTS.find(x => x.id === actId);
-  const ref = new URLSearchParams(window.location.search).get('ref') || '';
-  const { error } = await sb.from('signups').insert({
-    activity_id:   actId,
-    activity_name: a ? a.name : '',
-    user_name:     name,
-    user_phone:    phone,
-    people_count:  count,
-    event_date:    date || null,
-    remark:        remark || '',
-    ref_account:   ref,
-    status:        '待确认',
-    amount:        a ? a.price : ''
-  });
-  if (error) throw error;
-
-  // 更新报名人数（乐观更新本地）
-  if (a) a.sg = (a.sg || 0) + count;
-
-  // 远程也更新 signup_count
-  await sb.from('activities')
-    .update({ signup_count: (a ? a.sg : count) })
-    .eq('id', actId);
-}
-</script>
 </head>
 <body>
+
+<!-- 提示条 -->
 <div class="toast" id="toast"></div>
 
-<!-- 前台主页 -->
+<!-- ══ 首页 ══ -->
 <div class="view on" id="v-home">
 <div class="page">
   <div class="fh">
@@ -351,12 +224,10 @@ async function submitToSupabase(actId, name, phone, count, date, remark) {
         <div><div class="logo-cn" id="siteName">开开华彩</div><div class="logo-en">KAIKAIHUACAI</div></div>
       </div>
     </div>
-    <div class="hero-b">
-      <div class="hero-tag" id="heroTag">✦ 社群主理人活动手册 2026</div>
-      <div class="hero-h1" id="heroTitle">银发社群<br><span>50款精品活动</span></div>
-      <div class="hero-sub" id="heroSub">线下文娱俱乐部 · 一起变年轻 · 用爱和科技为父母做好产品</div>
-    </div>
-    <div id="heroTel" style="display:none;margin:8px 20px 0;padding:7px 12px;background:rgba(255,255,255,.1);border-radius:10px;display:none;align-items:center;gap:7px;width:fit-content;">
+    <div class="hero-tag" id="heroTag">✦ 社群主理人活动手册 2026</div>
+    <div class="hero-title">银发社群<br><span class="hero-hi">50款精品活动</span></div>
+    <div class="hero-sub" id="heroSub">线下文娱俱乐部 · 一起变年轻 · 用爱和科技为父母做好产品</div>
+    <div id="heroTel" style="display:none;margin:8px 20px 0;padding:7px 12px;background:rgba(255,255,255,.1);border-radius:10px;align-items:center;gap:7px;width:fit-content;">
       <i class="ti ti-phone" style="font-size:14px;color:var(--gold);"></i>
       <span id="heroTelNum" style="font-size:13px;color:rgba(255,255,255,.85);letter-spacing:.05em;"></span>
     </div>
@@ -366,36 +237,31 @@ async function submitToSupabase(actId, name, phone, count, date, remark) {
     <div class="si"><div class="sn">5<span style="font-size:11px">大</span></div><div class="sl2">活动矩阵</div></div>
     <div class="si"><div class="sn" id="fs-s">0</div><div class="sl2">累计报名</div></div>
   </div>
-
-  <div class="ftb">
-    <div class="frow" id="frow">
-      <span class="fb on" data-cat="全部">全部</span>
-      <span class="fb" data-cat="美学声乐">🎤 美学声乐</span>
-      <span class="fb" data-cat="同城社交">🌹 同城社交</span>
-      <span class="fb" data-cat="优雅品位">🍷 优雅品位</span>
-      <span class="fb" data-cat="人文知性">📚 人文知性</span>
-      <span class="fb" data-cat="活力康养">🌲 活力康养</span>
-    </div>
-    <div class="sr"><i class="ti ti-search"></i><input type="text" placeholder="搜索活动名称…" oninput="fSrch(this.value)" id="fsi"></div>
+  <div class="frow" id="frow">
+    <button class="fb on" data-cat="全部">全部</button>
+    <button class="fb" data-cat="美学声乐">🎤 美学声乐</button>
+    <button class="fb" data-cat="同城社交">🌹 同城社交</button>
+    <button class="fb" data-cat="优雅品位">🍷 优雅品位</button>
+    <button class="fb" data-cat="人文知性">📚 人文知性</button>
+    <button class="fb" data-cat="活力康养">🌲 活力康养</button>
+  </div>
+  <div class="fsrch">
+    <i class="ti ti-search" style="color:var(--mu);font-size:15px;"></i>
+    <input type="text" id="fsi" placeholder="搜索活动名称..." oninput="fSrch(this.value)">
   </div>
   <div class="ag" id="ag"></div>
   <div class="tab-bar-space"></div>
 </div>
 </div>
 
-<!-- 活动详情 -->
+<!-- ══ 活动详情页 ══ -->
 <div class="view" id="v-detail">
 <div class="page">
-  <div id="dh2"></div>
-  <div id="db2"></div>
-  <div class="dcta"><div class="ctar">
-    <button class="ctabs" id="pbtn"><i class="ti ti-photo"></i></button>
-    <button class="ctab" id="sbtn"><i class="ti ti-sparkles"></i>立即报名</button>
-  </div></div>
+  <div id="dpage"></div>
 </div>
 </div>
 
-<!-- 我的报名页面 -->
+<!-- ══ 我的报名页 ══ -->
 <div class="view" id="v-myorder">
 <div class="page">
   <div class="qhd">
@@ -419,7 +285,7 @@ async function submitToSupabase(actId, name, phone, count, date, remark) {
 </div>
 </div>
 
-<!-- 底部 TabBar -->
+<!-- ══ 底部 TabBar ══ -->
 <div class="tab-bar" id="tab-bar">
   <div class="tab-item on" id="tab-home" onclick="switchTab('home')">
     <i class="ti ti-home"></i><span>活动</span>
@@ -429,21 +295,35 @@ async function submitToSupabase(actId, name, phone, count, date, remark) {
   </div>
 </div>
 
-<!-- 报名弹层 -->
-<div class="ov h" id="suo"><div class="ss"><div class="sh2"></div><div id="scont"></div></div></div>
+<!-- ══ 报名弹层 ══ -->
+<div class="ov h" id="suo">
+  <div class="ss">
+    <div class="sh2"></div>
+    <div id="scont"></div>
+  </div>
+</div>
 
-<!-- 海报弹层 -->
+<!-- ══ 海报弹层 ══ -->
 <div class="pov h" id="pov">
   <div style="width:100%;max-width:340px;">
-    <div class="pc" id="pcard"></div>
-    <div class="pa">
-      <button class="pab pac2" onclick="closePo()">关闭</button>
-      <button class="pab pas" onclick="showT('海报已保存（演示）')">保存海报</button>
+    <div class="poster-wrap" id="poster-wrap"></div>
+    <div class="poster-btns">
+      <button class="poster-btn pb-close" onclick="closePoster()">关闭</button>
+      <button class="poster-btn pb-save" onclick="showT('请截图保存（Command+Shift+4）','ok');setTimeout(closePoster,2000)">保存截图</button>
     </div>
   </div>
 </div>
 
+<!-- ══ Supabase SDK ══ -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+// ══ Supabase 配置 ══
+const SUPABASE_URL  = 'https://zlkivrqahzkkbvirvgtf.supabase.co';
+const SUPABASE_ANON = 'sb_publishable__Y0pG-rf9L9e6zAvakh8Xw_xK35eLK7';
+const sb = (typeof supabase !== 'undefined')
+  ? supabase.createClient(SUPABASE_URL, SUPABASE_ANON)
+  : null;
+
 const CM={美学声乐:{cls:'b1',t:'t1'},同城社交:{cls:'b2',t:'t2'},优雅品位:{cls:'b3',t:'t3'},人文知性:{cls:'b4',t:'t4'},活力康养:{cls:'b5',t:'t5'}};
 const DEFAULT_ACTS=[
 {id:1,name:"复古国潮肖像美拍",cat:"美学声乐",e:"📸",min:25,max:80,dur:"3小时",price:"¥199/人",ven:"高端国风茶室、艺术空间或专业肖像馆",desc:"专业摄影师+造型师双重服务，在国风场景拍摄专属美拍大片。播放经典金曲烘托氛围，卸下面对镜头的防御，留下最美银发风华。",mat:"专业摄影棚灯光、国风服饰道具、便携补光灯、拍立得相机",out:"2套妆造拍摄、2张实体精修照、额外选片¥300/张",st:"on",hot:true,date:"2026-06-15",sg:34},
@@ -1005,6 +885,151 @@ document.addEventListener('DOMContentLoaded', () => {
   if (inp) inp.addEventListener('keydown', e => { if (e.key === 'Enter') queryOrders(); });
 });
 
+// ============================================================
+// ⚙️  配置区：填入你的 Supabase 信息
+// Supabase Dashboard → Settings → API
+// ============================================================
+const SUPABASE_URL  = 'https://zlkivrqahzkkbvirvgtf.supabase.co';   // 如 https://xxxx.supabase.co
+const SUPABASE_ANON = 'sb_publishable__Y0pG-rf9L9e6zAvakh8Xw_xK35eLK7';       // anon public key
+
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+// ── 数据加载：从 Supabase 读取活动和配置 ──
+async function loadRemoteData() {
+  try {
+    // 读取活动（已上架的）
+    const { data: acts, error: e1 } = await sb
+      .from('activities')
+      .select('*')
+      .eq('status', 'on')
+      .order('id');
+    if (e1) throw e1;
+
+    // 读取站点配置
+    const { data: cfgs, error: e2 } = await sb
+      .from('site_config')
+      .select('*');
+    if (e2) throw e2;
+
+    // 转换格式（Supabase字段名 → 系统字段名）
+    const remoteActs = (acts||[]).map(a => ({
+      id:    a.id,
+      name:  a.name,
+      cat:   a.category,
+      e:     a.emoji || '✨',
+      min:   a.min_people,
+      max:   a.max_people,
+      dur:   a.duration,
+      price: a.price,
+      ven:   a.venue || '',
+      desc:  a.description || '',
+      mat:   a.materials || '',
+      out:   a.deliverables || '',
+      imgs:  a.images || [],
+      st:    a.status,
+      hot:   a.is_hot,
+      date:  a.event_date || '',
+      sg:    a.signup_count || 0
+    }));
+
+    // 空数组保护：Supabase返回空时不覆盖本地数据
+    if(remoteActs.length > 0){
+      ACTS = remoteActs;
+      // 缓存到localStorage，断网时可用
+      try{ localStorage.setItem('kkh_acts', JSON.stringify(ACTS)); }catch(e){}
+    } else {
+      console.warn('Supabase返回空活动列表，保留本地数据');
+    }
+
+    // 应用配置
+    const cfg = {};
+    (cfgs || []).forEach(c => { cfg[c.key] = c.value; });
+    applyRemoteCfg(cfg);
+
+    // 渲染
+    rFront('全部');
+    updateStats();
+    startFrontPolling(); // 启动轮询
+  } catch (err) {
+    console.warn('Supabase读取失败，使用本地数据:', err.message);
+    // 回退到本地数据
+    ACTS = loadData();
+    applyCfg();
+    rFront('全部');
+  }
+}
+
+function applyRemoteCfg(cfg) {
+  const heroTag = document.getElementById('heroTag');
+  const siteName = document.getElementById('siteName');
+  const heroSub  = document.getElementById('heroSub');
+  const heroTel  = document.getElementById('heroTel');
+  const heroTelNum = document.getElementById('heroTelNum');
+  if (heroTag)  heroTag.textContent  = cfg.heroTag  || '✦ 社群主理人活动手册 2026';
+  if (siteName) siteName.textContent = cfg.siteName || '开开华彩';
+  if (heroSub)  heroSub.textContent  = cfg.heroSub  || '';
+  const tel = (cfg.tel || '').trim();
+  if (heroTel && heroTelNum) {
+    if (tel) { heroTelNum.textContent = tel; heroTel.style.display = 'flex'; }
+    else { heroTel.style.display = 'none'; }
+  }
+}
+
+function updateStats() {
+  const total = ACTS.filter(a => a.st === 'on').length;
+  const sgs   = ACTS.reduce((s, a) => s + (a.sg || 0), 0);
+  const fsT = document.getElementById('fs-t');
+  const fsS = document.getElementById('fs-s');
+  if (fsT) fsT.textContent = total;
+  if (fsS) fsS.textContent = sgs.toLocaleString();
+}
+
+// ── 报名提交到 Supabase ──
+async function submitToSupabase(actId, name, phone, count, date, remark) {
+  const a = ACTS.find(x => x.id === actId);
+  const ref = new URLSearchParams(window.location.search).get('ref') || '';
+  const { error } = await sb.from('signups').insert({
+    activity_id:   actId,
+    activity_name: a ? a.name : '',
+    user_name:     name,
+    user_phone:    phone,
+    people_count:  count,
+    event_date:    date || null,
+    remark:        remark || '',
+    ref_account:   ref,
+    status:        '待确认',
+    amount:        a ? a.price : ''
+  });
+  if (error) throw error;
+
+  // 更新报名人数（乐观更新本地）
+  if (a) a.sg = (a.sg || 0) + count;
+
+  // 远程也更新 signup_count
+  await sb.from('activities')
+    .update({ signup_count: (a ? a.sg : count) })
+    .eq('id', actId);
+}
+
+
+// ══ 页面初始化 ══
+ACTS = loadData();
+applyCfg();
+rFront('全部');
+
+// 异步加载 Supabase 云端数据
+if (sb && SUPABASE_URL !== 'YOUR_SUPABASE_URL') {
+  loadRemoteData().then(function(){
+    var params = new URLSearchParams(window.location.search);
+    var actId  = params.get('act');
+    if(actId){
+      var a = ACTS.find(function(x){ return x.id === parseInt(actId); });
+      if(a) setTimeout(function(){ openD(a.id); }, 300);
+    }
+  }).catch(function(err){
+    console.warn('Supabase加载失败，使用本地数据:', err);
+  });
+}
 </script>
 </body>
 </html>
