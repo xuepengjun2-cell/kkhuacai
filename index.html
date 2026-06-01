@@ -838,6 +838,20 @@ applyCfg();
 rFront('全部');
 
 // 如果已配置 Supabase，异步加载云端数据
+if (SUPABASE_URL !== 'YOUR_SUPABASE_URL') {
+  loadRemoteData().then(function(){
+    // 加载完成后检查URL参数，支持分享链接直达
+    var params = new URLSearchParams(window.location.search);
+    var actId = params.get('act');
+    if(actId){
+      var a = ACTS.find(function(x){ return x.id === parseInt(actId); });
+      if(a) setTimeout(function(){ openD(a.id); }, 300);
+    }
+  }).catch(function(err){
+    console.warn('Supabase加载失败，使用本地数据:', err);
+  });
+}
+
 // ══ 前台60秒轮询：刷新活动数据 ══
 let _frontPollTimer=null;
 function startFrontPolling(){
@@ -870,25 +884,7 @@ function startFrontPolling(){
   },60000); // 60秒
 }
 
-if (SUPABASE_URL !== 'YOUR_SUPABASE_URL') {
-  loadRemoteData().then(()=>{
-    // 加载完成后检查URL参数，支持分享链接直达
-    const params=new URLSearchParams(window.location.search);
-    const actId=params.get('act');
-    if(actId){
-      const a=ACTS.find(x=>x.id===parseInt(actId));
-      if(a) setTimeout(()=>openD(a.id),300);
-    }
-  });
-} else {
-  // 本地模式也检查URL参数
-  const params=new URLSearchParams(window.location.search);
-  const actId=params.get('act');
-  if(actId){
-    const a=ACTS.find(x=>x.id===parseInt(actId));
-    if(a) setTimeout(()=>openD(a.id),100);
-  }
-}
+
 
 // ══ TabBar 切换 ══
 function switchTab(tab) {
