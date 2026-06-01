@@ -4,187 +4,133 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>开开华彩 · 活动手册</title>
-<link rel="preconnect" href="https://cdn.jsdelivr.net">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/fonts/tabler-icons.min.css">
 <style>
-*{margin:0;padding:0;box-sizing:border-box;}
-:root{--or:#E8600A;--gold:#F5A623;--dark:#1C1410;--cream:#FFF8F0;--warm:#FEF3E2;--bd:#F0E8DF;--mu:#A08060;--tx:#2C1A0A;--sub:#7A6050;--gr:#1E7040;}
-body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif;background:var(--cream);color:var(--tx);}
-button,input,select,textarea{font-family:inherit;}
-
-/* HEADER */
-.fh{background:linear-gradient(160deg,#1C1410,#3D1F08 55%,#5C2E0A);padding-bottom:1.5rem;position:relative;overflow:hidden;}
-.fh::before{content:'';position:absolute;top:-60px;right:-50px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(245,166,35,.15),transparent 70%);}
-.topbar{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;}
-.logo-a{display:flex;align-items:center;gap:10px;}
-.logo-m{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--gold),var(--or));display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:700;color:#fff;}
-.logo-cn{font-size:16px;font-weight:600;color:#fff;}
-.logo-en{font-size:10px;color:rgba(255,255,255,.4);letter-spacing:.1em;margin-top:1px;}
-.hero-b{padding:4px 20px 0;}
-.hero-tag{display:inline-flex;align-items:center;font-size:11px;color:var(--gold);background:rgba(245,166,35,.12);border:.5px solid rgba(245,166,35,.25);padding:4px 12px;border-radius:20px;margin-bottom:12px;}
-.hero-h1{font-size:26px;font-weight:700;color:#fff;line-height:1.25;margin-bottom:8px;}
-.hero-h1 span{color:var(--gold);}
-.hero-sub{font-size:13px;color:rgba(255,255,255,.5);line-height:1.6;}
-.sbar{display:flex;background:linear-gradient(135deg,var(--or),var(--gold));padding:12px 20px;}
-.si{flex:1;text-align:center;position:relative;}
-.si+.si::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);height:60%;width:.5px;background:rgba(255,255,255,.3);}
-.sn{font-size:20px;font-weight:700;color:#fff;}
-.sl2{font-size:11px;color:rgba(255,255,255,.75);margin-top:1px;}
-
-/* TOOLBAR */
-.ftb{background:#fff;border-bottom:1px solid var(--bd);padding:10px 16px;position:sticky;top:0;z-index:20;}
-.frow{overflow-x:auto;white-space:nowrap;scrollbar-width:none;margin-bottom:8px;}
-.frow::-webkit-scrollbar{display:none;}
-.fb{display:inline-block;font-size:12px;color:var(--mu);background:var(--warm);border:.5px solid var(--bd);padding:5px 13px;border-radius:20px;margin-right:6px;cursor:pointer;transition:all .15s;}
-.fb.on{color:#fff;background:var(--or);border-color:var(--or);}
-.sr{display:flex;align-items:center;gap:8px;background:var(--warm);border:.5px solid var(--bd);border-radius:10px;padding:7px 12px;}
-.sr i{font-size:15px;color:var(--mu);}
-.sr input{background:none;border:none;outline:none;font-size:13px;color:var(--tx);width:100%;}
-
-/* CARDS */
-.page{max-width:480px;margin:0 auto;min-height:100vh;}
-.ag{padding:14px 16px;display:flex;flex-direction:column;gap:10px;}
-.ac{background:#fff;border-radius:14px;border:.5px solid var(--bd);overflow:hidden;cursor:pointer;transition:transform .15s,box-shadow .15s;}
-.ac:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(232,96,10,.1);}
-.aci{display:flex;align-items:stretch;}
-.at{width:90px;min-height:90px;display:flex;align-items:center;justify-content:center;font-size:34px;flex-shrink:0;position:relative;}
-.t1{background:linear-gradient(135deg,#FFF0E6,#FDDBB4);}
-.t2{background:linear-gradient(135deg,#E8F5EC,#B8E4C4);}
-.t3{background:linear-gradient(135deg,#F3EEFF,#D4B8F8);}
-.t4{background:linear-gradient(135deg,#FFF5E0,#FDDC8A);}
-.t5{background:linear-gradient(135deg,#E0F4FF,#A8D8F0);}
-.hd{position:absolute;top:6px;right:5px;background:var(--or);color:#fff;font-size:9px;padding:1px 5px;border-radius:8px;}
-.ain{flex:1;padding:11px 12px;}
-.abg{display:inline-block;font-size:10px;padding:2px 7px;border-radius:8px;margin-bottom:5px;}
-.b1{background:#FEE8D0;color:#8C3A00;}.b2{background:#D8EFDF;color:#1E5C30;}.b3{background:#EDE8FE;color:#5B1BAA;}.b4{background:#FEF3D0;color:#7A4A00;}.b5{background:#D8EEF8;color:#0A4A7A;}
-.an{font-size:14px;font-weight:600;color:var(--tx);margin-bottom:4px;line-height:1.3;}
-.ams{display:flex;gap:8px;flex-wrap:wrap;}
-.am{font-size:11px;color:var(--sub);display:flex;align-items:center;gap:2px;}
-.am i{font-size:12px;}
-.ap{font-size:14px;font-weight:700;color:var(--or);margin-top:5px;}
-.aar{display:flex;align-items:center;padding:0 10px;color:#D0C0B0;}
-.sc2{font-size:11px;color:var(--gr);background:#EAF7EE;padding:2px 7px;border-radius:7px;margin-top:4px;display:inline-block;}
-
-/* DETAIL */
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+:root{--or:#E8600A;--gold:#F5A623;--bg:#FBF7F2;--warm:#F5EDE4;--bd:#E8DDD4;--tx:#1C1410;--mu:#9A8878;--gr:#1A6835;--ra:14px;}
+body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif;color:var(--tx);}
+.page{max-width:480px;margin:0 auto;background:var(--bg);min-height:100vh;}
 .view{display:none;}.view.on{display:block;}
-.dh{background:linear-gradient(160deg,#1C1410,#3D1F08 55%,#5C2E0A);padding:16px 20px 24px;position:relative;overflow:hidden;}
-.dh::before{content:'';position:absolute;top:-40px;right:-40px;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,rgba(245,166,35,.15),transparent 70%);}
-.bb{display:inline-flex;align-items:center;gap:5px;font-size:13px;color:rgba(255,255,255,.65);cursor:pointer;margin-bottom:14px;}
-.de{width:68px;height:68px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:34px;margin-bottom:12px;}
-.dc{font-size:11px;color:var(--gold);letter-spacing:.08em;margin-bottom:5px;}
-.dh1{font-size:22px;font-weight:700;color:#fff;line-height:1.3;margin-bottom:8px;}
-.dph{font-size:26px;font-weight:700;color:var(--gold);}
-.dph span{font-size:13px;font-weight:400;color:rgba(255,255,255,.45);}
-.db{padding:0 16px 100px;}
-.ds{background:#fff;border-radius:14px;border:.5px solid var(--bd);padding:15px;margin-top:12px;}
-.dst{font-size:13px;font-weight:600;color:var(--tx);margin-bottom:11px;display:flex;align-items:center;gap:5px;}
-.dst i{font-size:15px;color:var(--or);}
-.ig{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-.ic2{background:var(--warm);border-radius:9px;padding:9px 11px;}
-.il{font-size:11px;color:var(--mu);margin-bottom:2px;}
-.iv{font-size:13px;font-weight:500;color:var(--tx);}
-.dd{font-size:13px;color:var(--sub);line-height:1.8;}
-.ol{display:flex;flex-direction:column;gap:7px;}
-.oi{display:flex;align-items:flex-start;gap:7px;font-size:13px;color:var(--sub);}
-.oi i{font-size:13px;color:var(--or);flex-shrink:0;margin-top:1px;}
-.ml2{display:flex;flex-direction:column;gap:6px;}
-.mi{display:flex;align-items:flex-start;gap:7px;font-size:13px;color:var(--sub);}
-.mi i{font-size:13px;color:#0A4A7A;flex-shrink:0;margin-top:1px;}
-.lb{background:var(--warm);border:.5px solid var(--bd);border-radius:9px;padding:9px 11px;display:flex;align-items:center;gap:7px;margin-top:7px;}
-.lb i{font-size:15px;color:var(--or);flex-shrink:0;}
-.lb span{font-size:12px;color:var(--sub);word-break:break-all;flex:1;}
-.cb{font-size:11px;color:var(--or);cursor:pointer;padding:3px 8px;border-radius:6px;background:rgba(232,96,10,.08);}
-.dcta{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;padding:10px 16px;background:rgba(255,248,240,.95);backdrop-filter:blur(8px);border-top:.5px solid var(--bd);z-index:50;}
+/* Toast */
+.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-80px);background:#1C1410;color:#fff;padding:10px 18px;border-radius:20px;font-size:13px;z-index:9999;transition:transform .3s;white-space:nowrap;max-width:90vw;text-align:center;}
+.toast.show{transform:translateX(-50%) translateY(0);}
+.toast.ok{background:linear-gradient(135deg,#1A6835,#28A056);}
+.toast.err{background:linear-gradient(135deg,#C0200A,#E0300A);}
+.toast.info{background:linear-gradient(135deg,#1060A0,#1878C8);}
+/* Hero */
+.fh{background:linear-gradient(160deg,#1C1410,#3D1F08 55%,#5C2E0A);padding:20px 20px 28px;position:relative;}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+.logo-a{display:flex;align-items:center;gap:10px;}
+.logo-m{width:40px;height:40px;background:linear-gradient(135deg,var(--gold),var(--or));border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:18px;color:#fff;}
+.logo-cn{font-size:16px;font-weight:700;color:#fff;letter-spacing:.05em;}
+.logo-en{font-size:9px;color:rgba(255,255,255,.4);letter-spacing:.15em;}
+.hero-tag{display:inline-flex;align-items:center;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:4px 12px;font-size:12px;color:rgba(255,255,255,.85);margin-bottom:12px;}
+.hero-title{font-size:28px;font-weight:800;color:#fff;line-height:1.2;margin-bottom:8px;}
+.hero-hi{color:var(--gold);}
+.hero-sub{font-size:13px;color:rgba(255,255,255,.6);line-height:1.6;}
+/* Stat bar */
+.sbar{background:linear-gradient(135deg,var(--or),var(--gold));display:flex;}
+.si{flex:1;text-align:center;padding:12px 8px;border-right:.5px solid rgba(255,255,255,.2);}
+.si:last-child{border:none;}
+.sn{font-size:24px;font-weight:800;color:#fff;}
+.sl2{font-size:10px;color:rgba(255,255,255,.8);margin-top:2px;}
+/* Filter */
+.frow{display:flex;gap:8px;padding:12px 14px;overflow-x:auto;scrollbar-width:none;}
+.frow::-webkit-scrollbar{display:none;}
+.fb{flex-shrink:0;padding:7px 14px;border-radius:20px;border:1.5px solid var(--bd);background:#fff;font-size:12px;color:var(--mu);cursor:pointer;transition:all .15s;}
+.fb.on{background:linear-gradient(135deg,var(--or),var(--gold));border-color:transparent;color:#fff;font-weight:600;}
+/* Search */
+.fsrch{margin:0 14px 12px;background:#fff;border:.5px solid var(--bd);border-radius:12px;display:flex;align-items:center;gap:8px;padding:10px 14px;}
+.fsrch input{flex:1;border:none;outline:none;font-size:13px;background:transparent;color:var(--tx);}
+/* Activity card */
+.ag{padding:0 14px 8px;}
+.ac{background:#fff;border-radius:var(--ra);margin-bottom:10px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06);cursor:pointer;border:.5px solid var(--bd);transition:transform .1s;}
+.ac:active{transform:scale(.98);}
+.aci{display:flex;align-items:stretch;}
+.at{width:90px;min-height:90px;display:flex;align-items:center;justify-content:center;font-size:32px;flex-shrink:0;position:relative;border-radius:0;}
+.t1{background:#FEF3E2;}.t2{background:#F2FCF4;}.t3{background:#FDE8F0;}.t4{background:#EEF2FF;}.t5{background:#E8F8F0;}
+.hd{position:absolute;top:8px;left:8px;background:linear-gradient(135deg,var(--or),var(--gold));color:#fff;font-size:10px;font-weight:700;padding:2px 6px;border-radius:6px;}
+.ain{flex:1;padding:11px 12px 11px 10px;}
+.abg{font-size:10px;padding:2px 8px;border-radius:6px;font-weight:600;display:inline-block;margin-bottom:5px;}
+.b1{background:#FEE8CC;color:#8C3A00;}.b2{background:#D4F0DF;color:#1A6835;}.b3{background:#FCE4EF;color:#7A1040;}
+.b4{background:#E0E8FF;color:#1A3080;}.b5{background:#D8F4E8;color:#0A5028;}
+.an{font-size:15px;font-weight:700;color:var(--tx);margin-bottom:5px;line-height:1.3;}
+.ams{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:5px;}
+.am{font-size:11px;color:var(--mu);display:flex;align-items:center;gap:3px;}
+.am i{font-size:11px;}
+.ap{font-size:15px;font-weight:800;color:var(--or);}
+.sc2{font-size:11px;color:var(--gr);margin-top:3px;display:flex;align-items:center;gap:3px;}
+.aar{display:flex;align-items:center;padding-right:10px;color:var(--bd);}
+/* Detail */
+.dback{display:flex;align-items:center;gap:6px;padding:14px 16px;cursor:pointer;color:var(--mu);font-size:13px;}
+.dback i{font-size:18px;}
+.carousel{position:relative;overflow:hidden;border-radius:0;background:#f0e8df;}
+.carousel-inner{display:flex;transition:transform .3s;}
+.carousel-inner>*{min-width:100%;}
+.carousel-prev,.carousel-next{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.4);color:#fff;border:none;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:2;}
+.carousel-prev{left:10px;}.carousel-next{right:10px;}
+.carousel-dots{display:flex;justify-content:center;gap:6px;padding:8px;}
+.carousel-dot{width:6px;height:6px;border-radius:50%;background:var(--bd);cursor:pointer;transition:all .2s;}
+.carousel-dot.on{background:var(--or);width:16px;border-radius:3px;}
+.demoji{font-size:60px;padding:40px;display:flex;align-items:center;justify-content:center;background:#f5ede4;}
+.dtag{display:inline-flex;align-items:center;background:var(--warm);padding:5px 14px;border-radius:20px;font-size:12px;font-weight:600;margin:12px 16px 0;}
+.dtitle{font-size:22px;font-weight:800;padding:8px 16px 4px;}
+.dprice{font-size:24px;font-weight:800;color:var(--or);padding:0 16px 10px;}
+.dmeta{display:flex;flex-wrap:wrap;gap:8px;padding:10px 16px;background:#fff;margin:0 0 8px;}
+.dm{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--mu);}
+.dm i{font-size:13px;color:var(--or);}
+.dsec{padding:14px 16px;background:#fff;margin-bottom:8px;}
+.dsec-t{font-size:13px;font-weight:700;color:var(--tx);margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+.dsec-t i{color:var(--or);}
+.dsec p{font-size:13px;color:#4A3828;line-height:1.7;}
+.dmat-item{display:flex;align-items:flex-start;gap:8px;margin-bottom:6px;font-size:13px;color:#4A3828;}
+.dmat-item:before{content:"·";color:var(--or);font-weight:700;flex-shrink:0;}
+.dout-item{display:flex;align-items:flex-start;gap:8px;margin-bottom:6px;font-size:13px;color:#4A3828;}
+.dout-item:before{content:"✓";color:var(--gr);font-weight:700;flex-shrink:0;}
+.dven{background:var(--warm);border-radius:10px;padding:10px 14px;font-size:12px;color:var(--mu);display:flex;align-items:flex-start;gap:8px;}
+.dven i{color:var(--or);flex-shrink:0;margin-top:1px;}
+.dcta{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;padding:12px 16px;padding-bottom:calc(12px + env(safe-area-inset-bottom));background:rgba(255,255,255,.97);backdrop-filter:blur(10px);border-top:.5px solid var(--bd);z-index:20;}
 .ctar{display:flex;gap:8px;}
-.ctab{flex:1;padding:13px;background:linear-gradient(135deg,var(--or),var(--gold));color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;}
-.ctabs{padding:13px 16px;background:#fff;color:var(--or);border:.5px solid var(--or);border-radius:12px;cursor:pointer;display:flex;align-items:center;}
-.ctabs i{font-size:18px;}
-
-/* SIGNUP */
-.ov{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;display:flex;align-items:flex-end;justify-content:center;}
+.ctab{flex:1;padding:14px;background:linear-gradient(135deg,var(--or),var(--gold));color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;}
+.ctabs{width:44px;background:var(--warm);border:none;border-radius:12px;color:var(--or);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+/* Poster */
+.pov{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:100;display:flex;align-items:center;justify-content:center;padding:20px;}
+.pov.h{display:none;}
+.poster-wrap{background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.3);}
+.poster-btns{display:flex;gap:10px;padding:12px 0 0;}
+.poster-btn{flex:1;padding:13px;border-radius:10px;border:none;font-size:14px;font-weight:600;cursor:pointer;}
+.pb-close{background:rgba(255,255,255,.1);color:#fff;}
+.pb-save{background:linear-gradient(135deg,var(--or),var(--gold));color:#fff;}
+/* Signup */
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:50;display:flex;align-items:flex-end;justify-content:center;}
 .ov.h{display:none;}
-.ss{background:#fff;border-radius:20px 20px 0 0;width:100%;max-width:480px;padding:20px 20px 40px;max-height:85vh;overflow-y:auto;}
-.sh2{width:36px;height:4px;background:#E0D8D0;border-radius:2px;margin:0 auto 16px;}
-.st{font-size:17px;font-weight:600;color:var(--tx);margin-bottom:4px;}
-.ssb{font-size:12px;color:var(--mu);margin-bottom:18px;}
-.ff{margin-bottom:13px;}
-.ff label{display:block;font-size:12px;color:var(--mu);margin-bottom:5px;font-weight:500;}
-.ff input,.ff select,.ff textarea{width:100%;background:var(--warm);border:.5px solid var(--bd);border-radius:9px;padding:10px 12px;font-size:13px;color:var(--tx);outline:none;}
+.ss{background:#fff;border-radius:18px 18px 0 0;padding:20px 16px 32px;width:100%;max-width:480px;max-height:88vh;overflow-y:auto;}
+.sh2{width:40px;height:4px;background:var(--bd);border-radius:2px;margin:0 auto 16px;}
+.st{font-size:17px;font-weight:700;margin-bottom:4px;}
+.ssb{font-size:13px;color:var(--mu);margin-bottom:16px;padding-bottom:14px;border-bottom:.5px solid var(--bd);}
+.ff{margin-bottom:12px;}
+.ff label{font-size:12px;font-weight:600;color:var(--mu);display:block;margin-bottom:5px;}
+.ff input,.ff select{width:100%;background:var(--warm);border:.5px solid var(--bd);border-radius:10px;padding:11px 13px;font-size:14px;color:var(--tx);outline:none;}
 .ff input:focus,.ff select:focus{border-color:var(--or);}
 .f2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-.subb{width:100%;padding:14px;background:linear-gradient(135deg,var(--or),var(--gold));color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:600;cursor:pointer;margin-top:6px;}
-.suc{text-align:center;padding:20px 0;}
+.sub-btn{width:100%;padding:14px;background:linear-gradient(135deg,var(--or),var(--gold));color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;margin-top:8px;}
+.suc{text-align:center;padding:24px 16px;}
 .suci{font-size:56px;margin-bottom:12px;}
-.suct{font-size:18px;font-weight:700;color:var(--tx);margin-bottom:6px;}
-.sucs{font-size:13px;color:var(--sub);line-height:1.7;margin-bottom:20px;}
-.sucb2{background:var(--warm);border-radius:12px;padding:14px;text-align:left;margin-bottom:16px;}
-.sucr{display:flex;justify-content:space-between;padding:5px 0;font-size:13px;border-bottom:.5px solid var(--bd);}
-.sucr:last-child{border:none;}
-.sucl{color:var(--mu);}.sucv{font-weight:500;color:var(--tx);}
-
-/* POSTER */
-.pov{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:110;display:flex;align-items:center;justify-content:center;padding:16px;flex-direction:column;gap:12px;}
-.pov.h{display:none;}
-.pc{background:linear-gradient(160deg,#1C1410,#3D1F08 55%,#5C2E0A);border-radius:20px;width:100%;max-width:320px;padding:28px 24px;position:relative;overflow:hidden;}
-.pc::before{content:'';position:absolute;top:-50px;right:-50px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(245,166,35,.2),transparent 70%);}
-.plg{display:flex;align-items:center;gap:8px;margin-bottom:18px;}
-.pm{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--gold),var(--or));display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;}
-.pn{font-size:13px;font-weight:600;color:#fff;}
-.pe{font-size:48px;margin-bottom:14px;display:block;}
-.pcat{font-size:10px;color:var(--gold);letter-spacing:.1em;margin-bottom:6px;}
-.pname{font-size:20px;font-weight:700;color:#fff;line-height:1.3;margin-bottom:10px;}
-.pdiv{height:.5px;background:rgba(255,255,255,.15);margin:14px 0;}
-.pmr{display:flex;justify-content:space-between;margin-bottom:12px;}
-.pmi{text-align:center;}
-.pmv{font-size:14px;font-weight:600;color:#fff;}
-.pml{font-size:10px;color:rgba(255,255,255,.5);margin-top:1px;}
-.ppw{background:rgba(245,166,35,.15);border:.5px solid rgba(245,166,35,.3);border-radius:10px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
-.pp{font-size:22px;font-weight:700;color:var(--gold);}
-.pqr{background:rgba(255,255,255,.08);border:.5px solid rgba(255,255,255,.12);border-radius:10px;padding:10px;display:flex;align-items:center;gap:10px;}
-.pqb{width:50px;height:50px;background:rgba(255,255,255,.15);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:22px;}
-.pqt{font-size:11px;color:rgba(255,255,255,.55);line-height:1.6;}
-.pa{display:flex;gap:8px;width:100%;max-width:320px;}
-.pab{flex:1;padding:11px;border:none;border-radius:10px;font-size:13px;font-weight:500;cursor:pointer;}
-.pac2{background:rgba(255,255,255,.15);color:#fff;}
-.pas{background:linear-gradient(135deg,var(--or),var(--gold));color:#fff;}
-.px2{position:absolute;top:12px;right:12px;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;color:rgba(255,255,255,.7);border:none;}
-.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:rgba(28,20,16,.92);color:#fff;padding:10px 18px;border-radius:11px;font-size:13px;z-index:300;opacity:0;transition:opacity .25s;pointer-events:none;white-space:nowrap;}
-.toast.show{opacity:1;}
-
-/* CAROUSEL */
-.carousel{position:relative;width:100%;border-radius:14px;overflow:hidden;margin-top:12px;background:#000;}
-.carousel-inner{display:flex;transition:transform .35s cubic-bezier(.4,0,.2,1);}
-.carousel-inner img{width:100%;flex-shrink:0;aspect-ratio:4/3;object-fit:cover;}
-.carousel-dots{display:flex;justify-content:center;gap:6px;padding:10px 0 2px;}
-.carousel-dot{width:6px;height:6px;border-radius:50%;background:rgba(0,0,0,.2);cursor:pointer;transition:all .2s;}
-.carousel-dot.on{background:var(--or);width:18px;border-radius:3px;}
-.carousel-prev,.carousel-next{position:absolute;top:50%;transform:translateY(-50%);width:32px;height:32px;background:rgba(255,255,255,.85);border:none;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;color:var(--tx);box-shadow:0 2px 8px rgba(0,0,0,.15);}
-.carousel-prev{left:10px;}.carousel-next{right:10px;}
-
-/* CAROUSEL */
-.carousel{position:relative;width:100%;border-radius:14px;overflow:hidden;margin-top:12px;background:#000;}
-.carousel-inner{display:flex;transition:transform .35s cubic-bezier(.4,0,.2,1);}
-.carousel-inner img{width:100%;flex-shrink:0;aspect-ratio:4/3;object-fit:cover;}
-.carousel-dots{display:flex;justify-content:center;gap:6px;padding:10px 0 2px;}
-.carousel-dot{width:6px;height:6px;border-radius:50%;background:rgba(0,0,0,.2);cursor:pointer;transition:all .2s;}
-.carousel-dot.on{background:var(--or);width:18px;border-radius:3px;}
-.carousel-prev,.carousel-next{position:absolute;top:50%;transform:translateY(-50%);width:32px;height:32px;background:rgba(255,255,255,.85);border:none;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;color:var(--tx);box-shadow:0 2px 8px rgba(0,0,0,.15);}
-.carousel-prev{left:10px;}.carousel-next{right:10px;}
-
-
-
-/* ── 我的报名 ── */
+.suct{font-size:20px;font-weight:700;margin-bottom:8px;}
+.sucs{font-size:13px;color:var(--mu);line-height:1.6;margin-bottom:20px;}
+.subb{padding:13px 40px;background:linear-gradient(135deg,var(--or),var(--gold));color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;}
+/* TabBar */
 .tab-bar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:rgba(255,255,255,.97);backdrop-filter:blur(10px);border-top:.5px solid var(--bd);display:flex;z-index:30;padding-bottom:env(safe-area-inset-bottom);}
 .tab-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px 0 6px;cursor:pointer;color:var(--mu);font-size:10px;gap:3px;transition:color .15s;}
 .tab-item i{font-size:20px;}
 .tab-item.on{color:var(--or);}
 .tab-bar-space{height:60px;}
-/* 查询页 */
-.qp{padding:0 16px 100px;}
+/* My orders */
 .qhd{background:linear-gradient(160deg,#1C1410,#3D1F08 55%,#5C2E0A);padding:20px 20px 28px;}
 .qhd-t{font-size:20px;font-weight:700;color:#fff;margin-bottom:4px;}
 .qhd-s{font-size:13px;color:rgba(255,255,255,.5);}
-.qbox{background:#fff;border-radius:14px;padding:16px;margin-top:-16px;box-shadow:0 4px 20px rgba(0,0,0,.08);margin-left:0;margin-right:0;}
+.qp{padding:0 16px 100px;}
+.qbox{background:#fff;border-radius:14px;padding:16px;margin-top:-16px;box-shadow:0 4px 20px rgba(0,0,0,.08);}
 .qrow{display:flex;gap:8px;align-items:center;}
 .qinp{flex:1;background:var(--warm);border:.5px solid var(--bd);border-radius:10px;padding:11px 14px;font-size:14px;color:var(--tx);outline:none;}
 .qinp:focus{border-color:var(--or);}
@@ -192,7 +138,6 @@ button,input,select,textarea{font-family:inherit;}
 .qempty{text-align:center;padding:48px 20px;color:var(--mu);}
 .qempty-icon{font-size:48px;margin-bottom:12px;}
 .qempty-t{font-size:15px;font-weight:500;color:var(--tx);margin-bottom:6px;}
-.qempty-s{font-size:13px;line-height:1.6;}
 .ord-card{background:#fff;border-radius:14px;border:.5px solid var(--bd);overflow:hidden;margin-top:12px;}
 .ord-hd{padding:13px 14px;background:var(--warm);border-bottom:.5px solid var(--bd);display:flex;align-items:center;justify-content:space-between;}
 .ord-name{font-size:14px;font-weight:600;color:var(--tx);}
@@ -211,25 +156,27 @@ button,input,select,textarea{font-family:inherit;}
 </head>
 <body>
 
-<!-- 提示条 -->
 <div class="toast" id="toast"></div>
 
-<!-- ══ 首页 ══ -->
+<!-- 首页 -->
 <div class="view on" id="v-home">
 <div class="page">
   <div class="fh">
     <div class="topbar">
       <div class="logo-a">
         <div class="logo-m">华</div>
-        <div><div class="logo-cn" id="siteName">开开华彩</div><div class="logo-en">KAIKAIHUACAI</div></div>
+        <div>
+          <div class="logo-cn" id="siteName">开开华彩</div>
+          <div class="logo-en">KAIKAIHUACAI</div>
+        </div>
       </div>
     </div>
     <div class="hero-tag" id="heroTag">✦ 社群主理人活动手册 2026</div>
     <div class="hero-title">银发社群<br><span class="hero-hi">50款精品活动</span></div>
     <div class="hero-sub" id="heroSub">线下文娱俱乐部 · 一起变年轻 · 用爱和科技为父母做好产品</div>
-    <div id="heroTel" style="display:none;margin:8px 20px 0;padding:7px 12px;background:rgba(255,255,255,.1);border-radius:10px;align-items:center;gap:7px;width:fit-content;">
+    <div id="heroTel" style="display:none;margin:10px 0 0;padding:7px 12px;background:rgba(255,255,255,.1);border-radius:10px;align-items:center;gap:7px;width:fit-content;">
       <i class="ti ti-phone" style="font-size:14px;color:var(--gold);"></i>
-      <span id="heroTelNum" style="font-size:13px;color:rgba(255,255,255,.85);letter-spacing:.05em;"></span>
+      <span id="heroTelNum" style="font-size:13px;color:rgba(255,255,255,.85);"></span>
     </div>
   </div>
   <div class="sbar">
@@ -254,14 +201,12 @@ button,input,select,textarea{font-family:inherit;}
 </div>
 </div>
 
-<!-- ══ 活动详情页 ══ -->
+<!-- 活动详情 -->
 <div class="view" id="v-detail">
-<div class="page">
-  <div id="dpage"></div>
-</div>
+<div class="page" id="dpage"></div>
 </div>
 
-<!-- ══ 我的报名页 ══ -->
+<!-- 我的报名 -->
 <div class="view" id="v-myorder">
 <div class="page">
   <div class="qhd">
@@ -285,7 +230,7 @@ button,input,select,textarea{font-family:inherit;}
 </div>
 </div>
 
-<!-- ══ 底部 TabBar ══ -->
+<!-- TabBar -->
 <div class="tab-bar" id="tab-bar">
   <div class="tab-item on" id="tab-home" onclick="switchTab('home')">
     <i class="ti ti-home"></i><span>活动</span>
@@ -295,7 +240,7 @@ button,input,select,textarea{font-family:inherit;}
   </div>
 </div>
 
-<!-- ══ 报名弹层 ══ -->
+<!-- 报名弹层 -->
 <div class="ov h" id="suo">
   <div class="ss">
     <div class="sh2"></div>
@@ -303,162 +248,173 @@ button,input,select,textarea{font-family:inherit;}
   </div>
 </div>
 
-<!-- ══ 海报弹层 ══ -->
+<!-- 海报弹层 -->
 <div class="pov h" id="pov">
   <div style="width:100%;max-width:340px;">
     <div class="poster-wrap" id="poster-wrap"></div>
     <div class="poster-btns">
       <button class="poster-btn pb-close" onclick="closePoster()">关闭</button>
-      <button class="poster-btn pb-save" onclick="showT('请截图保存（Command+Shift+4）','ok');setTimeout(closePoster,2000)">保存截图</button>
+      <button class="poster-btn pb-save" onclick="showT('请截图保存','ok');setTimeout(closePoster,2000)">保存截图</button>
     </div>
   </div>
 </div>
 
-<!-- ══ Supabase SDK ══ -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-// ══ Supabase 配置 ══
 const SUPABASE_URL  = 'https://zlkivrqahzkkbvirvgtf.supabase.co';
 const SUPABASE_ANON = 'sb_publishable__Y0pG-rf9L9e6zAvakh8Xw_xK35eLK7';
-const sb = (typeof supabase !== 'undefined')
-  ? supabase.createClient(SUPABASE_URL, SUPABASE_ANON)
-  : null;
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 
 const CM={美学声乐:{cls:'b1',t:'t1'},同城社交:{cls:'b2',t:'t2'},优雅品位:{cls:'b3',t:'t3'},人文知性:{cls:'b4',t:'t4'},活力康养:{cls:'b5',t:'t5'}};
+
 const DEFAULT_ACTS=[
-{id:1,name:"复古国潮肖像美拍",cat:"美学声乐",e:"📸",min:25,max:80,dur:"3小时",price:"¥199/人",ven:"高端国风茶室、艺术空间或专业肖像馆",desc:"专业摄影师+造型师双重服务，在国风场景拍摄专属美拍大片。播放经典金曲烘托氛围，卸下面对镜头的防御，留下最美银发风华。",mat:"专业摄影棚灯光、国风服饰道具、便携补光灯、拍立得相机",out:"2套妆造拍摄、2张实体精修照、额外选片¥300/张",st:"on",hot:true,date:"2026-06-15",sg:34},
-{id:2,name:"80年代怀旧KTV大赛",cat:"美学声乐",e:"🎤",min:20,max:40,dur:"3小时",price:"¥69/人",ven:"同城高端KTV豪华大包厢",desc:"穿越回80年代，金曲大合唱，彩色闪光棒齐挥舞，用音乐唤醒青春记忆，每一首老歌都是一段人生故事。",mat:"立式麦克风、彩色闪光棒、大字金曲歌单",out:"个人副歌高光短视频、拉歌合唱纪念Vlog",st:"on",hot:false,date:"2026-06-20",sg:22},
-{id:3,name:"母女两代温情美拍",cat:"美学声乐",e:"💞",min:10,max:20,dur:"3小时",price:"¥588/双人",ven:"阳光通透的美学独立咖啡厅",desc:"母女同框，两代温情。专业摄影记录最珍贵的家人时光，走心话题卡引导真实情感流露。",mat:"母女同色系改良装、大字号走心话题卡、两代人对比色温打光灯",out:"双人温情实体相册、互动纪实微电影",st:"on",hot:true,date:"2026-07-05",sg:9},
-{id:4,name:"同城岁月歌神争霸赛",cat:"美学声乐",e:"🏆",min:30,max:80,dur:"4小时",price:"¥60/人",ven:"社区多功能厅或影剧院",desc:"大型歌唱比赛，专业评委打分，超大字号歌词提示大屏，让每一位银发歌手登上属于自己的舞台。",mat:"超大字号歌词提示大屏、评委大字打分牌、水晶奖杯",out:"岁月歌神荣誉证书、舞台独唱高清视频",st:"on",hot:false,date:"2026-06-28",sg:65},
-{id:5,name:"银发超模街拍体验",cat:"美学声乐",e:"💃",min:12,max:25,dur:"3小时",price:"¥199/人",ven:"人文创意园区/古建筑平坦群落",desc:"专业摄影师全程跟拍，高功率补光灯让每位银发长者成为最美街拍主角，感受时尚的力量。",mat:"手持高功率补光灯、小蜜蜂麦克风、防暑急救药箱",out:"同城时尚街拍大片5张、微杂志封面电子版",st:"on",hot:false,date:"2026-07-12",sg:12},
-{id:6,name:"经典影视对白配音秀",cat:"美学声乐",e:"🎬",min:10,max:20,dur:"2.5小时",price:"¥128/人",ven:"专业录音棚或静谧会议室",desc:"为《庐山恋》等经典影视配音，高保真麦克风记录最美声音，重温那个年代的珍贵记忆。",mat:"大字号台词剧本活页、高保真麦克风",out:"原片声轨替换配音个人高光视频",st:"on",hot:false,date:"2026-06-25",sg:8},
-{id:7,name:"老照片故事分享会",cat:"美学声乐",e:"🖼️",min:12,max:24,dur:"2.5小时",price:"¥69/人",ven:"怀旧主题茶馆或艺术沙龙",desc:"带一张老照片来，讲一段人生故事。便携扫描仪当场数字化修复，让记忆重焕光彩。",mat:"便携扫描仪、高清投影、温和焦点灯光、湿纸巾",out:"老照片数字化高清修复、现场故事讲述音频",st:"on",hot:false,date:"2026-07-08",sg:14},
-{id:8,name:"黑胶音乐温情鉴赏",cat:"美学声乐",e:"🎵",min:10,max:20,dur:"2.5小时",price:"¥199/人",ven:"高档音乐清吧或品牌音响馆",desc:"老式复古黑胶留声机配上经典唱片，在优雅环境中共赏音乐之美，大字号曲目简介让每位长者从容欣赏。",mat:"老式复古黑胶留声机、经典黑胶盘、大字号曲目简介",out:"复古音乐明信片、现场鉴赏优雅特写照",st:"on",hot:false,date:"2026-07-15",sg:11},
-{id:9,name:"零基础非洲鼓欢聚",cat:"美学声乐",e:"🥁",min:20,max:50,dur:"2小时",price:"¥99/人",ven:"户外平坦草坪或宽敞舞蹈房",desc:"50面非洲鼓齐声敲响，彩色头带在风中飘动，用最原始的节奏释放退休生活的多巴胺。",mat:"标准非洲鼓50面、彩色头带、大字号节奏图谱",out:"多巴胺解压团队大合影、个人Solo动态短视频",st:"on",hot:false,date:"2026-06-22",sg:29},
-{id:10,name:"岁月芳华合唱交友聚",cat:"美学声乐",e:"🎼",min:25,max:60,dur:"2.5小时",price:"¥79/人",ven:"专业合唱排练厅或多功能音响厅",desc:"专业指挥带领，钢琴伴奏，分声部演唱经典合唱曲目，在音乐中寻找共鸣与归属感。",mat:"调节谱架、钢琴、超大字号简谱单页、润喉糖",out:"多机位精美合唱MV（配超大字幕）、声部合影",st:"on",hot:false,date:"2026-07-18",sg:31},
-{id:11,name:"遇见黄昏·精致单身社交派对",cat:"同城社交",e:"🌹",min:16,max:32,dur:"3.5小时",price:"¥398/人",ven:"格调高雅独立西餐厅或高档会所茶室",desc:"严执三不问刚性脚本，引导聚焦聊爱好与理想。后台盲选撮合，极致保护每位长者的尊严与隐私。",mat:"男女红蓝大字号胸牌、走心交流话题卡、盲选互选卡、无糖精致点心台",out:"个人高光社交肖像、私域专属一对一温情牵线服务",st:"on",hot:true,date:"2026-06-29",sg:28},
-{id:12,name:"银发红娘包饺子聚",cat:"同城社交",e:"🥟",min:16,max:28,dur:"2.5小时",price:"¥128/人",ven:"宽敞卫生的烘焙工坊或私厨空间",desc:"围坐一桌共包饺子，人间烟火气里最容易打开心扉，银发破冰卡牌让陌生人秒变老朋友。",mat:"定制围裙、各色新鲜馅料、银发破冰卡牌",out:"人间烟火气欢聚大合影、精制手工饺礼盒",st:"on",hot:false,date:"2026-08-05",sg:0},
-{id:13,name:"同城老乡温情半日聚",cat:"同城社交",e:"🏡",min:20,max:40,dur:"4小时",price:"¥150/人",ven:"地道地方菜馆包间或老字号茶楼",desc:"方言趣味竞猜、家乡老照片墙、定制老乡徽章，他乡遇故知的温暖在这里重现。",mat:"大字方言趣味竞猜卡、家乡老照片墙、定制老乡徽章",out:"老乡会专属微信通讯录、欢聚高光短视频",st:"on",hot:false,date:"2026-08-08",sg:0},
-{id:14,name:"退休经验交换智慧大集",cat:"同城社交",e:"💡",min:20,max:50,dur:"3小时",price:"¥99/人",ven:"俱乐部基地或合作书店大厅",desc:"每人带来一项退休后的智慧技能，微型摊位展示交流，用经验换友谊，让知识在银发群体中流动。",mat:"微型摊位牌、彩色粉笔、职业技能标签贴、大字画布",out:"电子版智慧技能手册、个人分享高光照",st:"on",hot:true,date:"2026-08-10",sg:0},
-{id:15,name:"心理健康与情感围炉",cat:"同城社交",e:"🕯️",min:8,max:15,dur:"2小时",price:"¥199/人",ven:"暖色调榻榻米茶室或私密冥想室",desc:"植物精油香薰、LED仿真烛光、暖毛毯，在安全温暖的小圈子里倾诉内心，专业引导化解退休后的心理落差。",mat:"植物精油香薰、LED仿真烛光、暖毛毯、倾诉卡",out:"定制舒压开运香囊、个人身心疗愈手记",st:"on",hot:false,date:"2026-08-12",sg:0},
-{id:16,name:"高知退休生活茶话会",cat:"同城社交",e:"📖",min:12,max:25,dur:"2.5小时",price:"¥128/人",ven:"大学周边安静咖啡厅或图书馆",desc:"儒雅知性着装，大字名著语录书签，骨瓷茶具，实木意见交流看板，让同频高知长者找到精神共鸣。",mat:"大字名著语录书签、骨瓷茶具、实木意见交流看板",out:"高知同频知己合影、定制读书纪念书签",st:"on",hot:false,date:"2026-08-15",sg:0},
-{id:17,name:"暖心主理人私厨家宴",cat:"同城社交",e:"🍽️",min:6,max:10,dur:"3小时",price:"¥268/人",ven:"主理人精心布置的私人大厨房",desc:"手写体欢迎信、大字版主厨养生菜单、精致骨瓷餐具，6-10人极致温馨私宴体验。",mat:"手写体欢迎信、大字版主厨养生菜单、精致骨瓷餐具",out:"暖心家宴纪实Vlog、与主理人亲密合影",st:"on",hot:true,date:"2026-06-21",sg:8},
-{id:18,name:"同城银发麻将掼蛋赛",cat:"同城社交",e:"🀄",min:16,max:48,dur:"3小时",price:"¥88/人",ven:"高级棋牌会所或俱乐部活动厅",desc:"全自动静音麻将机，加厚扑克，大字号积分榜，让智力竞技成为银发社交最轻松的破冰方式。",mat:"全自动静音麻将机、加厚扑克、大字号积分榜",out:"智力赛荣誉奖状、老战友高光对局合影",st:"on",hot:false,date:"2026-08-17",sg:0},
-{id:19,name:"岁月知己生日欢聚会",cat:"同城社交",e:"🎂",min:20,max:50,dur:"3小时",price:"¥199/人",ven:"俱乐部专属无障碍宴会厅",desc:"强对比定制生日墙、无糖健康大蛋糕、怀旧长寿面，让每位寿星感受到被整个圈子珍视的温度。",mat:"强对比定制生日墙、无糖健康大蛋糕、怀旧长寿面",out:"寿星集体高光电子相册、全场祝福短视频",st:"on",hot:true,date:"2026-08-19",sg:0},
-{id:20,name:"新老会员迎新茶聚",cat:"同城社交",e:"🌟",min:15,max:35,dur:"2小时",price:"免费",ven:"同城开开华彩线下俱乐部基地",desc:"老带新欢迎徽章、俱乐部大地图、专属通关护照，零门槛破冰，让新会员第一天就感受到家的温暖。",mat:"老带新欢迎徽章、俱乐部大地图、专属通关护照",out:"开开华彩专属合伙人认证通关护照",st:"on",hot:false,date:"2026-08-22",sg:0},
-{id:21,name:"精致微醺·红酒品鉴与礼仪",cat:"优雅品位",e:"🍷",min:12,max:24,dur:"2.5小时",price:"¥588/人",ven:"本地知名酒庄或西式私密美学空间",desc:"4款精选进口红酒+水晶高脚杯，用最通俗的大白话打消老人距离感，传授站姿坐姿与碰杯礼仪，微醺状态下自由社交。",mat:"4款精选进口红酒、水晶高脚杯、超大字号红酒风味图谱画布",out:"权威纸质红酒优雅生活家认证证书、高光社交侧颜美照",st:"on",hot:true,date:"2026-07-03",sg:19},
-{id:22,name:"私房菜主厨品鉴",cat:"优雅品位",e:"🍱",min:8,max:16,dur:"3小时",price:"¥498/人",ven:"本地黑珍珠级特色私房菜馆",desc:"主厨特制养生大字菜单、食材溯源高对比度展架，低调奢华的高端小团美食探索之旅，筛选高净值客户。",mat:"主厨特制养生大字菜单、食材溯源高对比度展架",out:"主厨亲笔签名合影、菜品美学视觉海报",st:"on",hot:true,date:"2026-08-24",sg:0},
-{id:23,name:"银发西点烘焙社交",cat:"优雅品位",e:"🧁",min:10,max:20,dur:"2.5小时",price:"¥198/人",ven:"烤箱防护到位的专业烘焙坊",desc:"进口无水奶油、木糖醇面粉、大字号步骤图，低糖健康烘焙，甜蜜是银发社交最美的破冰方式。",mat:"进口无水奶油、木糖醇面粉、大字号步骤图",out:"低糖健康西点礼盒、烘焙俏皮工作现场照",st:"on",hot:false,date:"2026-08-26",sg:0},
-{id:24,name:"多肉种植与园艺沙龙",cat:"优雅品位",e:"🪴",min:15,max:30,dur:"2小时",price:"¥128/人",ven:"采光良好的温室或合作阳光花园",desc:"饱满多肉植物、创意瓷盆、圆头迷你工具，亲手栽种带走，让每个家中都多一抹绿意和生机。",mat:"饱满多肉植物、创意瓷盆、圆头迷你工具、防污袖套",out:"亲手栽种的多肉盆栽、劳作治愈系特写照",st:"on",hot:false,date:"2026-08-29",sg:0},
-{id:25,name:"非遗围炉煮茶",cat:"优雅品位",e:"🍵",min:12,max:24,dur:"2.5小时",price:"¥168/人",ven:"新中式复古庭院茶空间",desc:"安全无烟电炭炉、老白茶、烤红薯、拍立得，在新中式茶空间里慢下来，感受时光温柔。",mat:"安全无烟电炭炉、老白茶、烤红薯、拍立得",out:"拍立得复古实体照、慢生活朋友圈九宫格",st:"on",hot:false,date:"2026-06-18",sg:16},
-{id:26,name:"插花艺术与空间美学",cat:"优雅品位",e:"💐",min:15,max:28,dur:"2.5小时",price:"¥198/人",ven:"鲜花环绕的美学工作室/阳光房",desc:"时令鲜花+中式古朴瓷花器，专业安全圆头剪刀，让每位长者都能创作出属于自己的高雅插花作品。",mat:"时令鲜花、中式古朴瓷花器、专业安全圆头剪刀",out:"个人专属高档插花花器成品、艺术微笑照片",st:"on",hot:false,date:"2026-08-31",sg:0},
-{id:27,name:"明星咖啡拉花体验课",cat:"优雅品位",e:"☕",min:10,max:18,dur:"2小时",price:"¥150/人",ven:"精品意式咖啡馆（铺满防烫垫）",desc:"半自动咖啡机、高品质鲜奶、大字体风味科普板，让每位长者都能拉出属于自己的第一杯艺术咖啡。",mat:"半自动咖啡机、高品质鲜奶、大字体风味科普板",out:"拉花作品高光图、个人拉花动感精辑短视频",st:"on",hot:true,date:"2026-09-02",sg:0},
-{id:28,name:"香道与舒压冥想坊",cat:"优雅品位",e:"🧘",min:8,max:16,dur:"2小时",price:"¥199/人",ven:"铺设厚地毯的专业隔音冥想室",desc:"海南天然沉香、香炉、加厚冥想垫、真丝眼罩，身心彻底放空，体验中国传统香道的极致禅意。",mat:"海南天然沉香、香炉、加厚冥想垫、真丝眼罩",out:"自制沉香线香礼盒、身心放空舒压特写照",st:"on",hot:false,date:"2026-07-01",sg:9},
-{id:29,name:"旗袍定制与色彩搭配",cat:"优雅品位",e:"👗",min:15,max:30,dur:"2.5小时",price:"¥299/人",ven:"高档旗袍高定工坊或美学馆",desc:"各色面料色块、专业色彩测试卡、超大防眩光穿衣镜，让每位长者找到最适合自己的色彩与风格。",mat:"各色面料色块、专业色彩测试卡、超大防眩光穿衣镜",out:"专属色彩搭配报告、量体裁衣气质照",st:"on",hot:false,date:"2026-09-05",sg:0},
-{id:30,name:"零基础丙烯油画沙龙",cat:"优雅品位",e:"🎨",min:12,max:24,dur:"3小时",price:"¥198/人",ven:"光线充足的独立画室（无障碍）",desc:"高档全棉画布框、无毒无味颜料、大字号渐进模板，零基础也能完成一幅可直接挂客厅的个人油画。",mat:"高档全棉画布框、无毒无味颜料、大字号渐进模板",out:"可直接挂客厅的个人油画框、创作纪实照",st:"on",hot:false,date:"2026-09-07",sg:0},
-{id:31,name:"市博物馆名师导览",cat:"人文知性",e:"🏛️",min:20,max:40,dur:"3小时",price:"¥128/人",ven:"市级大型博物馆/美术馆（走直梯）",desc:"骨传导无线耳机调大音量，名师深度导览，折叠便携轻量凳随身携带，让文化之旅轻松无负担。",mat:"骨传导无线耳机（调大音量）、折叠便携轻量凳",out:"同城看展知性风画册电子版、专属文化手记",st:"on",hot:false,date:"2026-09-09",sg:0},
-{id:32,name:"繁花时代读书分享会",cat:"人文知性",e:"📚",min:12,max:25,dur:"2小时",price:"¥88/人",ven:"复古风格历史书店沙龙区",desc:"致敬90年代复古风，大字号活页单页，金属年代书签，绿罩台灯，在书香中重温激情岁月。",mat:"大字号活页单页、金属年代书签、绿罩台灯",out:"开开华彩定制书香徽章、个人分享走心金句海报",st:"on",hot:false,date:"2026-09-12",sg:0},
-{id:33,name:"非遗扎染蓝染体验",cat:"人文知性",e:"🎋",min:15,max:25,dur:"3小时",price:"¥228/人",ven:"专业非遗传承基地/大工作室",desc:"纯植物染料、白丝巾、特厚防污围裙、高防滑套鞋，亲手创作独一无二的非遗扎染作品，感受匠心温度。",mat:"纯植物染料、白丝巾、特厚防污围裙、高防滑套鞋",out:"独一无二的非遗扎染成品丝巾、匠心纪实视频",st:"on",hot:true,date:"2026-09-14",sg:0},
-{id:34,name:"丹青雅集国画书法沙龙",cat:"人文知性",e:"🖌️",min:10,max:20,dur:"3小时",price:"¥150/人",ven:"笔墨纸砚齐全的高档画廊",desc:"加厚一得阁墨、生宣、特大字名家模板、吸墨毛毡，在专业画廊里感受中国传统书画的魅力，现场装裱带走。",mat:"加厚一得阁墨、生宣、特大字名家模板、吸墨毛毡",out:"现场专业装裱的个人字画成品、研墨挥毫照",st:"on",hot:false,date:"2026-09-16",sg:0},
-{id:35,name:"手机数码摄影与修图课",cat:"人文知性",e:"📱",min:15,max:35,dur:"3小时",price:"¥128/人",ven:"全平坦城市公园或多媒体厅",desc:"大字彩印手机操作手册、大旋钮三脚架，让每位银发长者轻松掌握手机摄影与修图技巧，拍出人生最美大片。",mat:"九宫格辅助线手机操作大字彩印手册、大旋钮三脚架",out:"个人摄影前后对比海报、手机摄影结业证书",st:"on",hot:false,date:"2026-09-19",sg:0},
-{id:36,name:"地方志建筑寻根读书会",cat:"人文知性",e:"🗺️",min:15,max:30,dur:"2.5小时",price:"¥99/人",ven:"城市受保护历史建筑内礼堂",desc:"同城旧地图复刻版、地方志节选大字活页、金属放大镜，在历史建筑中追寻城市记忆与文化根脉。",mat:"同城旧地图复刻版、地方志节选大字活页、金属放大镜",out:"精美古建筑手绘地图电子版、个人人文底蕴证言照",st:"on",hot:false,date:"2026-09-21",sg:0},
-{id:37,name:"神医养生·药膳工作坊",cat:"人文知性",e:"🌿",min:20,max:40,dur:"3小时",price:"¥258/人",ven:"老字号国医馆/高端中医养生会所",desc:"名老中医现场传授食疗秘诀，人手一台中药克重台秤，亲手抓药调配专属养生茶饮，7天定制茶包带走。",mat:"高精度中药克重台秤（人手一台）、四季时令名贵药材、大字号药膳配方手册",out:"7天定制养生药膳包、名医出具个人体质食疗调理方案书",st:"on",hot:true,date:"2026-07-17",sg:37},
-{id:38,name:"收藏家私人藏品分享会",cat:"人文知性",e:"🏺",min:10,max:20,dur:"2.5小时",price:"¥199/人",ven:"警备完善的私人收藏馆红木厅",desc:"专业高倍放大镜、无菌全棉白手套、加厚防爆展柜，近距离感受珍藏之美，开启高净值银发鉴赏之旅。",mat:"专业高倍放大镜、无菌全棉白手套、加厚防爆展柜",out:"高端文玩鉴赏指南小册子、尊享老会员特写照",st:"on",hot:false,date:"2026-09-23",sg:0},
-{id:39,name:"银发智能生活与防骗课",cat:"人文知性",e:"🛡️",min:20,max:60,dur:"2小时",price:"¥50/人",ven:"社区大学或俱乐部基地大教室",desc:"大红箭头手机操作步骤手册、新型AI防诈骗案例库，让每位长者都能安全畅游数字世界。",mat:"大红箭头手机操作步骤手册、新型AI防诈骗案例库",out:"开开华彩·智能生活通关正式证书",st:"on",hot:false,date:"2026-09-26",sg:0},
-{id:40,name:"诗歌朗诵与形体美学课",cat:"人文知性",e:"🎭",min:15,max:30,dur:"2小时",price:"¥120/人",ven:"铺设温暖地暖的无镜面大练功房",desc:"舒婷经典诗大字朗诵本、高敏无线领夹麦，在诗意中展现形体之美，找回优雅从容的自我。",mat:"舒婷经典诗大字朗诵本、高敏无线领夹麦、温和降噪音响",out:"个人高保真配乐朗诵录音轨、形体优雅特写照",st:"on",hot:true,date:"2026-09-28",sg:0},
-{id:41,name:"森林氧吧·银发轻量徒步",cat:"活力康养",e:"🌲",min:30,max:50,dur:"全天",price:"¥298/人",ven:"国家级森林公园全平坦木栈道",desc:"专业领队八段锦热身，严格控制总步数低于6000步，50万高额意外险保障，林间野餐+老歌合唱。",mat:"定制轻量碳素登山杖、专业急救药箱、大字号路标手旗、高颜值轻冷餐",out:"全员森林大团圆航拍合影、个人治愈系高光九宫格",st:"on",hot:true,date:"2026-06-23",sg:45},
-{id:42,name:"名山古刹一日禅修游",cat:"活力康养",e:"🏯",min:20,max:40,dur:"全天",price:"¥398/人",ven:"车程1.5小时以内的名山静谧古寺",desc:"统一棉麻禅修宽松外罩，大字号宣纸抄经帖，软质厚实拜垫，无糖素斋，在山间梵音中找回内心宁静。",mat:"统一棉麻禅修宽松外罩、大字号宣纸抄经帖、软质厚实拜垫、无糖素斋",out:"手抄经书成品、古刹禅意古风长者肖像",st:"on",hot:true,date:"2026-09-30",sg:0},
-{id:43,name:"春季采摘与农家乐",cat:"活力康养",e:"🍓",min:25,max:50,dur:"全天",price:"¥260/人",ven:"道路全平整的高标准大棚有机园",desc:"定制小竹篮、品牌标贴保鲜盒、一次性防滑加厚鞋套，亲手采摘新鲜果实，感受乡村向往的慢生活。",mat:"定制小竹篮、品牌标贴保鲜盒、一次性防滑加厚鞋套",out:"亲手采摘果实礼盒、乡村向往的生活短视频",st:"on",hot:false,date:"2026-10-03",sg:0},
-{id:44,name:"逆龄太极八段锦户外训",cat:"活力康养",e:"🥋",min:30,max:100,dur:"1.5小时",price:"¥60/人",ven:"空气清新的城市广场户外场地",desc:"总部定制白色高档练功服，大功率无线低音炮伴奏，从零学起，强身健体同时拓展银发社交圈。",mat:"总部定制白色高档练功服、大功率无线低音炮、不锈钢运动水杯",out:"九宫格动作太极形体照、团队太极震撼大合影",st:"on",hot:false,date:"2026-07-26",sg:68},
-{id:45,name:"近郊房车露营篝火晚会",cat:"活力康养",e:"🏕️",min:16,max:32,dur:"一日",price:"¥880/人",ven:"近郊成熟营地全草坪",desc:"房车+大天幕+吉他+氛围灯串+安全冷焰火，轻奢露营风格，高净值银发群体的专属浪漫夜晚。",mat:"房车、大天幕、吉他、氛围灯串、安全冷焰火",out:"星空露营纪实画册电子版、露营时光音乐MV",st:"on",hot:true,date:"2026-07-20",sg:23},
-{id:46,name:"温泉舒压康养半日游",cat:"活力康养",e:"♨️",min:20,max:40,dur:"4小时",price:"¥398/人",ven:"军工防滑地垫的五星级温泉度假村",desc:"定制高防滑温泉大拖鞋+超大加厚吸水毯+中药汤包，安全享受温泉疗愈时光，带走专属健康管理指南。",mat:"定制高防滑温泉大拖鞋、超大加厚吸水毯、中药汤包",out:"度假优雅贵妇风照卡、专属健康管理指南",st:"on",hot:false,date:"2026-10-05",sg:0},
-{id:47,name:"城市公园风筝联谊节",cat:"活力康养",e:"🪁",min:20,max:50,dur:"3小时",price:"¥99/人",ven:"地势开阔、周边无高压线的风筝草坪",desc:"全白DIY大风筝、彩色丙烯马克笔、加粗防割手线轮，在蓝天下放飞心愿，让快乐如风筝一样高飞。",mat:"全白DIY大风筝、彩色丙烯马克笔、加粗防割手线轮",out:"心愿涂鸦风筝纪念品、风筝入云动态捕捉抓拍照",st:"on",hot:false,date:"2026-10-07",sg:0},
-{id:48,name:"历史老街区文化漫步",cat:"活力康养",e:"🚶",min:15,max:35,dur:"3小时",price:"¥128/人",ven:"平路平坦、每500米有洗手间的古老街区",desc:"无线导览耳机、遮阳帽、盖章打卡手绘大地图，在历史老街中漫步，用脚步丈量城市的文化厚度。",mat:"无线导览耳机、遮阳帽、盖章打卡手绘大地图",out:"城市漫步人文电子画册、老街街拍美学图",st:"on",hot:false,date:"2026-10-10",sg:0},
-{id:49,name:"银发垂钓与天幕野餐会",cat:"活力康养",e:"🎣",min:16,max:36,dur:"4小时",price:"¥220/人",ven:"防护设施完善、地面硬化无泥泞的垂钓园",desc:"轻量高碳素鱼竿、靠背高弹钓鱼椅、轻奢户外冷餐垫，钓一条大鱼，享一顿野餐，银发休闲的最美模样。",mat:"轻量高碳素鱼竿、靠背高弹钓鱼椅、轻奢户外冷餐垫",out:"手捧大鱼爆护高光照、天幕野餐温情合影",st:"on",hot:true,date:"2026-10-12",sg:0},
-{id:50,name:"跟着诗词去周边古镇行",cat:"活力康养",e:"⛵",min:20,max:40,dur:"两日一夜",price:"¥1280/人",ven:"商业配套成熟、无石板陡坡的江南古镇",desc:"汉服+乌篷船包船+古镇诗词打卡护照，两日一夜深度游，感受水乡古镇的诗意与温情。",mat:"古镇诗词打卡护照、乌篷船包船、防滑登船踏板、汉服",out:"水乡古风精美个人写真集、诗意游高光纪录长片",st:"on",hot:false,date:"2026-10-14",sg:29}
+{id:1,name:"复古国潮肖像美拍",cat:"美学声乐",e:"📸",min:25,max:80,dur:"3小时",price:"¥199/人",ven:"高端国风茶室、艺术空间或专业肖像馆",desc:"专业摄影师+造型师双重服务，在国风场景拍摄专属美拍大片。播放经典金曲烘托氛围，卸下面对镜头的防御，留下最美银发风华。",mat:"专业摄影棚灯光、国风服饰道具、便携补光灯、拍立得相机",out:"2套妆造拍摄、2张实体精修照、额外选片¥300/张",st:"on",hot:true,date:"2026-06-15",sg:34,imgs:[]},
+{id:2,name:"80年代怀旧KTV大赛",cat:"美学声乐",e:"🎤",min:20,max:40,dur:"3小时",price:"¥69/人",ven:"同城高端KTV豪华大包厢",desc:"穿越回80年代，金曲大合唱，彩色闪光棒齐挥舞，用音乐唤醒青春记忆，每一首老歌都是一段人生故事。",mat:"立式麦克风、彩色闪光棒、大字金曲歌单",out:"个人副歌高光短视频、拉歌合唱纪念Vlog",st:"on",hot:false,date:"2026-06-20",sg:22,imgs:[]},
+{id:3,name:"母女两代温情美拍",cat:"美学声乐",e:"💞",min:10,max:20,dur:"3小时",price:"¥588/双人",ven:"阳光通透的美学独立咖啡厅",desc:"母女同框，两代温情。专业摄影记录最珍贵的家人时光，走心话题卡引导真实情感流露。",mat:"母女同色系改良装、大字号走心话题卡、两代人对比色温打光灯",out:"双人温情实体相册、互动纪实微电影",st:"on",hot:true,date:"2026-07-05",sg:9,imgs:[]},
+{id:4,name:"同城岁月歌神争霸赛",cat:"美学声乐",e:"🏆",min:30,max:80,dur:"4小时",price:"¥60/人",ven:"社区多功能厅或影剧院",desc:"大型歌唱比赛，专业评委打分，超大字号歌词提示大屏，让每一位银发歌手登上属于自己的舞台。",mat:"超大字号歌词提示大屏、评委大字打分牌、水晶奖杯",out:"岁月歌神荣誉证书、舞台独唱高清视频",st:"on",hot:false,date:"2026-06-28",sg:65,imgs:[]},
+{id:5,name:"银发超模街拍体验",cat:"美学声乐",e:"💃",min:12,max:25,dur:"3小时",price:"¥199/人",ven:"人文创意园区/古建筑平坦群落",desc:"专业摄影师全程跟拍，高功率补光灯让每位银发长者成为最美街拍主角，感受时尚的力量。",mat:"手持高功率补光灯、小蜜蜂麦克风、防暑急救药箱",out:"同城时尚街拍大片5张、微杂志封面电子版",st:"on",hot:false,date:"2026-07-12",sg:12,imgs:[]},
+{id:6,name:"经典影视对白配音秀",cat:"美学声乐",e:"🎬",min:10,max:20,dur:"2.5小时",price:"¥128/人",ven:"专业录音棚或静谧会议室",desc:"为《庐山恋》等经典影视配音，高保真麦克风记录最美声音，重温那个年代的珍贵记忆。",mat:"大字号台词剧本活页、高保真麦克风",out:"原片声轨替换配音个人高光视频",st:"on",hot:false,date:"2026-06-25",sg:8,imgs:[]},
+{id:7,name:"老照片故事分享会",cat:"美学声乐",e:"🖼️",min:12,max:24,dur:"2.5小时",price:"¥69/人",ven:"怀旧主题茶馆或艺术沙龙",desc:"带一张老照片来，讲一段人生故事。便携扫描仪当场数字化修复，让记忆重焕光彩。",mat:"便携扫描仪、高清投影、温和焦点灯光、湿纸巾",out:"老照片数字化高清修复、现场故事讲述音频",st:"on",hot:false,date:"2026-07-08",sg:14,imgs:[]},
+{id:8,name:"黑胶音乐温情鉴赏",cat:"美学声乐",e:"🎵",min:10,max:20,dur:"2.5小时",price:"¥199/人",ven:"高档音乐清吧或品牌音响馆",desc:"老式复古黑胶留声机配上经典唱片，在优雅环境中共赏音乐之美，大字号曲目简介让每位长者从容欣赏。",mat:"老式复古黑胶留声机、经典黑胶盘、大字号曲目简介",out:"复古音乐明信片、现场鉴赏优雅特写照",st:"on",hot:false,date:"2026-07-15",sg:11,imgs:[]},
+{id:9,name:"零基础非洲鼓欢聚",cat:"美学声乐",e:"🥁",min:20,max:50,dur:"2小时",price:"¥99/人",ven:"户外平坦草坪或宽敞舞蹈房",desc:"50面非洲鼓齐声敲响，彩色头带在风中飘动，用最原始的节奏释放退休生活的多巴胺。",mat:"标准非洲鼓50面、彩色头带、大字号节奏图谱",out:"多巴胺解压团队大合影、个人Solo动态短视频",st:"on",hot:false,date:"2026-06-22",sg:29,imgs:[]},
+{id:10,name:"岁月芳华合唱交友聚",cat:"美学声乐",e:"🎼",min:25,max:60,dur:"2.5小时",price:"¥79/人",ven:"专业合唱排练厅或多功能音响厅",desc:"专业指挥带领，钢琴伴奏，分声部演唱经典合唱曲目，在音乐中寻找共鸣与归属感。",mat:"调节谱架、钢琴、超大字号简谱单页、润喉糖",out:"多机位精美合唱MV（配超大字幕）、声部合影",st:"on",hot:false,date:"2026-07-18",sg:31,imgs:[]},
+{id:11,name:"遇见黄昏·精致单身社交派对",cat:"同城社交",e:"🌹",min:16,max:32,dur:"3.5小时",price:"¥398/人",ven:"格调高雅独立西餐厅或高档会所茶室",desc:"严执三不问刚性脚本，引导聚焦聊爱好与理想。后台盲选撮合，极致保护每位长者的尊严与隐私。",mat:"男女红蓝大字号胸牌、走心交流话题卡、盲选互选卡、无糖精致点心台",out:"个人高光社交肖像、私域专属一对一温情牵线服务",st:"on",hot:true,date:"2026-06-29",sg:28,imgs:[]},
+{id:12,name:"银发红娘包饺子聚",cat:"同城社交",e:"🥟",min:16,max:28,dur:"2.5小时",price:"¥128/人",ven:"宽敞卫生的烘焙工坊或私厨空间",desc:"围坐一桌共包饺子，人间烟火气里最容易打开心扉，银发破冰卡牌让陌生人秒变老朋友。",mat:"定制围裙、各色新鲜馅料、银发破冰卡牌",out:"人间烟火气欢聚大合影、精制手工饺礼盒",st:"on",hot:false,date:"2026-08-05",sg:0,imgs:[]},
+{id:13,name:"同城老乡温情半日聚",cat:"同城社交",e:"🏡",min:20,max:40,dur:"4小时",price:"¥150/人",ven:"地道地方菜馆包间或老字号茶楼",desc:"方言趣味竞猜、家乡老照片墙、定制老乡徽章，他乡遇故知的温暖在这里重现。",mat:"大字方言趣味竞猜卡、家乡老照片墙、定制老乡徽章",out:"老乡会专属微信通讯录、欢聚高光短视频",st:"on",hot:false,date:"2026-08-08",sg:0,imgs:[]},
+{id:14,name:"退休经验交换智慧大集",cat:"同城社交",e:"💡",min:20,max:50,dur:"3小时",price:"¥99/人",ven:"俱乐部基地或合作书店大厅",desc:"每人带来一项退休后的智慧技能，微型摊位展示交流，用经验换友谊，让知识在银发群体中流动。",mat:"微型摊位牌、彩色粉笔、职业技能标签贴、大字画布",out:"电子版智慧技能手册、个人分享高光照",st:"on",hot:true,date:"2026-08-10",sg:0,imgs:[]},
+{id:15,name:"心理健康与情感围炉",cat:"同城社交",e:"🕯️",min:8,max:15,dur:"2小时",price:"¥199/人",ven:"暖色调榻榻米茶室或私密冥想室",desc:"植物精油香薰、LED仿真烛光、暖毛毯，在安全温暖的小圈子里倾诉内心，专业引导化解退休后的心理落差。",mat:"植物精油香薰、LED仿真烛光、暖毛毯、倾诉卡",out:"定制舒压开运香囊、个人身心疗愈手记",st:"on",hot:false,date:"2026-08-12",sg:0,imgs:[]},
+{id:16,name:"高知退休生活茶话会",cat:"同城社交",e:"📖",min:12,max:25,dur:"2.5小时",price:"¥128/人",ven:"大学周边安静咖啡厅或图书馆",desc:"儒雅知性着装，大字名著语录书签，骨瓷茶具，实木意见交流看板，让同频高知长者找到精神共鸣。",mat:"大字名著语录书签、骨瓷茶具、实木意见交流看板",out:"高知同频知己合影、定制读书纪念书签",st:"on",hot:false,date:"2026-08-15",sg:0,imgs:[]},
+{id:17,name:"暖心主理人私厨家宴",cat:"同城社交",e:"🍽️",min:6,max:10,dur:"3小时",price:"¥268/人",ven:"主理人精心布置的私人大厨房",desc:"手写体欢迎信、大字版主厨养生菜单、精致骨瓷餐具，6-10人极致温馨私宴体验。",mat:"手写体欢迎信、大字版主厨养生菜单、精致骨瓷餐具",out:"暖心家宴纪实Vlog、与主理人亲密合影",st:"on",hot:true,date:"2026-06-21",sg:8,imgs:[]},
+{id:18,name:"同城银发麻将掼蛋赛",cat:"同城社交",e:"🀄",min:16,max:48,dur:"3小时",price:"¥88/人",ven:"高级棋牌会所或俱乐部活动厅",desc:"全自动静音麻将机，加厚扑克，大字号积分榜，让智力竞技成为银发社交最轻松的破冰方式。",mat:"全自动静音麻将机、加厚扑克、大字号积分榜",out:"智力赛荣誉奖状、老战友高光对局合影",st:"on",hot:false,date:"2026-08-17",sg:0,imgs:[]},
+{id:19,name:"岁月知己生日欢聚会",cat:"同城社交",e:"🎂",min:20,max:50,dur:"3小时",price:"¥199/人",ven:"俱乐部专属无障碍宴会厅",desc:"强对比定制生日墙、无糖健康大蛋糕、怀旧长寿面，让每位寿星感受到被整个圈子珍视的温度。",mat:"强对比定制生日墙、无糖健康大蛋糕、怀旧长寿面",out:"寿星集体高光电子相册、全场祝福短视频",st:"on",hot:true,date:"2026-08-19",sg:0,imgs:[]},
+{id:20,name:"新老会员迎新茶聚",cat:"同城社交",e:"🌟",min:15,max:35,dur:"2小时",price:"免费",ven:"同城开开华彩线下俱乐部基地",desc:"老带新欢迎徽章、俱乐部大地图、专属通关护照，零门槛破冰，让新会员第一天就感受到家的温暖。",mat:"老带新欢迎徽章、俱乐部大地图、专属通关护照",out:"开开华彩专属合伙人认证通关护照",st:"on",hot:false,date:"2026-08-22",sg:0,imgs:[]},
+{id:21,name:"精致微醺·红酒品鉴与礼仪",cat:"优雅品位",e:"🍷",min:12,max:24,dur:"2.5小时",price:"¥588/人",ven:"本地知名酒庄或西式私密美学空间",desc:"4款精选进口红酒+水晶高脚杯，用最通俗的大白话打消老人距离感，传授站姿坐姿与碰杯礼仪，微醺状态下自由社交。",mat:"4款精选进口红酒、水晶高脚杯、超大字号红酒风味图谱画布",out:"权威纸质红酒优雅生活家认证证书、高光社交侧颜美照",st:"on",hot:true,date:"2026-07-03",sg:19,imgs:[]},
+{id:22,name:"私房菜主厨品鉴",cat:"优雅品位",e:"🍱",min:8,max:16,dur:"3小时",price:"¥498/人",ven:"本地黑珍珠级特色私房菜馆",desc:"主厨特制养生大字菜单、食材溯源高对比度展架，低调奢华的高端小团美食探索之旅，筛选高净值客户。",mat:"主厨特制养生大字菜单、食材溯源高对比度展架",out:"主厨亲笔签名合影、菜品美学视觉海报",st:"on",hot:true,date:"2026-08-24",sg:0,imgs:[]},
+{id:23,name:"银发西点烘焙社交",cat:"优雅品位",e:"🧁",min:10,max:20,dur:"2.5小时",price:"¥198/人",ven:"烤箱防护到位的专业烘焙坊",desc:"进口无水奶油、木糖醇面粉、大字号步骤图，低糖健康烘焙，甜蜜是银发社交最美的破冰方式。",mat:"进口无水奶油、木糖醇面粉、大字号步骤图",out:"低糖健康西点礼盒、烘焙俏皮工作现场照",st:"on",hot:false,date:"2026-08-26",sg:0,imgs:[]},
+{id:24,name:"多肉种植与园艺沙龙",cat:"优雅品位",e:"🪴",min:15,max:30,dur:"2小时",price:"¥128/人",ven:"采光良好的温室或合作阳光花园",desc:"饱满多肉植物、创意瓷盆、圆头迷你工具，亲手栽种带走，让每个家中都多一抹绿意和生机。",mat:"饱满多肉植物、创意瓷盆、圆头迷你工具、防污袖套",out:"亲手栽种的多肉盆栽、劳作治愈系特写照",st:"on",hot:false,date:"2026-08-29",sg:0,imgs:[]},
+{id:25,name:"非遗围炉煮茶",cat:"优雅品位",e:"🍵",min:12,max:24,dur:"2.5小时",price:"¥168/人",ven:"新中式复古庭院茶空间",desc:"安全无烟电炭炉、老白茶、烤红薯、拍立得，在新中式茶空间里慢下来，感受时光温柔。",mat:"安全无烟电炭炉、老白茶、烤红薯、拍立得",out:"拍立得复古实体照、慢生活朋友圈九宫格",st:"on",hot:false,date:"2026-06-18",sg:16,imgs:[]},
+{id:26,name:"插花艺术与空间美学",cat:"优雅品位",e:"💐",min:15,max:28,dur:"2.5小时",price:"¥198/人",ven:"鲜花环绕的美学工作室/阳光房",desc:"时令鲜花+中式古朴瓷花器，专业安全圆头剪刀，让每位长者都能创作出属于自己的高雅插花作品。",mat:"时令鲜花、中式古朴瓷花器、专业安全圆头剪刀",out:"个人专属高档插花花器成品、艺术微笑照片",st:"on",hot:false,date:"2026-08-31",sg:0,imgs:[]},
+{id:27,name:"明星咖啡拉花体验课",cat:"优雅品位",e:"☕",min:10,max:18,dur:"2小时",price:"¥150/人",ven:"精品意式咖啡馆（铺满防烫垫）",desc:"半自动咖啡机、高品质鲜奶、大字体风味科普板，让每位长者都能拉出属于自己的第一杯艺术咖啡。",mat:"半自动咖啡机、高品质鲜奶、大字体风味科普板",out:"拉花作品高光图、个人拉花动感精辑短视频",st:"on",hot:true,date:"2026-09-02",sg:0,imgs:[]},
+{id:28,name:"香道与舒压冥想坊",cat:"优雅品位",e:"🧘",min:8,max:16,dur:"2小时",price:"¥199/人",ven:"铺设厚地毯的专业隔音冥想室",desc:"海南天然沉香、香炉、加厚冥想垫、真丝眼罩，身心彻底放空，体验中国传统香道的极致禅意。",mat:"海南天然沉香、香炉、加厚冥想垫、真丝眼罩",out:"自制沉香线香礼盒、身心放空舒压特写照",st:"on",hot:false,date:"2026-07-01",sg:9,imgs:[]},
+{id:29,name:"旗袍定制与色彩搭配",cat:"优雅品位",e:"👗",min:15,max:30,dur:"2.5小时",price:"¥299/人",ven:"高档旗袍高定工坊或美学馆",desc:"各色面料色块、专业色彩测试卡、超大防眩光穿衣镜，让每位长者找到最适合自己的色彩与风格。",mat:"各色面料色块、专业色彩测试卡、超大防眩光穿衣镜",out:"专属色彩搭配报告、量体裁衣气质照",st:"on",hot:false,date:"2026-09-05",sg:0,imgs:[]},
+{id:30,name:"零基础丙烯油画沙龙",cat:"优雅品位",e:"🎨",min:12,max:24,dur:"3小时",price:"¥198/人",ven:"光线充足的独立画室（无障碍）",desc:"高档全棉画布框、无毒无味颜料、大字号渐进模板，零基础也能完成一幅可直接挂客厅的个人油画。",mat:"高档全棉画布框、无毒无味颜料、大字号渐进模板",out:"可直接挂客厅的个人油画框、创作纪实照",st:"on",hot:false,date:"2026-09-07",sg:0,imgs:[]},
+{id:31,name:"市博物馆名师导览",cat:"人文知性",e:"🏛️",min:20,max:40,dur:"3小时",price:"¥128/人",ven:"市级大型博物馆/美术馆（走直梯）",desc:"骨传导无线耳机调大音量，名师深度导览，折叠便携轻量凳随身携带，让文化之旅轻松无负担。",mat:"骨传导无线耳机（调大音量）、折叠便携轻量凳",out:"同城看展知性风画册电子版、专属文化手记",st:"on",hot:false,date:"2026-09-09",sg:0,imgs:[]},
+{id:32,name:"繁花时代读书分享会",cat:"人文知性",e:"📚",min:12,max:25,dur:"2小时",price:"¥88/人",ven:"复古风格历史书店沙龙区",desc:"致敬90年代复古风，大字号活页单页，金属年代书签，绿罩台灯，在书香中重温激情岁月。",mat:"大字号活页单页、金属年代书签、绿罩台灯",out:"开开华彩定制书香徽章、个人分享走心金句海报",st:"on",hot:false,date:"2026-09-12",sg:0,imgs:[]},
+{id:33,name:"非遗扎染蓝染体验",cat:"人文知性",e:"🎋",min:15,max:25,dur:"3小时",price:"¥228/人",ven:"专业非遗传承基地/大工作室",desc:"纯植物染料、白丝巾、特厚防污围裙、高防滑套鞋，亲手创作独一无二的非遗扎染作品，感受匠心温度。",mat:"纯植物染料、白丝巾、特厚防污围裙、高防滑套鞋",out:"独一无二的非遗扎染成品丝巾、匠心纪实视频",st:"on",hot:true,date:"2026-09-14",sg:0,imgs:[]},
+{id:34,name:"丹青雅集国画书法沙龙",cat:"人文知性",e:"🖌️",min:10,max:20,dur:"3小时",price:"¥150/人",ven:"笔墨纸砚齐全的高档画廊",desc:"加厚一得阁墨、生宣、特大字名家模板、吸墨毛毡，在专业画廊里感受中国传统书画的魅力，现场装裱带走。",mat:"加厚一得阁墨、生宣、特大字名家模板、吸墨毛毡",out:"现场专业装裱的个人字画成品、研墨挥毫照",st:"on",hot:false,date:"2026-09-16",sg:0,imgs:[]},
+{id:35,name:"手机数码摄影与修图课",cat:"人文知性",e:"📱",min:15,max:35,dur:"3小时",price:"¥128/人",ven:"全平坦城市公园或多媒体厅",desc:"大字彩印手机操作手册、大旋钮三脚架，让每位银发长者轻松掌握手机摄影与修图技巧，拍出人生最美大片。",mat:"九宫格辅助线手机操作大字彩印手册、大旋钮三脚架",out:"个人摄影前后对比海报、手机摄影结业证书",st:"on",hot:false,date:"2026-09-19",sg:0,imgs:[]},
+{id:36,name:"地方志建筑寻根读书会",cat:"人文知性",e:"🗺️",min:15,max:30,dur:"2.5小时",price:"¥99/人",ven:"城市受保护历史建筑内礼堂",desc:"同城旧地图复刻版、地方志节选大字活页、金属放大镜，在历史建筑中追寻城市记忆与文化根脉。",mat:"同城旧地图复刻版、地方志节选大字活页、金属放大镜",out:"精美古建筑手绘地图电子版、个人人文底蕴证言照",st:"on",hot:false,date:"2026-09-21",sg:0,imgs:[]},
+{id:37,name:"神医养生·药膳工作坊",cat:"人文知性",e:"🌿",min:20,max:40,dur:"3小时",price:"¥258/人",ven:"老字号国医馆/高端中医养生会所",desc:"名老中医现场传授食疗秘诀，人手一台中药克重台秤，亲手抓药调配专属养生茶饮，7天定制茶包带走。",mat:"高精度中药克重台秤（人手一台）、四季时令名贵药材、大字号药膳配方手册",out:"7天定制养生药膳包、名医出具个人体质食疗调理方案书",st:"on",hot:true,date:"2026-07-17",sg:37,imgs:[]},
+{id:38,name:"收藏家私人藏品分享会",cat:"人文知性",e:"🏺",min:10,max:20,dur:"2.5小时",price:"¥199/人",ven:"警备完善的私人收藏馆红木厅",desc:"专业高倍放大镜、无菌全棉白手套、加厚防爆展柜，近距离感受珍藏之美，开启高净值银发鉴赏之旅。",mat:"专业高倍放大镜、无菌全棉白手套、加厚防爆展柜",out:"高端文玩鉴赏指南小册子、尊享老会员特写照",st:"on",hot:false,date:"2026-09-23",sg:0,imgs:[]},
+{id:39,name:"银发智能生活与防骗课",cat:"人文知性",e:"🛡️",min:20,max:60,dur:"2小时",price:"¥50/人",ven:"社区大学或俱乐部基地大教室",desc:"大红箭头手机操作步骤手册、新型AI防诈骗案例库，让每位长者都能安全畅游数字世界。",mat:"大红箭头手机操作步骤手册、新型AI防诈骗案例库",out:"开开华彩·智能生活通关正式证书",st:"on",hot:false,date:"2026-09-26",sg:0,imgs:[]},
+{id:40,name:"诗歌朗诵与形体美学课",cat:"人文知性",e:"🎭",min:15,max:30,dur:"2小时",price:"¥120/人",ven:"铺设温暖地暖的无镜面大练功房",desc:"舒婷经典诗大字朗诵本、高敏无线领夹麦，在诗意中展现形体之美，找回优雅从容的自我。",mat:"舒婷经典诗大字朗诵本、高敏无线领夹麦、温和降噪音响",out:"个人高保真配乐朗诵录音轨、形体优雅特写照",st:"on",hot:true,date:"2026-09-28",sg:0,imgs:[]},
+{id:41,name:"森林氧吧·银发轻量徒步",cat:"活力康养",e:"🌲",min:30,max:50,dur:"全天",price:"¥298/人",ven:"国家级森林公园全平坦木栈道",desc:"专业领队八段锦热身，严格控制总步数低于6000步，50万高额意外险保障，林间野餐+老歌合唱。",mat:"定制轻量碳素登山杖、专业急救药箱、大字号路标手旗、高颜值轻冷餐",out:"全员森林大团圆航拍合影、个人治愈系高光九宫格",st:"on",hot:true,date:"2026-06-23",sg:45,imgs:[]},
+{id:42,name:"名山古刹一日禅修游",cat:"活力康养",e:"🏯",min:20,max:40,dur:"全天",price:"¥398/人",ven:"车程1.5小时以内的名山静谧古寺",desc:"统一棉麻禅修宽松外罩，大字号宣纸抄经帖，软质厚实拜垫，无糖素斋，在山间梵音中找回内心宁静。",mat:"统一棉麻禅修宽松外罩、大字号宣纸抄经帖、软质厚实拜垫、无糖素斋",out:"手抄经书成品、古刹禅意古风长者肖像",st:"on",hot:true,date:"2026-09-30",sg:0,imgs:[]},
+{id:43,name:"春季采摘与农家乐",cat:"活力康养",e:"🍓",min:25,max:50,dur:"全天",price:"¥260/人",ven:"道路全平整的高标准大棚有机园",desc:"定制小竹篮、品牌标贴保鲜盒、一次性防滑加厚鞋套，亲手采摘新鲜果实，感受乡村向往的慢生活。",mat:"定制小竹篮、品牌标贴保鲜盒、一次性防滑加厚鞋套",out:"亲手采摘果实礼盒、乡村向往的生活短视频",st:"on",hot:false,date:"2026-10-03",sg:0,imgs:[]},
+{id:44,name:"逆龄太极八段锦户外训",cat:"活力康养",e:"🥋",min:30,max:100,dur:"1.5小时",price:"¥60/人",ven:"空气清新的城市广场户外场地",desc:"总部定制白色高档练功服，大功率无线低音炮伴奏，从零学起，强身健体同时拓展银发社交圈。",mat:"总部定制白色高档练功服、大功率无线低音炮、不锈钢运动水杯",out:"九宫格动作太极形体照、团队太极震撼大合影",st:"on",hot:false,date:"2026-07-26",sg:68,imgs:[]},
+{id:45,name:"近郊房车露营篝火晚会",cat:"活力康养",e:"🏕️",min:16,max:32,dur:"一日",price:"¥880/人",ven:"近郊成熟营地全草坪",desc:"房车+大天幕+吉他+氛围灯串+安全冷焰火，轻奢露营风格，高净值银发群体的专属浪漫夜晚。",mat:"房车、大天幕、吉他、氛围灯串、安全冷焰火",out:"星空露营纪实画册电子版、露营时光音乐MV",st:"on",hot:true,date:"2026-07-20",sg:23,imgs:[]},
+{id:46,name:"温泉舒压康养半日游",cat:"活力康养",e:"♨️",min:20,max:40,dur:"4小时",price:"¥398/人",ven:"军工防滑地垫的五星级温泉度假村",desc:"定制高防滑温泉大拖鞋+超大加厚吸水毯+中药汤包，安全享受温泉疗愈时光，带走专属健康管理指南。",mat:"定制高防滑温泉大拖鞋、超大加厚吸水毯、中药汤包",out:"度假优雅贵妇风照卡、专属健康管理指南",st:"on",hot:false,date:"2026-10-05",sg:0,imgs:[]},
+{id:47,name:"城市公园风筝联谊节",cat:"活力康养",e:"🪁",min:20,max:50,dur:"3小时",price:"¥99/人",ven:"地势开阔、周边无高压线的风筝草坪",desc:"全白DIY大风筝、彩色丙烯马克笔、加粗防割手线轮，在蓝天下放飞心愿，让快乐如风筝一样高飞。",mat:"全白DIY大风筝、彩色丙烯马克笔、加粗防割手线轮",out:"心愿涂鸦风筝纪念品、风筝入云动态捕捉抓拍照",st:"on",hot:false,date:"2026-10-07",sg:0,imgs:[]},
+{id:48,name:"历史老街区文化漫步",cat:"活力康养",e:"🚶",min:15,max:35,dur:"3小时",price:"¥128/人",ven:"平路平坦、每500米有洗手间的古老街区",desc:"无线导览耳机、遮阳帽、盖章打卡手绘大地图，在历史老街中漫步，用脚步丈量城市的文化厚度。",mat:"无线导览耳机、遮阳帽、盖章打卡手绘大地图",out:"城市漫步人文电子画册、老街街拍美学图",st:"on",hot:false,date:"2026-10-10",sg:0,imgs:[]},
+{id:49,name:"银发垂钓与天幕野餐会",cat:"活力康养",e:"🎣",min:16,max:36,dur:"4小时",price:"¥220/人",ven:"防护设施完善、地面硬化无泥泞的垂钓园",desc:"轻量高碳素鱼竿、靠背高弹钓鱼椅、轻奢户外冷餐垫，钓一条大鱼，享一顿野餐，银发休闲的最美模样。",mat:"轻量高碳素鱼竿、靠背高弹钓鱼椅、轻奢户外冷餐垫",out:"手捧大鱼爆护高光照、天幕野餐温情合影",st:"on",hot:true,date:"2026-10-12",sg:0,imgs:[]},
+{id:50,name:"跟着诗词去周边古镇行",cat:"活力康养",e:"⛵",min:20,max:40,dur:"两日一夜",price:"¥1280/人",ven:"商业配套成熟、无石板陡坡的江南古镇",desc:"汉服+乌篷船包船+古镇诗词打卡护照，两日一夜深度游，感受水乡古镇的诗意与温情。",mat:"古镇诗词打卡护照、乌篷船包船、防滑登船踏板、汉服",out:"水乡古风精美个人写真集、诗意游高光纪录长片",st:"on",hot:false,date:"2026-10-14",sg:29,imgs:[]}
 ];
 
-// ── 数据层：从localStorage读，无则用默认 ──
+function showT(msg,type=''){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.className='toast show'+(type?' '+type:'');
+  clearTimeout(t._t); t._t=setTimeout(()=>t.className='toast',3000);
+}
+
 function loadData(){
   try{
     const raw=localStorage.getItem('kkh_acts');
     if(raw){
-      const saved=JSON.parse(raw);
-      if(!Array.isArray(saved)||saved.length===0) return DEFAULT_ACTS;
-      // 如果本地存储的活动数量少于内置数量，说明是旧数据，强制用最新的
-      if(saved.length < DEFAULT_ACTS.length){
-        localStorage.setItem('kkh_acts',JSON.stringify(DEFAULT_ACTS));
-        return DEFAULT_ACTS;
-      }
-      // 确保每条活动都有 st 字段
-      saved.forEach(a=>{ if(!a.st) a.st='on'; });
-      return saved;
+      const s=JSON.parse(raw);
+      if(Array.isArray(s)&&s.length>=50) return s;
     }
     return DEFAULT_ACTS;
   }catch(e){return DEFAULT_ACTS;}
 }
+
 function loadCfg(){
-  try{
-    const raw=localStorage.getItem('kkh_cfg');
-    return raw?JSON.parse(raw):{heroTag:'✦ 社群主理人活动手册 2026',siteName:'开开华彩',heroSub:'线下文娱俱乐部 · 一起变年轻 · 用爱和科技为父母做好产品'};
-  }catch(e){return {heroTag:'✦ 社群主理人活动手册 2026',siteName:'开开华彩',heroSub:'线下文娱俱乐部 · 一起变年轻 · 用爱和科技为父母做好产品'};}
+  try{const r=localStorage.getItem('kkh_cfg');return r?JSON.parse(r):{};}catch(e){return {};}
 }
 
-let ACTS=loadData();
-let curCat='全部';
-
-// 应用配置
 function applyCfg(){
   const c=loadCfg();
-  document.getElementById('heroTag').textContent=c.heroTag||'✦ 社群主理人活动手册 2026';
-  document.getElementById('siteName').textContent=c.siteName||'开开华彩';
-  document.getElementById('heroSub').textContent=c.heroSub||'';
-  // 电话号码
-  const telWrap=document.getElementById('heroTel');
-  const telNum=document.getElementById('heroTelNum');
+  const el=id=>document.getElementById(id);
+  if(el('heroTag'))  el('heroTag').textContent  = c.heroTag  ||'✦ 社群主理人活动手册 2026';
+  if(el('siteName')) el('siteName').textContent = c.siteName ||'开开华彩';
+  if(el('heroSub'))  el('heroSub').textContent  = c.heroSub  ||'线下文娱俱乐部 · 一起变年轻 · 用爱和科技为父母做好产品';
   const tel=(c.tel||'').trim();
-  if(telWrap&&telNum){
-    if(tel){
-      telNum.textContent=tel;
-      telWrap.style.display='flex';
-    }else{
-      telWrap.style.display='none';
-    }
+  const wrap=el('heroTel');
+  if(wrap){
+    if(tel){el('heroTelNum').textContent=tel;wrap.style.display='flex';}
+    else wrap.style.display='none';
   }
 }
 
-// 监听localStorage变化（后台修改时实时更新）
-window.addEventListener('storage',function(e){
-  if(e.key==='kkh_acts'){ACTS=loadData();rFront(curCat,document.getElementById('fsi').value);}
-  if(e.key==='kkh_cfg'){applyCfg();}
-});
+function applyRemoteCfg(cfg){
+  const el=id=>document.getElementById(id);
+  if(el('heroTag'))  el('heroTag').textContent  = cfg.heroTag  ||'✦ 社群主理人活动手册 2026';
+  if(el('siteName')) el('siteName').textContent = cfg.siteName ||'开开华彩';
+  if(el('heroSub'))  el('heroSub').textContent  = cfg.heroSub  ||'';
+  const tel=(cfg.tel||'').trim();
+  const wrap=el('heroTel');
+  if(wrap){
+    if(tel){el('heroTelNum').textContent=tel;wrap.style.display='flex';}
+    else wrap.style.display='none';
+  }
+}
 
-function goHome(){
-  document.getElementById('v-home').classList.add('on');
-  document.getElementById('v-detail').classList.remove('on');
-  window.scrollTo(0,0);
-}
-function goDetail(){
-  document.getElementById('v-home').classList.remove('on');
-  document.getElementById('v-detail').classList.add('on');
-  window.scrollTo(0,0);
-}
+let ACTS=[];
+let curCat='全部';
 
 function rFront(cat,kw=''){
-  // 保护：ACTS 为空时用默认数据
-  if(!ACTS||!ACTS.length){ ACTS=DEFAULT_ACTS; }
-  let list=cat==='全部'?ACTS:ACTS.filter(a=>a.cat===cat);
-  if(kw)list=list.filter(a=>a.name.includes(kw)||a.cat.includes(kw));
-  list=list.filter(a=>a.st==='on'||!a.st); // st不存在时也显示
+  if(!ACTS||!ACTS.length) ACTS=DEFAULT_ACTS;
+  let list=cat==='全部'?[...ACTS]:ACTS.filter(a=>a.cat===cat);
+  if(kw) list=list.filter(a=>a.name.includes(kw)||a.cat.includes(kw));
+  list=list.filter(a=>!a.st||a.st==='on');
   const g=document.getElementById('ag');
-  if(!list.length){g.innerHTML='<div style="text-align:center;padding:40px;color:var(--mu);font-size:13px;">暂无活动</div>';return;}
+  if(!list.length){g.innerHTML='<div style="text-align:center;padding:40px;color:var(--mu);font-size:13px;">暂无活动</div>';updateStats();return;}
   g.innerHTML=list.map(a=>{
     const cm=CM[a.cat]||{cls:'b1',t:'t1'};
-    return `<div class="ac" onclick="openD(${a.id})"><div class="aci"><div class="at ${cm.t}" style="${(a.imgs&&a.imgs.length)?'padding:0;overflow:hidden;':''}">${a.hot?'<div class="hd">热</div>':''}${(a.imgs&&a.imgs.length)?`<img src="${a.imgs[0]}" style="width:100%;height:100%;object-fit:cover;display:block;">`:a.e}</div><div class="ain"><span class="abg ${cm.cls}">${a.cat}</span><div class="an">${a.name}</div><div class="ams"><span class="am"><i class="ti ti-users"></i>${a.min}–${a.max}人</span><span class="am"><i class="ti ti-clock"></i>${a.dur}</span><span class="am"><i class="ti ti-calendar"></i>${a.date||'待定'}</span></div><div class="ap">${a.price}</div>${a.sg>0?'<div class="sc2"><i class="ti ti-user-check" style="font-size:11px;vertical-align:-1px;"></i> 已报名 '+a.sg+' 人</div>':''}</div><div class="aar"><i class="ti ti-chevron-right"></i></div></div></div>`;
+    const hasImg=a.imgs&&a.imgs.length>0;
+    const thumb=hasImg?`<img src="${a.imgs[0]}" style="width:100%;height:100%;object-fit:cover;display:block;">`:a.e;
+    const thumbStyle=hasImg?'padding:0;overflow:hidden;':'';
+    return `<div class="ac" onclick="openD(${a.id})">
+      <div class="aci">
+        <div class="at ${cm.t}" style="${thumbStyle}">
+          ${a.hot?'<div class="hd">热</div>':''}${thumb}
+        </div>
+        <div class="ain">
+          <span class="abg ${cm.cls}">${a.cat}</span>
+          <div class="an">${a.name}</div>
+          <div class="ams">
+            <span class="am"><i class="ti ti-users"></i>${a.min}–${a.max}人</span>
+            <span class="am"><i class="ti ti-clock"></i>${a.dur}</span>
+            <span class="am"><i class="ti ti-calendar"></i>${a.date||'待定'}</span>
+          </div>
+          <div class="ap">${a.price}</div>
+          ${a.sg>0?`<div class="sc2"><i class="ti ti-user-check" style="font-size:11px;vertical-align:-1px;"></i> 已报名 ${a.sg} 人</div>`:''}
+        </div>
+        <div class="aar"><i class="ti ti-chevron-right"></i></div>
+      </div>
+    </div>`;
   }).join('');
-  document.getElementById('fs-t').textContent=ACTS.filter(a=>a.st==='on').length;
-  document.getElementById('fs-s').textContent=ACTS.reduce((s,a)=>s+(a.sg||0),0).toLocaleString();
+  updateStats();
 }
+
+function updateStats(){
+  const on=ACTS.filter(a=>!a.st||a.st==='on');
+  const t=document.getElementById('fs-t');
+  const s=document.getElementById('fs-s');
+  if(t) t.textContent=on.length;
+  if(s) s.textContent=on.reduce((x,a)=>x+(a.sg||0),0).toLocaleString();
+}
+
+function fSrch(v){ rFront(curCat,v); }
 
 document.getElementById('frow').addEventListener('click',e=>{
   const b=e.target.closest('.fb');if(!b)return;
@@ -466,570 +422,312 @@ document.getElementById('frow').addEventListener('click',e=>{
   b.classList.add('on');curCat=b.dataset.cat;
   rFront(curCat,document.getElementById('fsi').value);
 });
-function fSrch(v){rFront(curCat,v);}
 
+// ══ 详情页 ══
+let carIdx={};
 function openD(id){
   const a=ACTS.find(x=>x.id===id);if(!a)return;
   const cm=CM[a.cat]||{cls:'b1',t:'t1'};
-  document.getElementById('dh2').innerHTML=`<div class="dh"><div class="bb" onclick="goHome()"><i class="ti ti-arrow-left"></i>返回活动列表</div><div class="de ${cm.t}">${a.e}</div><div class="dc">${a.cat}</div><div class="dh1">${a.name}</div><div class="dph">${a.price} <span>/ 每人</span></div></div>`;
-  const outs=(a.out||'').split('、').map(o=>`<div class="oi"><i class="ti ti-star"></i>${o}</div>`).join('');
-  const mats=(a.mat||'').split('、').map(m=>`<div class="mi"><i class="ti ti-package"></i>${m}</div>`).join('');
-  document.getElementById('db2').innerHTML=`
-  <div class="ds"><div class="dst"><i class="ti ti-info-circle"></i>活动信息</div><div class="ig"><div class="ic2"><div class="il">活动人数</div><div class="iv">${a.min}–${a.max} 人</div></div><div class="ic2"><div class="il">活动时长</div><div class="iv">${a.dur}</div></div><div class="ic2"><div class="il">活动日期</div><div class="iv">${a.date||'待定'}</div></div><div class="ic2"><div class="il">收费标准</div><div class="iv" style="color:var(--or)">${a.price}</div></div></div></div>
-  ${(a.imgs&&a.imgs.length)?`<div class="ds"><div class="dst"><i class="ti ti-photo"></i>活动图片</div>
-  <div class="carousel" id="car-${a.id}">
-    <div class="carousel-inner" id="car-inner-${a.id}">${a.imgs.map(src=>`<img src="${src}" alt="活动图片">`).join('')}</div>
-    ${a.imgs.length>1?`<button class="carousel-prev" onclick="carPrev(${a.id})"><i class="ti ti-chevron-left"></i></button><button class="carousel-next" onclick="carNext(${a.id})"><i class="ti ti-chevron-right"></i></button>`:''} 
-  </div>
-  ${a.imgs.length>1?`<div class="carousel-dots" id="car-dots-${a.id}">${a.imgs.map((_,i)=>`<div class="carousel-dot ${i===0?'on':''}" onclick="carGo(${a.id},${i})"></div>`).join('')}</div>`:''}
-  </div>`:''}
-  <div class="ds"><div class="dst"><i class="ti ti-map-pin"></i>场地推荐</div><div class="dd">${a.ven}</div></div>
-  <div class="ds"><div class="dst"><i class="ti ti-file-description"></i>活动详情</div><div class="dd">${a.desc}</div></div>
-  ${mats?'<div class="ds"><div class="dst"><i class="ti ti-package"></i>核心物料</div><div class="ml2">'+mats+'</div></div>':''}
-  <div class="ds"><div class="dst"><i class="ti ti-gift"></i>参与收获</div><div class="ol">${outs}</div></div>
-  <div class="ds"><div class="dst"><i class="ti ti-link"></i>活动专属链接</div><div class="lb"><i class="ti ti-world"></i><span>https://kaikaihuacai.com/act/${a.id}</span><span class="cb" onclick="cpT('https://kaikaihuacai.com/act/${a.id}','链接已复制')">复制</span></div></div>`;
-  document.getElementById('sbtn').onclick=()=>openSU(id);
-  document.getElementById('pbtn').onclick=()=>openPo(id);
-  goDetail();
-}
-
-function openSU(id){
-  const a=ACTS.find(x=>x.id===id);if(!a)return;
-  // 日期显示逻辑：固定显示活动设定日期，不可自由选择
-  const dateDisplay=a.date
-    ?'<div class="ff"><label>活动日期</label><div style="background:var(--warm);border:.5px solid var(--bd);border-radius:9px;padding:10px 12px;font-size:13px;color:var(--tx);display:flex;align-items:center;gap:6px;"><i class="ti ti-calendar" style="color:var(--or);font-size:14px;"></i>'+a.date+'<input type="hidden" id="sud" value="'+a.date+'"></div></div>'
-    :'<div class="ff"><label>活动日期</label><div style="background:var(--warm);border:.5px solid var(--bd);border-radius:9px;padding:10px 12px;font-size:13px;color:var(--mu);">待定，报名后主理人确认<input type="hidden" id="sud" value=""></div></div>';
-  document.getElementById('scont').innerHTML='<div class="st">报名参加活动</div>'
-    +'<div class="ssb">'+a.e+' '+a.name+' · '+a.price+'</div>'
-    +'<div class="ff"><label>您的姓名 *</label><input type="text" id="sun" placeholder="请输入姓名"></div>'
-    +'<div class="ff"><label>手机号码 *</label><input type="tel" id="sup" placeholder="请输入手机号码"></div>'
-    +'<div class="f2">'
-    +'<div class="ff"><label>报名人数</label><select id="suc"><option>1人</option><option>2人</option><option>3人</option><option>4人</option></select></div>'
-    +dateDisplay
-    +'</div>'
-    +'<div class="ff"><label>备注（可选）</label><input type="text" id="suno" placeholder="如：需要素食、有轮椅需求等"></div>'
-    +'<div style="background:var(--warm);border-radius:10px;padding:10px 13px;font-size:12px;color:var(--sub);line-height:1.7;margin-bottom:14px;"><i class="ti ti-shield-check" style="color:var(--or);margin-right:4px;"></i>报名后48小时内可全额退款 · 支持微信/支付宝</div><button class="subb" onclick="subSU(${id})">确认报名 · ${a.price}</button>`;
-  document.getElementById('suo').classList.remove('h');
-}
-function subSU(id){
-  const n=document.getElementById('sun').value.trim(),p=document.getElementById('sup').value.trim();
-  if(!n||!p){showT('请填写姓名和手机号');return;}
-  const a=ACTS.find(x=>x.id===id);
-  const c=parseInt(document.getElementById('suc').value)||1,d=document.getElementById('sud').value;
-  const remark=document.getElementById('suno')?document.getElementById('suno').value:'';
-  // 提交到 Supabase（异步，不阻塞UI）
-  if(SUPABASE_URL !== 'YOUR_SUPABASE_URL'){
-    submitToSupabase(id,n,p,c,d,remark)
-      .then(()=>console.log('✅ 报名已同步到Supabase'))
-      .catch(err=>{
-        console.error('❌ 报名同步失败:', err);
-        console.error('错误详情:', JSON.stringify(err));
-      });
+  const imgs=a.imgs&&a.imgs.length?a.imgs:[];
+  let media='';
+  if(imgs.length){
+    const slides=imgs.map(src=>{
+      const isV=src.match(/\.(mp4|webm|mov)($|\?)/i)||src.includes('/video/');
+      return isV
+        ?`<video src="${src}" style="width:100%;aspect-ratio:4/3;object-fit:cover;" controls playsinline></video>`
+        :`<img src="${src}" style="width:100%;aspect-ratio:4/3;object-fit:cover;display:block;">`;
+    }).join('');
+    const dots=imgs.length>1?`<div class="carousel-dots" id="car-dots-${id}">`+imgs.map((_,i)=>`<div class="carousel-dot ${i===0?'on':''}" onclick="carGo(${id},${i})"></div>`).join('')+'</div>':'';
+    const nav=imgs.length>1?`<button class="carousel-prev" onclick="carPrev(${id})"><i class="ti ti-chevron-left"></i></button><button class="carousel-next" onclick="carNext(${id})"><i class="ti ti-chevron-right"></i></button>`:'';
+    media=`<div class="carousel" id="car-${id}"><div class="carousel-inner" id="car-inner-${id}">${slides}</div>${nav}</div>${dots}`;
+  }else{
+    media=`<div class="demoji">${a.e}</div>`;
   }
-  if(a){a.sg=(a.sg||0)+c;localStorage.setItem('kkh_acts',JSON.stringify(ACTS));
-    try{
-      const sgList=JSON.parse(localStorage.getItem('kkh_sg')||'[]');
-      const ref=new URLSearchParams(window.location.search).get('ref')||'';
-      sgList.unshift({id:Date.now(),n:n,p:p.replace(/(\d{3})\d{4}(\d{4})/,'$1****$2'),a:a?a.name:'',aid:id,c:c,amt:a?a.price:'',t:new Date().toLocaleString('zh-CN').replace(/\//g,'-'),s:'待支付',ref:ref});
-      localStorage.setItem('kkh_sg',JSON.stringify(sgList));
-    }catch(e){}
-  }
-  // 存手机号到sessionStorage，我的报名自动加载
-  sessionStorage.setItem('kkh_my_phone', p);
-  document.getElementById('scont').innerHTML=`<div class="suc"><div class="suci">🎉</div><div class="suct">报名成功！</div><div class="sucs">我们将在24小时内与您联系确认，请保持手机畅通。</div><div class="sucb2"><div class="sucr"><span class="sucl">活动名称</span><span class="sucv">${a?a.name:''}</span></div><div class="sucr"><span class="sucl">报名人数</span><span class="sucv">${c}人</span></div><div class="sucr"><span class="sucl">活动日期</span><span class="sucv">${d||'待确认'}</span></div><div class="sucr"><span class="sucl">联系电话</span><span class="sucv">${p}</span></div></div><button class="subb" onclick="closeSUAndGo()">查看我的报名</button></div>`;
-  rFront(curCat);
-}
-function closeSU(){document.getElementById('suo').classList.add('h');}
-function closeSUAndGo(){
-  document.getElementById('suo').classList.add('h');
-  // 跳到我的报名页，自动加载
-  switchTab('myorder');
-  const phone=sessionStorage.getItem('kkh_my_phone');
-  if(phone){
-    document.getElementById('q-phone').value=phone;
-    setTimeout(queryOrders,400);
-  }
-}
-document.getElementById('suo').addEventListener('click',function(e){if(e.target===this)closeSU();});
-
-function openPo(id){
-  var a=ACTS.find(function(x){return x.id===id;});
-  if(!a)return;
-  var ref=new URLSearchParams(window.location.search).get('ref')||'';
-  var url='https://kaikaihuacai.com/act/'+id+(ref?'?ref='+ref:'');
-  buildPosterHTML('pcard', a, url, ref, null);
-  document.getElementById('pov').classList.remove('h');
+  const matHtml=a.mat?a.mat.split('、').map(m=>`<div class="dmat-item">${m}</div>`).join(''):'';
+  const outHtml=a.out?a.out.split('、').map(o=>`<div class="dout-item">${o}</div>`).join(''):'';
+  document.getElementById('dpage').innerHTML=`
+    <div class="dback" onclick="goHome()"><i class="ti ti-arrow-left"></i>返回活动列表</div>
+    ${media}
+    <div class="dtag"><span class="abg ${cm.cls}" style="margin:0;">${a.cat}</span></div>
+    <div class="dtitle">${a.name}</div>
+    <div class="dprice">${a.price}</div>
+    <div class="dmeta">
+      <div class="dm"><i class="ti ti-users"></i>${a.min}–${a.max}人</div>
+      <div class="dm"><i class="ti ti-clock"></i>${a.dur}</div>
+      <div class="dm"><i class="ti ti-calendar"></i>${a.date||'日期待定'}</div>
+    </div>
+    ${a.desc?`<div class="dsec"><div class="dsec-t"><i class="ti ti-info-circle"></i>活动详情</div><p>${a.desc}</p></div>`:''}
+    ${matHtml?`<div class="dsec"><div class="dsec-t"><i class="ti ti-checklist"></i>核心物料</div>${matHtml}</div>`:''}
+    ${outHtml?`<div class="dsec"><div class="dsec-t"><i class="ti ti-gift"></i>交付成果</div>${outHtml}</div>`:''}
+    ${a.ven?`<div class="dsec"><div class="dven"><i class="ti ti-map-pin"></i><span>${a.ven}</span></div></div>`:''}
+    <div class="dcta"><div class="ctar">
+      <button class="ctabs" id="pbtn" onclick="showPoster(${id})"><i class="ti ti-share"></i></button>
+      <button class="ctab" id="sbtn" onclick="openSU(${id})"><i class="ti ti-sparkles"></i> 立即报名</button>
+    </div></div>
+    <div style="height:80px;"></div>`;
+  switchTab('detail');
+  carIdx[id]=0;
+  window.scrollTo(0,0);
 }
 
-function closePo(){document.getElementById('pov').classList.add('h');}
-function cpT(t,m){navigator.clipboard&&navigator.clipboard.writeText(t).catch(()=>{});showT(m||'已复制');}
-function showT(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2400);}
-
-// 初始化
-applyCfg();
-
-// ── 图片轮播 ──
-const carState={};
+function carPrev(id){
+  const a=ACTS.find(x=>x.id===id);if(!a||!a.imgs)return;
+  carIdx[id]=(carIdx[id]-1+a.imgs.length)%a.imgs.length;carGo(id,carIdx[id]);
+}
+function carNext(id){
+  const a=ACTS.find(x=>x.id===id);if(!a||!a.imgs)return;
+  carIdx[id]=(carIdx[id]+1)%a.imgs.length;carGo(id,carIdx[id]);
+}
 function carGo(id,i){
   const inner=document.getElementById('car-inner-'+id);
+  if(inner) inner.style.transform=`translateX(-${i*100}%)`;
   const dots=document.getElementById('car-dots-'+id);
-  if(!inner)return;
-  const total=inner.children.length;
-  i=((i%total)+total)%total;
-  carState[id]=i;
-  inner.style.transform=`translateX(-${i*100}%)`;
-  if(dots){
-    Array.from(dots.children).forEach((d,j)=>d.classList.toggle('on',j===i));
-  }
-}
-// ── 通用海报构建函数 ──
-function buildPosterHTML(containerId, a, url, ref, refName){
-  var container = document.getElementById(containerId);
-  if(!container) return;
-
-  // 二维码：用img标签，src通过JS赋值，失败时替换为emoji div
-  var qrId  = 'qr-img-'+Date.now();
-  var qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=110x110&color=1C1410&bgcolor=FFFFFF&margin=6&data='+encodeURIComponent(url);
-
-  var html = '';
-
-  // 关闭按钮（仅前台海报有）
-  if(containerId==='pcard'){
-    html += '<button class="px2" onclick="closePo()"><i class="ti ti-x"></i></button>';
-  }
-
-  // Logo
-  html += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">';
-  html += '<div style="width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,#F5A623,#E8600A);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;">华</div>';
-  html += '<div style="font-size:13px;font-weight:600;color:#fff;">开开华彩</div>';
-  html += '</div>';
-
-  // 活动图 or emoji
-  if(a.imgs && a.imgs.length){
-    html += '<div style="width:100%;height:96px;border-radius:10px;overflow:hidden;margin-bottom:12px;">';
-    html += '<img src="'+a.imgs[0]+'" style="width:100%;height:100%;object-fit:cover;"></div>';
-  } else {
-    html += '<div style="font-size:44px;margin-bottom:12px;">'+a.e+'</div>';
-  }
-
-  // 分类 + 名称
-  html += '<div style="font-size:10px;color:#F5A623;letter-spacing:.1em;margin-bottom:5px;">'+a.cat.toUpperCase()+'</div>';
-  html += '<div style="font-size:19px;font-weight:700;color:#fff;line-height:1.3;margin-bottom:10px;">'+a.name+'</div>';
-  html += '<div style="height:.5px;background:rgba(255,255,255,.15);margin:10px 0;"></div>';
-
-  // 三项数据
-  html += '<div style="display:flex;justify-content:space-between;margin-bottom:12px;">';
-  html += '<div style="text-align:center;"><div style="font-size:14px;font-weight:600;color:#fff;">'+a.min+'–'+a.max+'</div><div style="font-size:10px;color:rgba(255,255,255,.5);">人数</div></div>';
-  html += '<div style="text-align:center;"><div style="font-size:14px;font-weight:600;color:#fff;">'+a.dur+'</div><div style="font-size:10px;color:rgba(255,255,255,.5);">时长</div></div>';
-  html += '<div style="text-align:center;"><div style="font-size:14px;font-weight:600;color:#fff;">'+(a.sg||0)+'</div><div style="font-size:10px;color:rgba(255,255,255,.5);">已报名</div></div>';
-  html += '</div>';
-
-  // 价格栏
-  html += '<div style="background:rgba(245,166,35,.15);border:.5px solid rgba(245,166,35,.3);border-radius:10px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">';
-  html += '<div><div style="font-size:22px;font-weight:700;color:#F5A623;">'+a.price+'</div><div style="font-size:11px;color:rgba(255,255,255,.5);">活动收费</div></div>';
-  html += '<div style="font-size:11px;color:rgba(255,255,255,.5);text-align:right;">报名后48h<br>可全额退款</div>';
-  html += '</div>';
-
-  // ── 二维码 + 链接 左右50% 白底卡片 ──
-  html += '<div style="background:#fff;border-radius:14px;padding:14px;display:flex;align-items:stretch;margin-bottom:8px;">';
-
-  // 左50%：二维码
-  html += '<div style="width:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding-right:10px;border-right:1px solid #EDE5DC;">';
-  html += '<div id="'+qrId+'" style="width:110px;height:110px;background:#F5F0EB;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:32px;">⏳</div>';
-  html += '<div style="font-size:10px;font-weight:600;color:#3A2010;text-align:center;">扫码立即报名</div>';
-  html += '</div>';
-
-  // 右50%：说明 + 链接 + 复制按钮
-  html += '<div style="width:50%;display:flex;flex-direction:column;justify-content:center;padding-left:12px;gap:8px;">';
-  html += '<div style="font-size:11px;font-weight:600;color:#1A1008;line-height:1.6;">扫描左侧二维码<br>直接进入报名页</div>';
-  html += '<div style="background:#FEF3E2;border:.5px solid #F0C888;border-radius:8px;padding:7px 9px;">';
-  html += '<div style="font-size:9px;color:#9A7040;margin-bottom:3px;font-weight:500;">活动专属链接</div>';
-  html += '<div style="font-size:9px;color:#7A5020;word-break:break-all;line-height:1.5;">'+url+'</div>';
-  html += '</div>';
-  html += '<button id="cp-btn-'+qrId+'" style="width:100%;padding:8px;background:linear-gradient(135deg,#E8600A,#F5A623);color:#fff;border:none;border-radius:8px;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;">复制专属链接</button>';
-  html += '</div>';
-  html += '</div>';
-
-  // 分享人标注
-  if(refName){
-    html += '<div style="text-align:center;font-size:10px;color:rgba(255,255,255,.35);margin-top:4px;">分享人：'+refName+'</div>';
-  } else if(ref){
-    html += '<div style="text-align:center;font-size:10px;color:rgba(255,255,255,.35);margin-top:4px;">分享来源：'+ref+'</div>';
-  }
-
-  container.innerHTML = html;
-
-  // 异步加载二维码（无引号嵌套问题）
-  var qrEl = document.getElementById(qrId);
-  var cpBtn = document.getElementById('cp-btn-'+qrId);
-
-  if(cpBtn){
-    cpBtn.addEventListener('click', function(){
-      if(navigator.clipboard){ navigator.clipboard.writeText(url).catch(function(){}); }
-      cpBtn.textContent = '✅ 已复制！';
-      setTimeout(function(){ cpBtn.textContent = '复制专属链接'; }, 2000);
-    });
-  }
-
-  if(qrEl){
-    var img = new Image();
-    img.onload = function(){
-      img.style.cssText = 'display:block;width:110px;height:110px;border-radius:6px;';
-      qrEl.style.cssText = 'width:110px;height:110px;border-radius:8px;overflow:hidden;background:#fff;';
-      qrEl.innerHTML = '';
-      qrEl.appendChild(img);
-    };
-    img.onerror = function(){
-      qrEl.innerHTML = '📲';
-      qrEl.style.cssText = 'width:110px;height:110px;background:#F0EDE8;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:36px;';
-    };
-    img.src = qrUrl;
-  }
+  if(dots) dots.querySelectorAll('.carousel-dot').forEach((d,j)=>d.classList.toggle('on',j===i));
+  carIdx[id]=i;
 }
 
-function carPrev(id){carGo(id,(carState[id]||0)-1);}
-function carNext(id){carGo(id,(carState[id]||0)+1);}
-
-// ── 分享归属：读取URL中的ref参数 ──
-function getRef(){
-  return new URLSearchParams(window.location.search).get('ref')||'';
+// ══ 报名 ══
+function openSU(id){
+  const a=ACTS.find(x=>x.id===id);if(!a)return;
+  const dateDisplay=a.date
+    ?`<div class="ff"><label>活动日期</label><div style="background:var(--warm);border:.5px solid var(--bd);border-radius:9px;padding:10px 12px;font-size:13px;color:var(--tx);display:flex;align-items:center;gap:6px;"><i class="ti ti-calendar" style="color:var(--or);font-size:14px;"></i>${a.date}<input type="hidden" id="sud" value="${a.date}"></div></div>`
+    :`<div class="ff"><label>活动日期</label><div style="background:var(--warm);border:.5px solid var(--bd);border-radius:9px;padding:10px 12px;font-size:13px;color:var(--mu);">待定，报名后主理人确认<input type="hidden" id="sud" value=""></div></div>`;
+  document.getElementById('scont').innerHTML=`
+    <div class="st">报名参加活动</div>
+    <div class="ssb">${a.e} ${a.name} · ${a.price}</div>
+    <div class="ff"><label>您的姓名 *</label><input type="text" id="sun" placeholder="请输入姓名"></div>
+    <div class="ff"><label>手机号码 *</label><input type="tel" id="sup" placeholder="请输入手机号码"></div>
+    <div class="f2">
+      <div class="ff"><label>报名人数</label><select id="suc"><option>1人</option><option>2人</option><option>3人</option><option>4人</option></select></div>
+      ${dateDisplay}
+    </div>
+    <div class="ff"><label>备注（可选）</label><input type="text" id="suno" placeholder="如：需要素食、有轮椅需求等"></div>
+    <div style="background:var(--warm);border-radius:10px;padding:10px 13px;font-size:12px;color:var(--mu);margin-bottom:14px;">
+      <i class="ti ti-shield-check" style="color:var(--or);vertical-align:-2px;"></i>
+      报名成功后24小时内主理人将与您联系确认
+    </div>
+    <button class="sub-btn" onclick="subSU(${id})"><i class="ti ti-sparkles"></i> 确认报名</button>`;
+  document.getElementById('suo').classList.remove('h');
 }
-// 在subSU中保存ref到报名记录
-const _origSubSU=window.subSU;
 
+function closeSU(){document.getElementById('suo').classList.add('h');}
 
-// 优先展示本地默认数据，再异步加载远程数据
-// 强制刷新：清掉可能过期的localStorage缓存，确保显示最新50条
-(function(){
-  try{
-    const cached = JSON.parse(localStorage.getItem('kkh_acts')||'[]');
-    // 只有当缓存条数和DEFAULT_ACTS完全一致且有st字段时才用缓存
-    const valid = cached.length >= DEFAULT_ACTS.length &&
-                  cached.every(a=>a.st&&a.name&&a.id);
-    if(!valid){
-      localStorage.setItem('kkh_acts', JSON.stringify(DEFAULT_ACTS));
-    }
-  }catch(e){
-    localStorage.setItem('kkh_acts', JSON.stringify(DEFAULT_ACTS));
+function closeSUAndGo(){
+  document.getElementById('suo').classList.add('h');
+  switchTab('myorder');
+  const phone=sessionStorage.getItem('kkh_my_phone');
+  if(phone){ document.getElementById('q-phone').value=phone; setTimeout(queryOrders,400); }
+}
+
+function subSU(id){
+  const n=document.getElementById('sun').value.trim();
+  const p=document.getElementById('sup').value.trim();
+  if(!n||!p){showT('请填写姓名和手机号');return;}
+  const a=ACTS.find(x=>x.id===id);
+  const c=parseInt(document.getElementById('suc').value)||1;
+  const d=document.getElementById('sud')?document.getElementById('sud').value:'';
+  const remark=document.getElementById('suno')?document.getElementById('suno').value:'';
+  // 存手机号
+  sessionStorage.setItem('kkh_my_phone',p);
+  // 提交Supabase
+  if(SUPABASE_URL!=='YOUR_SUPABASE_URL'){
+    submitToSupabase(id,n,p,c,d,remark)
+      .then(()=>console.log('✅报名已同步'))
+      .catch(err=>console.error('❌报名同步失败:',err));
   }
-})();
-ACTS = loadData();
-applyCfg();
-rFront('全部');
-
-// 如果已配置 Supabase，异步加载云端数据
-if (SUPABASE_URL !== 'YOUR_SUPABASE_URL') {
-  loadRemoteData().then(function(){
-    // 加载完成后检查URL参数，支持分享链接直达
-    var params = new URLSearchParams(window.location.search);
-    var actId = params.get('act');
-    if(actId){
-      var a = ACTS.find(function(x){ return x.id === parseInt(actId); });
-      if(a) setTimeout(function(){ openD(a.id); }, 300);
-    }
-  }).catch(function(err){
-    console.warn('Supabase加载失败，使用本地数据:', err);
-  });
+  // 本地记录
+  const ref=new URLSearchParams(window.location.search).get('ref')||'';
+  const SG_local=JSON.parse(localStorage.getItem('kkh_sg_local')||'[]');
+  SG_local.unshift({n,p,a:a?a.name:'',aid:id,c,amt:a?a.price:'',t:new Date().toLocaleString('zh-CN'),s:'待确认',ref});
+  localStorage.setItem('kkh_sg_local',JSON.stringify(SG_local.slice(0,100)));
+  if(a){a.sg=(a.sg||0)+c;}
+  // 成功提示
+  document.getElementById('scont').innerHTML=`
+    <div class="suc">
+      <div class="suci">🎉</div>
+      <div class="suct">报名成功！</div>
+      <div class="sucs">我们将在24小时内与您联系确认，请保持手机畅通。</div>
+      <button class="subb" onclick="closeSUAndGo()">查看我的报名</button>
+    </div>`;
+  rFront(curCat);
 }
 
-// ══ 前台60秒轮询：刷新活动数据 ══
-let _frontPollTimer=null;
-function startFrontPolling(){
-  if(_frontPollTimer)clearInterval(_frontPollTimer);
-  _frontPollTimer=setInterval(async()=>{
+// ══ 我的报名查询 ══
+async function queryOrders(){
+  const phone=document.getElementById('q-phone').value.trim();
+  if(!phone||phone.length<7){showT('请输入正确的手机号码');return;}
+  const resultEl=document.getElementById('q-result');
+  resultEl.innerHTML='<div style="text-align:center;padding:30px;color:var(--mu);font-size:13px;">查询中…</div>';
+  if(SUPABASE_URL!=='YOUR_SUPABASE_URL'){
     try{
-      const {data:acts}=await sb.from('activities')
-        .select('id,signup_count,status,price,name,is_hot,event_date')
-        .eq('status','on');
-      if(acts){
-        let changed=false;
-        acts.forEach(a=>{
-          const loc=ACTS.find(x=>x.id===a.id);
-          if(loc){
-            if(loc.sg!==a.signup_count||loc.price!==a.price){
-              loc.sg=a.signup_count||0;
-              loc.price=a.price;
-              loc.hot=a.is_hot;
-              loc.date=a.event_date||'';
-              changed=true;
-            }
-          }
-        });
-        if(changed){
-          rFront(curCat,document.getElementById('fsi').value);
-          updateStats && updateStats();
-        }
-      }
-    }catch(e){console.warn('前台轮询失败:',e);}
-  },60000); // 60秒
+      const {data,error}=await sb.from('signups').select('*').eq('user_phone',phone).order('created_at',{ascending:false});
+      if(error) throw error;
+      renderOrderResult(data,phone);return;
+    }catch(err){console.warn('Supabase查询失败:',err);}
+  }
+  // 回退本地
+  const local=JSON.parse(localStorage.getItem('kkh_sg_local')||'[]');
+  renderOrderResult(local.filter(r=>r.p===phone).map(r=>({
+    activity_name:r.a,people_count:r.c,event_date:r.t,
+    status:r.s||'待确认',amount:r.amt,created_at:r.t
+  })),phone);
 }
 
+function renderOrderResult(orders,phone){
+  const resultEl=document.getElementById('q-result');
+  if(!orders||!orders.length){
+    resultEl.innerHTML=`<div class="qempty"><div class="qempty-icon">📋</div><div class="qempty-t">暂无报名记录</div><div style="font-size:13px;color:var(--mu);">手机号 ${phone} 尚未有报名记录<br>如有疑问请联系主理人</div></div>`;
+    return;
+  }
+  const stMap={'已确认':'st-confirmed','待确认':'st-pending','待支付':'st-pending','已取消':'st-cancelled'};
+  resultEl.innerHTML=`<div style="font-size:13px;color:var(--mu);padding:14px 2px 6px;">共找到 <b style="color:var(--or)">${orders.length}</b> 条报名记录</div>`+
+  orders.map(o=>{
+    const stCls=stMap[o.status]||'st-pending';
+    const dateStr=o.created_at?new Date(o.created_at).toLocaleDateString('zh-CN'):(o.event_date||'—');
+    return `<div class="ord-card">
+      <div class="ord-hd"><div class="ord-name">${o.activity_name||'活动'}</div><span class="ord-status ${stCls}">${o.status||'待确认'}</span></div>
+      <div class="ord-body">
+        <div class="ord-row"><span class="ord-lbl">报名人数</span><span class="ord-val">${o.people_count||1}人</span></div>
+        <div class="ord-row"><span class="ord-lbl">活动日期</span><span class="ord-val">${o.event_date||'待确认'}</span></div>
+        <div class="ord-row"><span class="ord-lbl">报名金额</span><span class="ord-val ord-price">${o.amount||'—'}</span></div>
+        <div class="ord-row"><span class="ord-lbl">报名时间</span><span class="ord-val">${dateStr}</span></div>
+      </div>
+    </div>`;
+  }).join('')+`<div class="ord-tip">如需修改或取消报名<br>请联系主理人处理</div>`;
+}
 
-
-// ══ TabBar 切换 ══
-function switchTab(tab) {
-  // 隐藏所有view
-  ['v-home','v-detail','v-myorder'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.classList.remove('on');
-  });
-  // 更新tab高亮
-  document.querySelectorAll('.tab-item').forEach(el => el.classList.remove('on'));
-
-  if (tab === 'home') {
+// ══ TabBar ══
+function switchTab(tab){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('on'));
+  document.querySelectorAll('.tab-item').forEach(t=>t.classList.remove('on'));
+  if(tab==='home'){
     document.getElementById('v-home').classList.add('on');
     document.getElementById('tab-home').classList.add('on');
-  } else if (tab === 'myorder') {
+  }else if(tab==='myorder'){
     document.getElementById('v-myorder').classList.add('on');
     document.getElementById('tab-myorder').classList.add('on');
-    window.scrollTo(0, 0);
-    // 自动填入上次报名的手机号
-    const savedPhone = sessionStorage.getItem('kkh_my_phone');
-    if(savedPhone && !document.getElementById('q-phone').value){
-      document.getElementById('q-phone').value = savedPhone;
-      setTimeout(queryOrders, 300);
+    const saved=sessionStorage.getItem('kkh_my_phone');
+    if(saved&&!document.getElementById('q-phone').value){
+      document.getElementById('q-phone').value=saved;
+      setTimeout(queryOrders,300);
     }
-  } else if (tab === 'detail') {
+    window.scrollTo(0,0);
+  }else if(tab==='detail'){
     document.getElementById('v-detail').classList.add('on');
     document.getElementById('tab-home').classList.add('on');
   }
 }
+function goHome(){switchTab('home');}
+function goDetail(){switchTab('detail');window.scrollTo(0,0);}
 
-// ══ 覆盖 goHome / goDetail，兼容 TabBar ══
-function goHome() { switchTab('home'); }
-function goDetail() { switchTab('detail'); window.scrollTo(0, 0); }
+// ══ 海报 ══
+function showPoster(id){
+  const a=ACTS.find(x=>x.id===id);if(!a)return;
+  const ref=new URLSearchParams(window.location.search).get('ref')||'';
+  const url=`https://xuepengjun2-cell.github.io/kkhuacai/?act=${id}${ref?'&ref='+ref:''}`;
+  const qr=`https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(url)}`;
+  document.getElementById('poster-wrap').innerHTML=`
+    <div style="padding:20px;background:#fff;">
+      <div style="text-align:center;margin-bottom:12px;">
+        <img src="${qr}" style="width:160px;height:160px;border-radius:10px;">
+      </div>
+      <div style="font-size:13px;font-weight:700;text-align:center;margin-bottom:6px;">${a.name}</div>
+      <div style="font-size:11px;color:var(--mu);text-align:center;word-break:break-all;">${url}</div>
+      <div style="display:flex;gap:8px;margin-top:12px;justify-content:center;">
+        <span style="font-size:11px;background:#FEE8CC;color:#8C3A00;padding:3px 8px;border-radius:6px;">${a.cat}</span>
+        <span style="font-size:11px;background:var(--warm);color:var(--mu);padding:3px 8px;border-radius:6px;">${a.price}</span>
+      </div>
+    </div>`;
+  document.getElementById('pov').classList.remove('h');
+}
+function closePoster(){document.getElementById('pov').classList.add('h');}
 
-// ══ 报名记录查询 ══
-async function queryOrders() {
-  const phone = document.getElementById('q-phone').value.trim();
-  if (!phone || phone.length < 7) {
-    showT('请输入正确的手机号码');
-    return;
-  }
-  const resultEl = document.getElementById('q-result');
-  resultEl.innerHTML = '<div style="text-align:center;padding:30px;color:var(--mu);font-size:13px;">查询中…</div>';
-
-  // 优先从 Supabase 查询
-  if (SUPABASE_URL !== 'YOUR_SUPABASE_URL') {
-    try {
-      const { data, error } = await sb
-        .from('signups')
-        .select('*')
-        .eq('user_phone', phone)
-        .order('created_at', { ascending: false });
-      if (error) throw error;
-      renderOrderResult(data, phone);
-      return;
-    } catch (err) {
-      console.warn('Supabase查询失败，尝试本地:', err);
+// ══ Supabase 数据加载 ══
+async function loadRemoteData(){
+  try{
+    const {data:acts,error:e1}=await sb.from('activities').select('*').eq('status','on').order('id');
+    if(e1) throw e1;
+    const {data:cfgs,error:e2}=await sb.from('site_config').select('*');
+    if(e2) throw e2;
+    if(acts&&acts.length>0){
+      ACTS=acts.map(a=>({
+        id:a.id,name:a.name,cat:a.category,e:a.emoji||'✨',
+        min:a.min_people,max:a.max_people,dur:a.duration,price:a.price,
+        ven:a.venue||'',desc:a.description||'',mat:a.materials||'',
+        out:a.deliverables||'',imgs:a.images||[],st:a.status,
+        hot:a.is_hot,date:a.event_date||'',sg:a.signup_count||0
+      }));
+      try{localStorage.setItem('kkh_acts',JSON.stringify(ACTS));}catch(e){}
     }
+    if(cfgs){
+      const cfg={};cfgs.forEach(c=>{cfg[c.key]=c.value;});
+      applyRemoteCfg(cfg);
+    }
+    rFront(curCat);
+    updateStats();
+  }catch(err){
+    console.warn('Supabase加载失败，使用本地数据:',err.message);
   }
-
-  // 回退：查本地 localStorage
-  const local = JSON.parse(localStorage.getItem('kkh_sg') || '[]');
-  const filtered = local.filter(r => r.p && r.p.replace(/\*/g, '') !== '' &&
-    (r.p === phone || r.p.replace(/\*{4}/, '').replace(/(\d{3})(\d{4})/, '$1$2') === phone.slice(0,3) + phone.slice(-4)));
-  renderOrderResult(filtered.map(r => ({
-    activity_name: r.a,
-    people_count:  r.c,
-    event_date:    r.t,
-    status:        r.s || '待确认',
-    amount:        r.amt,
-    created_at:    r.t,
-    remark:        r.remark || ''
-  })), phone);
 }
 
-function renderOrderResult(orders, phone) {
-  const resultEl = document.getElementById('q-result');
-  if (!orders || !orders.length) {
-    resultEl.innerHTML = `
-      <div class="qempty">
-        <div class="qempty-icon">📋</div>
-        <div class="qempty-t">暂无报名记录</div>
-        <div class="qempty-s">手机号 ${phone} 尚未有报名记录<br>如有疑问请联系主理人</div>
-      </div>`;
-    return;
-  }
-
-  const statusMap = { '已确认':'st-confirmed','待确认':'st-pending','待支付':'st-pending','已取消':'st-cancelled' };
-
-  resultEl.innerHTML = `
-    <div style="font-size:13px;color:var(--mu);padding:14px 2px 6px;">
-      共找到 <b style="color:var(--or)">${orders.length}</b> 条报名记录
-    </div>` +
-    orders.map(o => {
-      const stCls = statusMap[o.status] || 'st-pending';
-      const dateStr = o.created_at ? new Date(o.created_at).toLocaleDateString('zh-CN') : (o.event_date || '—');
-      return `
-        <div class="ord-card">
-          <div class="ord-hd">
-            <div class="ord-name">${o.activity_name || '活动'}</div>
-            <span class="ord-status ${stCls}">${o.status || '待确认'}</span>
-          </div>
-          <div class="ord-body">
-            <div class="ord-row"><span class="ord-lbl">报名人数</span><span class="ord-val">${o.people_count || 1}人</span></div>
-            <div class="ord-row"><span class="ord-lbl">活动日期</span><span class="ord-val">${o.event_date || '待确认'}</span></div>
-            <div class="ord-row"><span class="ord-lbl">报名金额</span><span class="ord-val ord-price">${o.amount || '—'}</span></div>
-            <div class="ord-row"><span class="ord-lbl">报名时间</span><span class="ord-val">${dateStr}</span></div>
-            ${o.remark ? `<div class="ord-row"><span class="ord-lbl">备注</span><span class="ord-val">${o.remark}</span></div>` : ''}
-          </div>
-        </div>`;
-    }).join('') +
-    `<div class="ord-tip">如需修改或取消报名<br>请联系主理人处理</div>`;
+async function submitToSupabase(actId,name,phone,count,date,remark){
+  const a=ACTS.find(x=>x.id===actId);
+  const ref=new URLSearchParams(window.location.search).get('ref')||'';
+  const {error}=await sb.from('signups').insert({
+    activity_id:actId,activity_name:a?a.name:'',
+    user_name:name,user_phone:phone,people_count:count,
+    event_date:date||null,remark:remark||'',ref_account:ref,
+    status:'待确认',amount:a?a.price:''
+  });
+  if(error) throw error;
+  if(a){a.sg=(a.sg||0)+count;}
+  await sb.from('activities').update({signup_count:a?a.sg:count}).eq('id',actId);
 }
 
-// 回车触发查询
-document.addEventListener('DOMContentLoaded', () => {
-  const inp = document.getElementById('q-phone');
-  if (inp) inp.addEventListener('keydown', e => { if (e.key === 'Enter') queryOrders(); });
+// ══ 60秒轮询刷新 ══
+setInterval(async()=>{
+  if(SUPABASE_URL==='YOUR_SUPABASE_URL')return;
+  try{
+    const {data:acts}=await sb.from('activities')
+      .select('id,signup_count,status,price,is_hot,event_date')
+      .eq('status','on');
+    if(acts&&acts.length){
+      let changed=false;
+      acts.forEach(a=>{
+        const loc=ACTS.find(x=>x.id===a.id);
+        if(loc&&(loc.sg!==a.signup_count||loc.price!==a.price)){
+          loc.sg=a.signup_count||0;loc.price=a.price;changed=true;
+        }
+      });
+      if(changed) rFront(curCat);
+    }
+  }catch(e){}
+},60000);
+
+// 回车查询
+document.addEventListener('DOMContentLoaded',function(){
+  const inp=document.getElementById('q-phone');
+  if(inp) inp.addEventListener('keydown',e=>{if(e.key==='Enter')queryOrders();});
 });
 
-// ============================================================
-// ⚙️  配置区：填入你的 Supabase 信息
-// Supabase Dashboard → Settings → API
-// ============================================================
-const SUPABASE_URL  = 'https://zlkivrqahzkkbvirvgtf.supabase.co';   // 如 https://xxxx.supabase.co
-const SUPABASE_ANON = 'sb_publishable__Y0pG-rf9L9e6zAvakh8Xw_xK35eLK7';       // anon public key
-
-const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
-
-// ── 数据加载：从 Supabase 读取活动和配置 ──
-async function loadRemoteData() {
-  try {
-    // 读取活动（已上架的）
-    const { data: acts, error: e1 } = await sb
-      .from('activities')
-      .select('*')
-      .eq('status', 'on')
-      .order('id');
-    if (e1) throw e1;
-
-    // 读取站点配置
-    const { data: cfgs, error: e2 } = await sb
-      .from('site_config')
-      .select('*');
-    if (e2) throw e2;
-
-    // 转换格式（Supabase字段名 → 系统字段名）
-    const remoteActs = (acts||[]).map(a => ({
-      id:    a.id,
-      name:  a.name,
-      cat:   a.category,
-      e:     a.emoji || '✨',
-      min:   a.min_people,
-      max:   a.max_people,
-      dur:   a.duration,
-      price: a.price,
-      ven:   a.venue || '',
-      desc:  a.description || '',
-      mat:   a.materials || '',
-      out:   a.deliverables || '',
-      imgs:  a.images || [],
-      st:    a.status,
-      hot:   a.is_hot,
-      date:  a.event_date || '',
-      sg:    a.signup_count || 0
-    }));
-
-    // 空数组保护：Supabase返回空时不覆盖本地数据
-    if(remoteActs.length > 0){
-      ACTS = remoteActs;
-      // 缓存到localStorage，断网时可用
-      try{ localStorage.setItem('kkh_acts', JSON.stringify(ACTS)); }catch(e){}
-    } else {
-      console.warn('Supabase返回空活动列表，保留本地数据');
-    }
-
-    // 应用配置
-    const cfg = {};
-    (cfgs || []).forEach(c => { cfg[c.key] = c.value; });
-    applyRemoteCfg(cfg);
-
-    // 渲染
-    rFront('全部');
-    updateStats();
-    startFrontPolling(); // 启动轮询
-  } catch (err) {
-    console.warn('Supabase读取失败，使用本地数据:', err.message);
-    // 回退到本地数据
-    ACTS = loadData();
-    applyCfg();
-    rFront('全部');
-  }
-}
-
-function applyRemoteCfg(cfg) {
-  const heroTag = document.getElementById('heroTag');
-  const siteName = document.getElementById('siteName');
-  const heroSub  = document.getElementById('heroSub');
-  const heroTel  = document.getElementById('heroTel');
-  const heroTelNum = document.getElementById('heroTelNum');
-  if (heroTag)  heroTag.textContent  = cfg.heroTag  || '✦ 社群主理人活动手册 2026';
-  if (siteName) siteName.textContent = cfg.siteName || '开开华彩';
-  if (heroSub)  heroSub.textContent  = cfg.heroSub  || '';
-  const tel = (cfg.tel || '').trim();
-  if (heroTel && heroTelNum) {
-    if (tel) { heroTelNum.textContent = tel; heroTel.style.display = 'flex'; }
-    else { heroTel.style.display = 'none'; }
-  }
-}
-
-function updateStats() {
-  const total = ACTS.filter(a => a.st === 'on').length;
-  const sgs   = ACTS.reduce((s, a) => s + (a.sg || 0), 0);
-  const fsT = document.getElementById('fs-t');
-  const fsS = document.getElementById('fs-s');
-  if (fsT) fsT.textContent = total;
-  if (fsS) fsS.textContent = sgs.toLocaleString();
-}
-
-// ── 报名提交到 Supabase ──
-async function submitToSupabase(actId, name, phone, count, date, remark) {
-  const a = ACTS.find(x => x.id === actId);
-  const ref = new URLSearchParams(window.location.search).get('ref') || '';
-  const { error } = await sb.from('signups').insert({
-    activity_id:   actId,
-    activity_name: a ? a.name : '',
-    user_name:     name,
-    user_phone:    phone,
-    people_count:  count,
-    event_date:    date || null,
-    remark:        remark || '',
-    ref_account:   ref,
-    status:        '待确认',
-    amount:        a ? a.price : ''
-  });
-  if (error) throw error;
-
-  // 更新报名人数（乐观更新本地）
-  if (a) a.sg = (a.sg || 0) + count;
-
-  // 远程也更新 signup_count
-  await sb.from('activities')
-    .update({ signup_count: (a ? a.sg : count) })
-    .eq('id', actId);
-}
-
-
-// ══ 页面初始化 ══
-ACTS = loadData();
+// ══ 初始化 ══
+ACTS=loadData();
 applyCfg();
 rFront('全部');
 
-// 异步加载 Supabase 云端数据
-if (sb && SUPABASE_URL !== 'YOUR_SUPABASE_URL') {
-  loadRemoteData().then(function(){
-    var params = new URLSearchParams(window.location.search);
-    var actId  = params.get('act');
-    if(actId){
-      var a = ACTS.find(function(x){ return x.id === parseInt(actId); });
-      if(a) setTimeout(function(){ openD(a.id); }, 300);
-    }
-  }).catch(function(err){
-    console.warn('Supabase加载失败，使用本地数据:', err);
-  });
-}
+// 检查URL参数（分享链接直达）
+(function(){
+  const params=new URLSearchParams(window.location.search);
+  const actId=params.get('act');
+  if(actId){
+    const a=ACTS.find(x=>x.id===parseInt(actId));
+    if(a) setTimeout(()=>openD(a.id),100);
+  }
+})();
+
+// 加载云端数据
+loadRemoteData();
+
 </script>
 </body>
 </html>
