@@ -266,6 +266,7 @@ async function loadRemoteData() {
     // 渲染
     rFront('全部');
     updateStats();
+    startFrontPolling(); // 启动轮询
   } catch (err) {
     console.warn('Supabase读取失败，使用本地数据:', err.message);
     // 回退到本地数据
@@ -626,10 +627,22 @@ function subSU(id){
       localStorage.setItem('kkh_sg',JSON.stringify(sgList));
     }catch(e){}
   }
-  document.getElementById('scont').innerHTML=`<div class="suc"><div class="suci">🎉</div><div class="suct">报名成功！</div><div class="sucs">我们将在24小时内与您联系确认，请保持手机畅通。</div><div class="sucb2"><div class="sucr"><span class="sucl">活动名称</span><span class="sucv">${a?a.name:''}</span></div><div class="sucr"><span class="sucl">报名人数</span><span class="sucv">${c}人</span></div><div class="sucr"><span class="sucl">活动日期</span><span class="sucv">${d||'待确认'}</span></div><div class="sucr"><span class="sucl">联系电话</span><span class="sucv">${p}</span></div></div><button class="subb" onclick="closeSU()">完成</button></div>`;
+  // 存手机号到sessionStorage，我的报名自动加载
+  sessionStorage.setItem('kkh_my_phone', p);
+  document.getElementById('scont').innerHTML=`<div class="suc"><div class="suci">🎉</div><div class="suct">报名成功！</div><div class="sucs">我们将在24小时内与您联系确认，请保持手机畅通。</div><div class="sucb2"><div class="sucr"><span class="sucl">活动名称</span><span class="sucv">${a?a.name:''}</span></div><div class="sucr"><span class="sucl">报名人数</span><span class="sucv">${c}人</span></div><div class="sucr"><span class="sucl">活动日期</span><span class="sucv">${d||'待确认'}</span></div><div class="sucr"><span class="sucl">联系电话</span><span class="sucv">${p}</span></div></div><button class="subb" onclick="closeSUAndGo()">查看我的报名</button></div>`;
   rFront(curCat);
 }
 function closeSU(){document.getElementById('suo').classList.add('h');}
+function closeSUAndGo(){
+  document.getElementById('suo').classList.add('h');
+  // 跳到我的报名页，自动加载
+  switchTab('myorder');
+  const phone=sessionStorage.getItem('kkh_my_phone');
+  if(phone){
+    document.getElementById('q-phone').value=phone;
+    setTimeout(queryOrders,400);
+  }
+}
 document.getElementById('suo').addEventListener('click',function(e){if(e.target===this)closeSU();});
 
 function openPo(id){
@@ -784,6 +797,38 @@ applyCfg();
 rFront('全部');
 
 // 如果已配置 Supabase，异步加载云端数据
+// ══ 前台60秒轮询：刷新活动数据 ══
+let _frontPollTimer=null;
+function startFrontPolling(){
+  if(_frontPollTimer)clearInterval(_frontPollTimer);
+  _frontPollTimer=setInterval(async()=>{
+    try{
+      const {data:acts}=await sb.from('activities')
+        .select('id,signup_count,status,price,name,is_hot,event_date')
+        .eq('status','on');
+      if(acts){
+        let changed=false;
+        acts.forEach(a=>{
+          const loc=ACTS.find(x=>x.id===a.id);
+          if(loc){
+            if(loc.sg!==a.signup_count||loc.price!==a.price){
+              loc.sg=a.signup_count||0;
+              loc.price=a.price;
+              loc.hot=a.is_hot;
+              loc.date=a.event_date||'';
+              changed=true;
+            }
+          }
+        });
+        if(changed){
+          rFront(curCat,document.getElementById('fsi').value);
+          updateStats && updateStats();
+        }
+      }
+    }catch(e){console.warn('前台轮询失败:',e);}
+  },60000); // 60秒
+}
+
 if (SUPABASE_URL !== 'YOUR_SUPABASE_URL') {
   loadRemoteData().then(()=>{
     // 加载完成后检查URL参数，支持分享链接直达
@@ -820,9 +865,13 @@ function switchTab(tab) {
   } else if (tab === 'myorder') {
     document.getElementById('v-myorder').classList.add('on');
     document.getElementById('tab-myorder').classList.add('on');
-    document.getElementById('q-result').innerHTML = '';
-    document.getElementById('q-phone').value = '';
     window.scrollTo(0, 0);
+    // 自动填入上次报名的手机号
+    const savedPhone = sessionStorage.getItem('kkh_my_phone');
+    if(savedPhone && !document.getElementById('q-phone').value){
+      document.getElementById('q-phone').value = savedPhone;
+      setTimeout(queryOrders, 300);
+    }
   } else if (tab === 'detail') {
     document.getElementById('v-detail').classList.add('on');
     document.getElementById('tab-home').classList.add('on');
