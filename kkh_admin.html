@@ -7,6 +7,14 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
 <script>(function(){var s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js';document.head.appendChild(s);})();</script>
 <style>
+/* ── Toast提示 ── */
+.toast{position:fixed;top:16px;right:20px;background:rgba(28,20,16,.92);color:#fff;padding:9px 14px;border-radius:10px;font-size:12px;z-index:9999;opacity:0;transition:opacity .25s;pointer-events:none;display:flex;align-items:center;gap:7px;max-width:280px;box-shadow:0 4px 16px rgba(0,0,0,.25);line-height:1.4;}
+.toast.show{opacity:1;pointer-events:auto;}
+.toast.ok{background:linear-gradient(135deg,#1A6835,#28A056);}
+.toast.err{background:linear-gradient(135deg,#C0200A,#E0300A);}
+.toast.info{background:linear-gradient(135deg,#1060A0,#1878C8);}
+
+
 *{margin:0;padding:0;box-sizing:border-box;}
 :root{
   --or:#E8600A;--gold:#F5A623;--dark:#1C1410;--bg:#F4F1ED;
@@ -249,11 +257,6 @@ tr:hover td{background:#FDFCFB;}
 .perm-view{background:#F0EDE8;color:var(--mu);}
 
 /* TOAST */
-.toast{position:fixed;bottom:24px;right:24px;background:rgba(28,20,16,.92);color:#fff;padding:11px 20px;border-radius:11px;font-size:13px;z-index:300;opacity:0;transition:opacity .3s;pointer-events:none;max-width:340px;display:flex;align-items:center;gap:8px;}
-.toast.show{opacity:1;}
-.toast.ok{background:linear-gradient(135deg,#1A6835,#28A056);}
-.toast.err{background:linear-gradient(135deg,var(--red),#E03020);}
-.toast.info{background:linear-gradient(135deg,#0A4070,#1060A0);}
 
 @media(max-width:1000px){
   .sidebar{display:none;}.main{margin-left:0;}
@@ -268,11 +271,6 @@ tr:hover td{background:#FDFCFB;}
 .perm-view{background:#F0EDE8;color:var(--mu);}
 
 /* TOAST */
-.toast{position:fixed;bottom:24px;right:24px;background:rgba(28,20,16,.92);color:#fff;padding:11px 20px;border-radius:11px;font-size:13px;z-index:300;opacity:0;transition:opacity .3s;pointer-events:none;max-width:340px;display:flex;align-items:center;gap:8px;}
-.toast.show{opacity:1;}
-.toast.ok{background:linear-gradient(135deg,#1A6835,#28A056);}
-.toast.err{background:linear-gradient(135deg,var(--red),#E03020);}
-.toast.info{background:linear-gradient(135deg,#0A4070,#1060A0);}
 
 @media(max-width:1000px){
   .sidebar{display:none;}.main{margin-left:0;}
@@ -434,11 +432,6 @@ input:checked+.slider:before{transform:translateX(20px);}
 .sb-out:hover{background:rgba(232,96,10,.3);color:var(--or);}
 .sb-ur{font-size:10px;color:rgba(255,255,255,.35);margin-top:1px;}
 /* ── Toast ── */
-.toast{position:fixed;top:16px;right:20px;left:auto;transform:translateY(-100px);background:#1C1410;color:#fff;padding:10px 16px;border-radius:12px;font-size:13px;z-index:9999;transition:transform .3s;white-space:nowrap;display:flex;align-items:center;gap:6px;max-width:320px;box-shadow:0 4px 20px rgba(0,0,0,.2);}
-.toast.show{transform:translateY(0);}
-.toast.ok{background:linear-gradient(135deg,#1A6835,#28A056);}
-.toast.err{background:linear-gradient(135deg,#C0200A,#E0300A);}
-.toast.info{background:linear-gradient(135deg,#1060A0,#1878C8);}
 /* ── 响应式 ── */
 @media(max-width:900px){.stats-row{grid-template-columns:1fr 1fr;}.charts-row{grid-template-columns:1fr;}.share-cards{grid-template-columns:1fr;}.f3{grid-template-columns:1fr;}.f2{grid-template-columns:1fr;}}
 </style>
@@ -657,10 +650,22 @@ input:checked+.slider:before{transform:translateX(20px);}
       <div class="tcard" style="max-width:600px;">
         <div class="tc-head"><div class="tc-title">顶部横幅文案</div></div>
         <div class="cfg-form">
-          <div class="cfg-item"><label>小标签文字</label><input id="cfg-tag" type="text" class="lf-input" placeholder="✦ 社群主理人活动手册 2026"></div>
-          <div class="cfg-item"><label>品牌名称</label><input id="cfg-name" type="text" class="lf-input" placeholder="开开华彩"></div>
-          <div class="cfg-item"><label>品牌 Slogan</label><input id="cfg-sub" type="text" class="lf-input" placeholder="同城银发社群主理人…"></div>
-          <div class="cfg-item"><label>联系电话</label><input id="cfg-tel" type="text" class="lf-input" placeholder="前台展示的主理人联系电话"></div>
+          <div class="cfg-item">
+            <label>小标签文字 <span style="font-size:11px;color:var(--mu);">标题上方小标签，如「✦ 社群主理人活动手册 2026」</span></label>
+            <input id="cfg-tag" type="text" placeholder="✦ 社群主理人活动手册 2026">
+          </div>
+          <div class="cfg-item">
+            <label>品牌名称 <span style="font-size:11px;color:var(--mu);">左上角 Logo 文字</span></label>
+            <input id="cfg-name" type="text" placeholder="开开华彩">
+          </div>
+          <div class="cfg-item">
+            <label>品牌 Slogan <span style="font-size:11px;color:var(--mu);">标题下方副说明</span></label>
+            <input id="cfg-sub" type="text" placeholder="同城银发社群主理人 · 一起变年轻…">
+          </div>
+          <div class="cfg-item">
+            <label>联系电话 <span style="font-size:11px;color:var(--mu);">前台展示的主理人联系电话</span></label>
+            <input id="cfg-tel" type="text" placeholder="19359956937">
+          </div>
         </div>
         <div class="tc-head" style="margin-top:16px;"><div class="tc-title">前台展示控制</div></div>
         <div class="cfg-form">
@@ -1825,13 +1830,32 @@ function renderModalImgs(){
 function removeImg(i){modalImgs.splice(i,1);renderModalImgs();}
 
 // ══ 配置 ══
-function loadCfgFields(){
+async function loadCfgFields(){
+  // 先用本地数据填充
   const c=loadD('kkh_cfg',{});
-  const set=(id,v)=>{const d=document.getElementById(id);if(d)d.value=v;};
-  set('cfg-tag',c.heroTag||'✦ 社群主理人活动手册 2026');
-  set('cfg-name',c.siteName||'开开华彩');
-  set('cfg-sub',c.heroSub||'线下文娱俱乐部 · 一起变年轻 · 用爱和科技为父母做好产品');
-  set('cfg-tel',c.tel||'');
+  const set=(id,v)=>{const d=document.getElementById(id);if(d&&v)d.value=v;};
+  set('cfg-tag',  c.heroTag ||'✦ 社群主理人活动手册 2026');
+  set('cfg-name', c.siteName||'开开华彩');
+  set('cfg-sub',  c.heroSub ||'线下文娱俱乐部 · 一起变年轻 · 用爱和科技为父母做好产品');
+  set('cfg-tel',  c.tel     ||'');
+  // 再从 Supabase 读取最新配置
+  if(typeof sb!=='undefined'&&sb){
+    try{
+      const {data:cfgs}=await sb.from('site_config').select('*');
+      if(cfgs&&cfgs.length){
+        const map={};cfgs.forEach(r=>{map[r.key]=r.value;});
+        if(map.heroTag)  set('cfg-tag',  map.heroTag);
+        if(map.siteName) set('cfg-name', map.siteName);
+        if(map.heroSub)  set('cfg-sub',  map.heroSub);
+        if(map.tel!==undefined) {
+          const telEl=document.getElementById('cfg-tel');
+          if(telEl) telEl.value=map.tel;
+        }
+        // 同步到本地
+        saveD('kkh_cfg',{heroTag:map.heroTag,siteName:map.siteName,heroSub:map.heroSub,tel:map.tel||''});
+      }
+    }catch(e){console.warn('配置加载失败:',e);}
+  }
 }
 function saveCfg(){
   const get=id=>(document.getElementById(id)||{}).value||'';
