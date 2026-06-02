@@ -1145,20 +1145,11 @@ function showT(m,type){
   clearTimeout(t._timer);t._timer=setTimeout(()=>t.classList.remove('show'),3500);
 }
 function cpT(t,m){navigator.clipboard&&navigator.clipboard.writeText(t).catch(()=>{});showT(m||'已复制','ok');}
+function cpLinkUrl(el,url){const decoded=url.replace(/\\'/g,"'");cpT(decoded,'链接已复制 ✅');}
 
 // ══ 权限 ══
-const ROLE_LABELS={admin:'超级管理员',editor:'编辑者',viewer:'查看者'};
-const ROLE_PERMS={
-  admin:{canEdit:true,canDelete:true,canManageAcc:true,canViewAll:true,canEditAll:true},
-  editor:{canEdit:true,canDelete:false,canManageAcc:false,canViewAll:false,canEditAll:false},
-  viewer:{canEdit:false,canDelete:false,canManageAcc:false,canViewAll:false,canEditAll:false}
-};
-function can(perm){return curUser&&ROLE_PERMS[curUser.role]&&ROLE_PERMS[curUser.role][perm];}
-function canEditAct(act){
-  if(!curUser)return false;
-  if(can('canEditAll'))return true;
-  return act&&act.created_by===curUser.uname;
-}
+
+
 
 // ══ 统计更新 ══
 function updateStats(){
@@ -1280,33 +1271,32 @@ function renderActs(kw){
   if(cnt)cnt.textContent='共 '+list.length+' 条';
   const tbl=document.getElementById('acts-tbl');
   if(!tbl)return;
-  const badgeCls={美学声乐:'b1',同城社交:'b2',优雅品位:'b3',人文知性:'b4',活力康养:'b5'};
-  tbl.innerHTML='<thead><tr><th>#</th><th>活动名称</th><th>分类</th><th>人数</th><th>日期</th><th>价格</th><th>图片</th><th>报名</th><th>热门</th><th>状态</th><th>操作</th></tr></thead><tbody>'+
-  list.map((a,i)=>{
-    const bc=badgeCls[a.cat]||'b1';
+  const bc={美学声乐:'b1',同城社交:'b2',优雅品位:'b3',人文知性:'b4',活力康养:'b5'};
+  const rows=list.map(function(a){
     const canE=canEditAct(a);
+    const stBadge=a.st==='on'?'<span class="badge b-on">已上架</span>':'<span class="badge b-off">已下架</span>';
+    let btns='';
+    if(canE) btns+='<button class="ab ab-e" onclick="openActModal(null,'+a.id+',\'edit\')">编辑</button>';
+    btns+='<button class="ab ab-img" onclick="openActModal(null,'+a.id+',\'img\')"><i class="ti ti-photo"></i> 图片</button>';
+    btns+='<button class="ab ab-p" onclick="showPoster('+a.id+')">海报</button>';
+    if(canE) btns+='<button class="ab '+(a.st==='on'?'ab-off':'ab-on')+'" onclick="toggleSt('+a.id+')">'+(a.st==='on'?'下架':'上架')+'</button>';
+    if(can('canDelete')&&canE) btns+='<button class="ab ab-d" onclick="delAct('+a.id+')">删除</button>';
     return '<tr>'
       +'<td style="color:var(--mu);font-size:11px">#'+a.id+'</td>'
-      +'<td class="td-name"><span style="margin-right:4px;">'+a.e+'</span>'+a.name+'</td>'
-      +'<td><span class="badge '+bc+'">'+a.cat+'</span></td>'
+      +'<td class="td-name">'+a.e+' '+a.name+'</td>'
+      +'<td><span class="badge '+(bc[a.cat]||'b1')+'">'+a.cat+'</span></td>'
       +'<td style="color:var(--mu);font-size:12px;">'+a.min+'–'+a.max+'人</td>'
       +'<td style="color:var(--mu);font-size:12px;">'+(a.date||'—')+'</td>'
       +'<td style="color:var(--or);font-weight:600;">'+a.price+'</td>'
       +'<td style="color:var(--mu);font-size:12px;">'+(a.imgs&&a.imgs.length||0)+'张</td>'
       +'<td style="font-weight:600;">'+(a.sg||0)+'</td>'
-      +'<td>'+(a.hot?'<span style="color:var(--or)">🔥</span>':'—')+'</td>'
-      +'<td>'+(a.st==='on'?'<span class="badge b-on">已上架</span>':'<span class="badge b-off">已下架</span>')+'</td>'
-      +'<td><div class="act-group">'
-      +(canE?'<button class="ab ab-e" onclick="openActModal('edit','+a.id+')">编辑</button>':'')
-      +'<button class="ab ab-img" onclick="openActModal('img','+a.id+')"><i class="ti ti-photo" style="font-size:12px;vertical-align:-1px;"></i> 图片</button>'
-      +'<button class="ab ab-p" onclick="showPoster('+a.id+')">海报</button>'
-      +(canE?'<button class="ab '+(a.st==='on'?'ab-off':'ab-on')+'" onclick="toggleSt('+a.id+')">'+(a.st==='on'?'下架':'上架')+'</button>':'')
-      +(can('canDelete')&&canE?'<button class="ab ab-d" onclick="delAct('+a.id+')">删除</button>':'')
-      +'</div></td>'
+      +'<td>'+(a.hot?'🔥':'—')+'</td>'
+      +'<td>'+stBadge+'</td>'
+      +'<td><div class="act-group">'+btns+'</div></td>'
       +'</tr>';
-  }).join('')+'</tbody>';
+  });
+  tbl.innerHTML='<thead><tr><th>#</th><th>活动名称</th><th>分类</th><th>人数</th><th>日期</th><th>价格</th><th>图片</th><th>报名</th><th>热门</th><th>状态</th><th>操作</th></tr></thead><tbody>'+rows.join('')+'</tbody>';
 }
-
 // ══ 活动日历 ══
 function renderCalendar(){
   const wrap=document.getElementById('cal-wrap');
@@ -1339,32 +1329,33 @@ function renderCalendar(){
 // ══ 链接管理 ══
 function renderLinks(){
   const sel=document.getElementById('link-acc-filter');
-  if(sel&&!sel.value&&curUser&&curUser.role!=='admin'){sel.value=curUser.uname;}
+  if(sel&&!sel.value&&curUser&&curUser.role!=='admin') sel.value=curUser.uname;
   const filterAcc=sel?sel.value:'';
   const myAcc=filterAcc||(curUser?curUser.uname:'');
-  const showAccs=myAcc?ACCS.filter(a=>a.uname===myAcc):ACCS;
+  const showAccs=myAcc?ACCS.filter(function(a){return a.uname===myAcc;}):ACCS;
   let html='';
-  ACTS.filter(a=>a.st==='on').forEach(act=>{
-    showAccs.forEach(acc=>{
+  ACTS.filter(function(a){return a.st==='on';}).forEach(function(act){
+    showAccs.forEach(function(acc){
       const url='https://xuepengjun2-cell.github.io/kkhuacai/?act='+act.id+'&ref='+acc.uname;
-      const sgCnt=SG.filter(r=>r.aid===act.id&&r.ref===acc.uname).reduce((s,r)=>s+(r.c||0),0);
-      html+='<div class="lk-item">'
-        +'<span class="lk-e">'+act.e+'</span>'
-        +'<div class="lk-info">'
-        +'<div class="lk-name">'+act.name
-        +' <span style="font-size:10px;background:#EAE0FC;color:#4A1899;padding:1px 6px;border-radius:5px;margin-left:4px;">'+acc.realname+'</span>'
-        +(sgCnt>0?' <span style="font-size:10px;color:var(--gr);margin-left:4px;">已报名 '+sgCnt+' 人</span>':'')
-        +'</div><div class="lk-url">'+url+'</div></div>'
-        +'<div class="lk-acts">'
-        +'<button class="lkb lkb-cp" onclick="cpT(''+url+'','链接已复制')">复制</button>'
-        +'<button class="lkb lkb-po" onclick="showPoster('+act.id+',''+acc.uname+'')">海报</button>'
-        +'</div></div>';
+      const sgCnt=SG.filter(function(r){return r.aid===act.id&&r.ref===acc.uname;}).reduce(function(s,r){return s+(r.c||0);},0);
+      html+='<div class="lk-item">';
+      html+='<span class="lk-e">'+act.e+'</span>';
+      html+='<div class="lk-info">';
+      html+='<div class="lk-name">'+act.name;
+      html+=' <span style="font-size:10px;background:#EAE0FC;color:#4A1899;padding:1px 6px;border-radius:5px;margin-left:4px;">'+acc.realname+'</span>';
+      if(sgCnt>0) html+=' <span style="font-size:10px;color:var(--gr);margin-left:4px;">已报名 '+sgCnt+' 人</span>';
+      html+='</div>';
+      html+='<div class="lk-url">'+url+'</div>';
+      html+='</div>';
+      html+='<div class="lk-acts">';
+      html+='<button class="lkb lkb-cp" onclick="cpLinkUrl(this,\''+url+'\')">复制</button>';
+      html+='<button class="lkb lkb-po" onclick="showPoster('+act.id+',\''+acc.uname+'\')">海报</button>';
+      html+='</div></div>';
     });
   });
   const list=document.getElementById('links-list');
-  if(list)list.innerHTML=html||'<div style="padding:20px;text-align:center;color:var(--mu);font-size:13px;">暂无数据</div>';
+  if(list) list.innerHTML=html||'<div style="padding:20px;text-align:center;color:var(--mu);font-size:13px;">暂无数据</div>';
 }
-
 function copyAllLinks(){
   const sel=document.getElementById('link-acc-filter');
   const filterAcc=sel?sel.value:'';
@@ -1513,20 +1504,25 @@ function renderAccList(){
   const roleColors={admin:'linear-gradient(135deg,#F5A623,#E8600A)',editor:'linear-gradient(135deg,#28A056,#1A6835)',viewer:'linear-gradient(135deg,#8060C0,#5040A0)'};
   const el=document.getElementById('acc-list');
   if(!el)return;
-  el.innerHTML=ACCS.map(acc=>'<div class="acc-row">'
-    +'<div class="acc-av" style="background:'+(acc.color||roleColors[acc.role]||'#888')+'">'+( acc.avatar||acc.realname[0])+'</div>'
-    +'<div class="acc-info"><div class="acc-name">'+acc.realname
-    +' <span class="badge '+(acc.role==='admin'?'b-admin':acc.role==='editor'?'b-editor':'b-viewer')+'" style="margin-left:6px;">'+(ROLE_LABELS[acc.role]||acc.role)+'</span></div>'
-    +'<div class="acc-detail">账号：'+acc.uname+(acc.phone?' · 手机：'+acc.phone:'')+(acc.note?' · '+acc.note:'')+'</div></div>'
-    +'<div class="acc-acts">'
-    +(acc.uname!=='admin'
-      ?'<button class="ab ab-e" onclick="openAccModal('edit','+acc.id+')">编辑</button>'
-       +'<button class="ab ab-d" onclick="delAcc('+acc.id+')">删除</button>'
-      :'<span style="font-size:11px;color:var(--mu);">系统账号</span>')
-    +'</div></div>').join('');
+  el.innerHTML=ACCS.map(function(acc){
+    const isAdmin=(acc.uname==='admin');
+    const avBg=acc.color||roleColors[acc.role]||'#888';
+    const roleBadge='<span class="badge '+(acc.role==='admin'?'b-admin':acc.role==='editor'?'b-editor':'b-viewer')+'">'+(ROLE_LABELS[acc.role]||acc.role)+'</span>';
+    let actBtns=isAdmin
+      ?'<span style="font-size:11px;color:var(--mu);">系统账号</span>'
+      :'<button class="ab ab-e" onclick="openAccModal(null,'+acc.id+',\'edit\')">编辑</button>'
+       +'<button class="ab ab-d" onclick="delAcc('+acc.id+')">删除</button>';
+    return '<div class="acc-row">'
+      +'<div class="acc-av" style="background:'+avBg+';">'+(acc.avatar||acc.realname[0])+'</div>'
+      +'<div class="acc-info">'
+      +'<div class="acc-name">'+acc.realname+' '+roleBadge+'</div>'
+      +'<div class="acc-detail">账号：'+acc.uname+(acc.phone?' · 手机：'+acc.phone:'')+(acc.note?' · '+acc.note:'')+'</div>'
+      +'</div>'
+      +'<div class="acc-acts">'+actBtns+'</div>'
+      +'</div>';
+  }).join('');
 }
-
-function openAccModal(mode,id){
+function openAccModal(el,id,mode){
   if(!can('canManageAcc')){showT('权限不足','err');return;}
   editAccId=id||null;
   document.getElementById('acc-modal-title').textContent=mode==='edit'?'编辑账号':'新增账号';
@@ -1592,7 +1588,8 @@ function populateAccFilters(){
 }
 
 // ══ 活动 CRUD ══
-function openActModal(mode,id){
+function openActModal(el,id,mode){
+  if(!mode) mode=id, id=null; // 兼容旧调用
   if(mode!=='img'&&!can('canEdit')){showT('您没有编辑权限','err');return;}
   if(mode==='edit'&&id){
     const checkAct=ACTS.find(x=>x.id===id);
