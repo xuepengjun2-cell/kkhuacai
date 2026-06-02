@@ -281,10 +281,377 @@ tr:hover td{background:#FDFCFB;}
 }
 
 </style>
+</head>
 
-<!-- Supabase SDK -->
+<body>
+<div id="toast" class="toast"></div>
+
+<!-- 登录页 -->
+<div id="loginPage" class="login-page">
+  <div class="login-box">
+    <div class="login-logo">
+      <div class="logo-icon">华</div>
+    </div>
+    <div class="login-title">开开华彩</div>
+    <div class="login-sub">活动管理后台 · 请登录</div>
+    <div class="login-form">
+      <div class="lf-item">
+        <label class="lf-label">账号</label>
+        <input id="lu" type="text" class="lf-input" placeholder="请输入账号" autocomplete="username">
+      </div>
+      <div class="lf-item">
+        <label class="lf-label">密码</label>
+        <input id="lp" type="password" class="lf-input" placeholder="请输入密码" autocomplete="current-password">
+      </div>
+      <div id="lerr" class="lerr"></div>
+      <button class="login-btn" onclick="doLogin()">登 录</button>
+    </div>
+    <div class="login-demo">演示：admin/kkhuacai2025 · editor01/editor123 · viewer01/viewer123</div>
+  </div>
+</div>
+
+<!-- 主界面 -->
+<div id="mainApp" class="main-app h">
+
+  <!-- 侧边栏 -->
+  <div class="sidebar" id="sidebar">
+    <div class="sb-header">
+      <div class="sb-logo">
+        <div class="sb-logo-icon">华</div>
+        <div>
+          <div class="sb-brand">开开华彩</div>
+          <div class="sb-ver">活动管理后台 v3.0</div>
+        </div>
+      </div>
+      <div id="user-badge" class="user-badge"></div>
+    </div>
+
+    <div class="sb-section-label">数据概览</div>
+    <div class="nav-item" data-panel="p-dash" onclick="navTo('p-dash')">
+      <i class="ti ti-dashboard"></i><span>数据总览</span>
+    </div>
+
+    <div class="sb-section-label">活动管理</div>
+    <div class="nav-item" data-panel="p-acts" onclick="navTo('p-acts')">
+      <i class="ti ti-calendar-event"></i><span>活动列表</span>
+    </div>
+    <div class="nav-item" data-panel="p-cal" onclick="navTo('p-cal')">
+      <i class="ti ti-calendar"></i><span>活动日历</span>
+    </div>
+    <div class="nav-item" data-panel="p-links" onclick="navTo('p-links')">
+      <i class="ti ti-link"></i><span>链接管理</span>
+    </div>
+    <div class="nav-item" data-panel="p-sgrec" onclick="navTo('p-sgrec')">
+      <i class="ti ti-clipboard-list"></i><span>报名记录</span>
+    </div>
+    <div class="nav-item" data-panel="p-share" onclick="navTo('p-share')">
+      <i class="ti ti-share"></i><span>分享归属</span>
+      <span class="nav-badge">NEW</span>
+    </div>
+
+    <div class="sb-section-label">系统配置</div>
+    <div class="nav-item" data-panel="p-cfg" onclick="navTo('p-cfg')">
+      <i class="ti ti-settings"></i><span>前台配置</span>
+    </div>
+    <div class="nav-item" data-panel="p-accs" onclick="navTo('p-accs')" id="nav-accs">
+      <i class="ti ti-users"></i><span>账号管理</span>
+    </div>
+
+    <div class="sb-footer">
+      <div class="sb-user" id="sb-user-info"></div>
+      <button class="sb-logout" onclick="logout()"><i class="ti ti-logout"></i></button>
+    </div>
+  </div>
+
+  <!-- 主内容 -->
+  <div class="main-content">
+    <!-- 顶栏 -->
+    <div class="topbar-main">
+      <div class="topbar-title" id="page-title">数据总览</div>
+      <div class="topbar-actions">
+        <button class="btn-primary" onclick="openActModal('new')">
+          <i class="ti ti-plus"></i> 新建活动
+        </button>
+        <button class="btn-outline" onclick="navTo('p-acts');setTimeout(()=>location.reload&&window.open(location.origin+location.pathname.replace('kkh_admin.html',''),'_blank'),100)">
+          <i class="ti ti-external-link"></i> 查看前台
+        </button>
+      </div>
+    </div>
+
+    <!-- 数据总览 -->
+    <div class="panel on" id="p-dash">
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-icon" style="background:linear-gradient(135deg,#F5A623,#E8600A);"><i class="ti ti-calendar-event"></i></div>
+          <div><div class="sc-num" id="st-total">0</div><div class="sc-lbl">活动总数</div><div class="sc-trend" id="st-acts-tip"><i class="ti ti-calendar-check"></i> 全部已上架</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:linear-gradient(135deg,#28A056,#1A6835);"><i class="ti ti-users"></i></div>
+          <div><div class="sc-num" id="st-sg">0</div><div class="sc-lbl">累计报名人次</div><div class="sc-trend"><i class="ti ti-users"></i> 累计报名人次</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:linear-gradient(135deg,#1060A0,#0A4070);"><i class="ti ti-currency-yen"></i></div>
+          <div><div class="sc-num" id="st-revenue">¥0</div><div class="sc-lbl">累计确认营收</div><div class="sc-trend"><i class="ti ti-info-circle"></i> 报名确认后统计</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:linear-gradient(135deg,#8060C0,#5040A0);"><i class="ti ti-star"></i></div>
+          <div><div class="sc-num" id="st-orders">0</div><div class="sc-lbl">报名订单数</div><div class="sc-trend"><i class="ti ti-clipboard-list"></i> 实时统计</div></div>
+        </div>
+      </div>
+      <div class="charts-row">
+        <div class="tcard"><div class="tc-head"><div class="tc-title">各矩阵活动占比</div></div><div class="chart-wrap"><canvas id="cpie"></canvas></div></div>
+        <div class="tcard"><div class="tc-head"><div class="tc-title">近6月报名趋势</div></div><div class="chart-wrap"><canvas id="cline"></canvas></div></div>
+      </div>
+      <div class="tcard">
+        <div class="tc-head"><div class="tc-title">近期活动</div></div>
+        <table id="dash-tbl" class="data-tbl"></table>
+      </div>
+    </div>
+
+    <!-- 活动列表 -->
+    <div class="panel" id="p-acts">
+      <div class="tcard">
+        <div class="tc-head">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div class="tc-title">全部活动</div>
+            <span class="tc-sub" id="acts-count"></span>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <select id="cat-filter" onchange="renderActs()" class="filter-sel">
+              <option value="">全部分类</option>
+              <option>美学声乐</option><option>同城社交</option>
+              <option>优雅品位</option><option>人文知性</option><option>活力康养</option>
+            </select>
+            <select id="st-filter" onchange="renderActs()" class="filter-sel">
+              <option value="">全部状态</option>
+              <option value="on">已上架</option><option value="off">已下架</option>
+            </select>
+            <div class="sb2"><i class="ti ti-search"></i><input type="text" placeholder="搜索活动名称…" oninput="renderActs(this.value)"></div>
+          </div>
+        </div>
+        <div class="tbl-wrap"><table id="acts-tbl" class="data-tbl"></table></div>
+      </div>
+    </div>
+
+    <!-- 活动日历 -->
+    <div class="panel" id="p-cal">
+      <div class="tcard">
+        <div class="tc-head"><div class="tc-title">活动日历</div></div>
+        <div id="cal-wrap"></div>
+      </div>
+    </div>
+
+    <!-- 链接管理 -->
+    <div class="panel" id="p-links">
+      <div class="tcard">
+        <div class="tc-head">
+          <div>
+            <div class="tc-title">活动链接管理</div>
+            <div style="font-size:12px;color:var(--mu);margin-top:4px;"><i class="ti ti-info-circle" style="color:var(--or);"></i> 分享归属机制：每个账号都有专属分享链接（URL含 ?ref=账号名 参数）。用户通过某账号的链接进入并报名，该报名自动归属该账号，支持业绩统计与佣金核算。</div>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <select id="link-acc-filter" onchange="renderLinks()" class="filter-sel">
+              <option value="">全部账号的链接</option>
+            </select>
+            <button class="btn-outline" onclick="copyAllLinks()"><i class="ti ti-copy"></i> 批量复制</button>
+          </div>
+        </div>
+        <div id="links-list"></div>
+      </div>
+    </div>
+
+    <!-- 报名记录 -->
+    <div class="panel" id="p-sgrec">
+      <div class="tcard">
+        <div class="tc-head">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div class="tc-title">报名记录</div>
+            <span class="tc-sub" id="sg-stat"></span>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+            <select id="sg-acc-filter" onchange="renderSgRec()" class="filter-sel">
+              <option value="">全部来源</option>
+            </select>
+            <div class="sb2"><i class="ti ti-search"></i><input type="text" placeholder="搜索姓名/活动…" oninput="filterSg(this.value)"></div>
+            <button class="btn-outline" onclick="exportSg()"><i class="ti ti-download"></i> 导出</button>
+          </div>
+        </div>
+        <div class="tbl-wrap"><table id="sg-tbl" class="data-tbl"></table></div>
+      </div>
+    </div>
+
+    <!-- 分享归属 -->
+    <div class="panel" id="p-share">
+      <div class="tcard">
+        <div class="tc-head"><div class="tc-title">分享归属统计</div></div>
+        <div id="share-cards" class="share-cards"></div>
+        <div class="tbl-wrap" style="margin-top:16px;"><table id="share-tbl" class="data-tbl"></table></div>
+      </div>
+    </div>
+
+    <!-- 前台配置 -->
+    <div class="panel" id="p-cfg">
+      <div class="tcard" style="max-width:600px;">
+        <div class="tc-head"><div class="tc-title">顶部横幅文案</div></div>
+        <div class="cfg-form">
+          <div class="cfg-item"><label>小标签文字</label><input id="cfg-tag" type="text" class="lf-input" placeholder="✦ 社群主理人活动手册 2026"></div>
+          <div class="cfg-item"><label>品牌名称</label><input id="cfg-name" type="text" class="lf-input" placeholder="开开华彩"></div>
+          <div class="cfg-item"><label>品牌 Slogan</label><input id="cfg-sub" type="text" class="lf-input" placeholder="同城银发社群主理人…"></div>
+          <div class="cfg-item"><label>联系电话</label><input id="cfg-tel" type="text" class="lf-input" placeholder="前台展示的主理人联系电话"></div>
+        </div>
+        <div class="tc-head" style="margin-top:16px;"><div class="tc-title">前台展示控制</div></div>
+        <div class="cfg-form">
+          <div class="cfg-switch"><span>显示活动价格</span><label class="switch"><input type="checkbox" id="cfg-show-price" checked><span class="slider"></span></label></div>
+          <div class="cfg-switch"><span>显示报名人数</span><label class="switch"><input type="checkbox" id="cfg-show-sg" checked><span class="slider"></span></label></div>
+          <div class="cfg-switch"><span>显示热门标签</span><label class="switch"><input type="checkbox" id="cfg-show-hot" checked><span class="slider"></span></label></div>
+        </div>
+        <button class="btn-primary" style="margin-top:20px;width:100%;" onclick="saveCfg()">
+          <i class="ti ti-check"></i> 保存配置并同步前台
+        </button>
+      </div>
+    </div>
+
+    <!-- 账号管理 -->
+    <div class="panel" id="p-accs">
+      <div class="tcard">
+        <div class="tc-head">
+          <div class="tc-title">账号列表</div>
+          <button class="btn-primary" onclick="openAccModal('new')"><i class="ti ti-user-plus"></i> 新增账号</button>
+        </div>
+        <div id="acc-list"></div>
+        <div class="tcard" style="margin-top:16px;">
+          <div class="tc-head"><div class="tc-title">♡ 权限说明</div></div>
+          <table class="data-tbl">
+            <thead><tr><th>权限级别</th><th>可操作内容</th><th>分享归属</th></tr></thead>
+            <tbody>
+              <tr><td><span class="badge b-admin">超级管理员</span></td><td>全部功能：创建/编辑/删除活动、管理账号、修改配置、查看全部数据</td><td>可查看所有账号的报名归属统计</td></tr>
+              <tr><td><span class="badge b-editor">编辑者</span></td><td>新建/编辑活动、上传图片、查看报名记录（含自己归属的）</td><td>只能查看自己分享链接带来的报名</td></tr>
+              <tr><td><span class="badge b-viewer">查看者</span></td><td>仅看数据总览和活动列表，不可修改任何内容</td><td>可查看自己的分享链接和报名数</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 活动编辑弹窗 -->
+<div class="modal-ov h" id="act-modal-ov">
+  <div class="modal">
+    <div class="modal-hd">
+      <div class="modal-title" id="act-modal-title">新建活动</div>
+      <button class="modal-close" onclick="closeActModal()"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="f3">
+        <div class="ff"><label>活动名称 *</label><input id="f-name" type="text" placeholder="如：复古国潮肖像美拍"></div>
+        <div class="ff"><label>矩阵分类</label>
+          <select id="f-cat"><option>美学声乐</option><option>同城社交</option><option>优雅品位</option><option>人文知性</option><option>活力康养</option></select>
+        </div>
+        <div class="ff"><label>活动状态</label>
+          <select id="f-st"><option value="on">已上架</option><option value="off">已下架</option><option value="draft">草稿</option></select>
+        </div>
+      </div>
+      <div class="f3">
+        <div class="ff"><label>最少人数</label><input id="f-min" type="number" placeholder="15"></div>
+        <div class="ff"><label>最多人数</label><input id="f-max" type="number" placeholder="40"></div>
+        <div class="ff"><label>活动时长</label><input id="f-dur" type="text" placeholder="2小时"></div>
+      </div>
+      <div class="f3">
+        <div class="ff"><label>收费价格 *</label><input id="f-price" type="text" placeholder="¥199/人"></div>
+        <div class="ff"><label>活动日期</label><input id="f-date" type="date"></div>
+        <div class="ff"><label>活动Emoji</label><input id="f-emoji" type="text" placeholder="📸"></div>
+      </div>
+      <div class="f2">
+        <div class="ff"><label>是否热门</label>
+          <select id="f-hot"><option value="false">否</option><option value="true">是 🔥</option></select>
+        </div>
+        <div class="ff"><label>场地推荐</label><input id="f-ven" type="text" placeholder="高端国风茶室…"></div>
+      </div>
+      <div class="ff"><label>活动详情</label><textarea id="f-desc" rows="3" placeholder="活动描述…"></textarea></div>
+      <div class="ff"><label>核心物料（顿号「、」分隔）</label><input id="f-mat" type="text" placeholder="如：摄影棚灯光、国风服饰道具"></div>
+      <div class="ff"><label>交付成果（顿号「、」分隔）</label><textarea id="f-out" rows="2" placeholder="如：2套妆造拍摄、2张实体精修照"></textarea></div>
+      <div class="ff">
+        <label>活动图片 <span style="font-size:11px;color:var(--mu);">上传活动现场图或宣传图，前台详情页将以轮播图形式展示（建议比例 4:3，最多6张）</span></label>
+        <div class="img-grid" id="modal-img-grid"></div>
+        <div class="img-add" id="img-add-btn" onclick="document.getElementById('img-file-input').click()">
+          <i class="ti ti-cloud-upload"></i>
+          <span>点击上传图片或视频</span>
+          <span style="font-size:11px;color:var(--mu);">图片：JPG/PNG/WEBP · 视频：MP4/MOV（自动压缩至10MB）</span>
+          <input type="file" id="img-file-input" accept="image/*,video/mp4,video/quicktime,video/webm" multiple onchange="handleMediaUpload(event)">
+        </div>
+        <div id="upload-progress" style="display:none;margin-top:10px;">
+          <div style="background:var(--bg);border-radius:8px;overflow:hidden;height:6px;">
+            <div id="upload-bar" style="height:100%;background:linear-gradient(90deg,var(--or),var(--gold));width:0;transition:width .3s;border-radius:8px;"></div>
+          </div>
+          <div id="upload-tip" style="font-size:11px;color:var(--mu);text-align:center;margin-top:5px;">上传中…</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-ft">
+      <button class="btn-cancel" onclick="closeActModal()">取消</button>
+      <button class="btn-save" onclick="saveAct()"><i class="ti ti-check" style="font-size:14px;margin-right:4px;"></i>保存并同步前台</button>
+    </div>
+  </div>
+</div>
+
+<!-- 账号编辑弹窗 -->
+<div class="modal-ov h" id="acc-modal-ov">
+  <div class="modal">
+    <div class="modal-hd">
+      <div class="modal-title" id="acc-modal-title">新增账号</div>
+      <button class="modal-close" onclick="closeAccModal()"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="f2">
+        <div class="ff"><label>真实姓名 *</label><input id="acc-realname" type="text" placeholder="李主理人"></div>
+        <div class="ff"><label>登录账号 *</label><input id="acc-username" type="text" placeholder="editor01"></div>
+      </div>
+      <div class="f2">
+        <div class="ff"><label>登录密码 *</label><input id="acc-password" type="password" placeholder="至少6位"></div>
+        <div class="ff"><label>权限角色</label>
+          <select id="acc-role"><option value="editor">编辑者</option><option value="viewer">查看者</option><option value="admin">超级管理员</option></select>
+        </div>
+      </div>
+      <div class="f2">
+        <div class="ff"><label>手机号码</label><input id="acc-phone" type="tel" placeholder="138-0000-0000"></div>
+        <div class="ff"><label>备注说明</label><input id="acc-note" type="text" placeholder="负责区域或职责"></div>
+      </div>
+    </div>
+    <div class="modal-ft">
+      <button class="btn-cancel" onclick="closeAccModal()">取消</button>
+      <button class="btn-save" onclick="saveAcc()"><i class="ti ti-check" style="font-size:14px;margin-right:4px;"></i>保存账号</button>
+    </div>
+  </div>
+</div>
+
+<!-- 海报弹窗 -->
+<div class="modal-ov h" id="poster-ov">
+  <div class="modal" style="max-width:380px;">
+    <div class="modal-hd">
+      <div class="modal-title">活动海报</div>
+      <button class="modal-close" onclick="closePoster()"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="ff">
+        <label>选择分享账号</label>
+        <select id="poster-ref-sel" onchange="refreshPoster()" class="filter-sel" style="width:100%;"></select>
+      </div>
+      <div id="poster-card" style="background:linear-gradient(160deg,#1C1410,#3D1F08 55%,#5C2E0A);border-radius:16px;padding:20px;margin-top:12px;"></div>
+    </div>
+    <div class="modal-ft">
+      <button class="btn-cancel" onclick="closePoster()">关闭</button>
+      <button class="btn-save" onclick="savePosterAndClose()">保存截图</button>
+    </div>
+  </div>
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+
 // ============================================================
 // ⚙️  配置区：填入你的 Supabase 信息（和前台保持一致）
 // 后台用 service_role key（有完整读写权限）
@@ -1420,6 +1787,104 @@ document.addEventListener('DOMContentLoaded',function(){
   // 回车登录
   const lp=document.getElementById('lp');
   if(lp)lp.addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
+});
+
+
+// ══ 权限UI ══
+function applyPermUI(){
+  if(!curUser)return;
+  const badge=document.getElementById('user-badge');
+  if(badge){
+    const roleLabel={admin:'超级管理员',editor:'编辑者',viewer:'查看者'};
+    badge.className='user-badge role-'+curUser.role;
+    badge.textContent=roleLabel[curUser.role]||curUser.role;
+  }
+  const sbUser=document.getElementById('sb-user-info');
+  if(sbUser) sbUser.textContent=curUser.realname||curUser.uname;
+  // 隐藏无权限的导航
+  const navAccs=document.getElementById('nav-accs');
+  if(navAccs) navAccs.style.display=can('canManageAcc')?'':'none';
+  // 显示主界面
+  const mainApp=document.getElementById('mainApp');
+  if(mainApp) mainApp.classList.remove('h');
+}
+
+// ══ 初始化 ══
+async function initApp(){
+  ACTS=loadD('kkh_acts',DEFAULT_ACTS);
+  SG=loadD('kkh_sg',DEFAULT_SG);
+  ACCS=loadD('kkh_accs',DEFAULT_ACCS);
+  populateAccFilters();
+  renderDash();renderActs();renderCalendar();
+  renderLinks();renderSgRec();renderShare();renderAccList();
+  loadCfgFields();
+  setTimeout(initCharts,400);
+
+  // 从Supabase加载最新数据
+  if(typeof sb!=='undefined'&&sb){
+    try{
+      showT('正在从云端加载数据…','info');
+      const {data:acts}=await sb.from('activities').select('*').order('id');
+      const {data:accs}=await sb.from('accounts').select('*').order('id');
+      const {data:sgs}=await sb.from('signups').select('*').order('created_at',{ascending:false});
+      if(acts&&acts.length){
+        ACTS=acts.map(a=>({id:a.id,name:a.name,cat:a.category,e:a.emoji||'✨',
+          min:a.min_people,max:a.max_people,dur:a.duration,price:a.price,
+          ven:a.venue||'',desc:a.description||'',mat:a.materials||'',
+          out:a.deliverables||'',imgs:a.images||[],st:a.status,
+          hot:a.is_hot,date:a.event_date||'',sg:a.signup_count||0,
+          created_by:a.created_by||''}));
+        saveD('kkh_acts',ACTS);
+      }
+      if(accs&&accs.length){
+        ACCS=accs.map(a=>({id:a.id,uname:a.username,pwd:a.password,
+          realname:a.realname,role:a.role,phone:a.phone||'',
+          note:a.note||'',avatar:a.avatar||a.realname[0],
+          color:a.color||'linear-gradient(135deg,#F5A623,#E8600A)'}));
+        saveD('kkh_accs',ACCS);
+      }
+      if(sgs){
+        SG=sgs.map(s=>({id:s.id,n:s.user_name,p:s.user_phone,a:s.activity_name,
+          aid:s.activity_id,c:s.people_count,amt:s.amount||'',
+          t:new Date(s.created_at).toLocaleString('zh-CN').replace(/\//g,'-'),
+          s:s.status,ref:s.ref_account||''}));
+        saveD('kkh_sg',SG);
+      }
+      renderDash();renderActs();renderSgRec();renderShare();renderLinks();
+      populateAccFilters();updateStats();initCharts();
+      showT('✅ 云端数据已加载','ok');
+    }catch(e){
+      console.warn('Supabase加载失败:',e);
+      showT('本地数据已加载','info');
+    }
+  }
+  startPolling();
+}
+
+// ══ 退出登录 ══
+function logout(){
+  curUser=null;
+  try{sessionStorage.removeItem('kkh_session');}catch(e){}
+  document.getElementById('loginPage').classList.remove('h');
+  document.getElementById('mainApp').classList.add('h');
+  document.getElementById('lp').value='';
+  document.getElementById('lu').value='';
+  document.getElementById('lerr').textContent='';
+}
+
+// ══ 顶栏查看前台 ══
+document.addEventListener('DOMContentLoaded',function(){
+  // 回车登录
+  var lp=document.getElementById('lp');
+  if(lp) lp.addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});
+  var lu=document.getElementById('lu');
+  if(lu) lu.addEventListener('keydown',function(e){if(e.key==='Enter')document.getElementById('lp').focus();});
+  // 顶栏查看前台按钮
+  document.querySelectorAll('.topbar-actions .btn-outline').forEach(function(btn){
+    btn.onclick=function(){window.open('https://xuepengjun2-cell.github.io/kkhuacai/','_blank');};
+  });
+  // 检查session
+  checkSession();
 });
 
 </script>
