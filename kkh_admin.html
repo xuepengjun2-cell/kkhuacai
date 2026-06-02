@@ -7,6 +7,14 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
 <script>(function(){var s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js';document.head.appendChild(s);})();</script>
 <style>
+/* ── Toast提示 ── */
+.toast{position:fixed;top:16px;right:20px;background:rgba(28,20,16,.92);color:#fff;padding:9px 14px;border-radius:10px;font-size:12px;z-index:9999;opacity:0;transition:opacity .25s;pointer-events:none;display:flex;align-items:center;gap:7px;max-width:280px;box-shadow:0 4px 16px rgba(0,0,0,.25);line-height:1.4;}
+.toast.show{opacity:1;pointer-events:auto;}
+.toast.ok{background:linear-gradient(135deg,#1A6835,#28A056);}
+.toast.err{background:linear-gradient(135deg,#C0200A,#E0300A);}
+.toast.info{background:linear-gradient(135deg,#1060A0,#1878C8);}
+
+
 *{margin:0;padding:0;box-sizing:border-box;}
 :root{
   --or:#E8600A;--gold:#F5A623;--dark:#1C1410;--bg:#F4F1ED;
@@ -249,11 +257,6 @@ tr:hover td{background:#FDFCFB;}
 .perm-view{background:#F0EDE8;color:var(--mu);}
 
 /* TOAST */
-.toast{position:fixed;bottom:24px;right:24px;background:rgba(28,20,16,.92);color:#fff;padding:11px 20px;border-radius:11px;font-size:13px;z-index:300;opacity:0;transition:opacity .3s;pointer-events:none;max-width:340px;display:flex;align-items:center;gap:8px;}
-.toast.show{opacity:1;}
-.toast.ok{background:linear-gradient(135deg,#1A6835,#28A056);}
-.toast.err{background:linear-gradient(135deg,var(--red),#E03020);}
-.toast.info{background:linear-gradient(135deg,#0A4070,#1060A0);}
 
 @media(max-width:1000px){
   .sidebar{display:none;}.main{margin-left:0;}
@@ -268,11 +271,6 @@ tr:hover td{background:#FDFCFB;}
 .perm-view{background:#F0EDE8;color:var(--mu);}
 
 /* TOAST */
-.toast{position:fixed;bottom:24px;right:24px;background:rgba(28,20,16,.92);color:#fff;padding:11px 20px;border-radius:11px;font-size:13px;z-index:300;opacity:0;transition:opacity .3s;pointer-events:none;max-width:340px;display:flex;align-items:center;gap:8px;}
-.toast.show{opacity:1;}
-.toast.ok{background:linear-gradient(135deg,#1A6835,#28A056);}
-.toast.err{background:linear-gradient(135deg,var(--red),#E03020);}
-.toast.info{background:linear-gradient(135deg,#0A4070,#1060A0);}
 
 @media(max-width:1000px){
   .sidebar{display:none;}.main{margin-left:0;}
@@ -301,7 +299,7 @@ tr:hover td{background:#FDFCFB;}
 /* ── 主界面 ── */
 .main-app{display:flex;height:100vh;overflow:hidden;}
 .main-app.h{display:none;}
-.main-content{flex:1;overflow-y:auto;background:var(--bg);padding:0;}
+.main-content{flex:1;overflow-y:auto;background:var(--bg);padding:0;margin-left:232px;}
 .topbar-main{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;background:#fff;border-bottom:.5px solid var(--bd);position:sticky;top:0;z-index:10;}
 .topbar-title{font-size:18px;font-weight:700;color:var(--tx);}
 .topbar-actions{display:flex;gap:8px;}
@@ -430,12 +428,10 @@ input:checked+.slider:before{transform:translateX(20px);}
 .user-badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:8px;font-size:12px;font-weight:600;background:rgba(255,255,255,.15);color:rgba(255,255,255,.9);}
 .sb-user{font-size:12px;color:rgba(255,255,255,.6);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .sb-logout{width:32px;height:32px;background:rgba(255,255,255,.1);border:none;border-radius:8px;color:rgba(255,255,255,.7);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.sb-out{width:28px;height:28px;background:rgba(255,255,255,.08);border:none;border-radius:6px;color:rgba(255,255,255,.5);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;transition:all .15s;}
+.sb-out:hover{background:rgba(232,96,10,.3);color:var(--or);}
+.sb-ur{font-size:10px;color:rgba(255,255,255,.35);margin-top:1px;}
 /* ── Toast ── */
-.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-80px);background:#1C1410;color:#fff;padding:10px 18px;border-radius:20px;font-size:13px;z-index:9999;transition:transform .3s;white-space:nowrap;display:flex;align-items:center;gap:6px;}
-.toast.show{transform:translateX(-50%) translateY(0);}
-.toast.ok{background:linear-gradient(135deg,#1A6835,#28A056);}
-.toast.err{background:linear-gradient(135deg,#C0200A,#E0300A);}
-.toast.info{background:linear-gradient(135deg,#1060A0,#1878C8);}
 /* ── 响应式 ── */
 @media(max-width:900px){.stats-row{grid-template-columns:1fr 1fr;}.charts-row{grid-template-columns:1fr;}.share-cards{grid-template-columns:1fr;}.f3{grid-template-columns:1fr;}.f2{grid-template-columns:1fr;}}
 </style>
@@ -473,51 +469,53 @@ input:checked+.slider:before{transform:translateX(20px);}
 
   <!-- 侧边栏 -->
   <div class="sidebar" id="sidebar">
-    <div class="sb-header">
-      <div class="sb-logo">
-        <div class="sb-logo-icon">华</div>
-        <div>
-          <div class="sb-brand">开开华彩</div>
-          <div class="sb-ver">活动管理后台 v3.0</div>
-        </div>
+    <div class="sb-logo">
+      <div class="sb-lm">华</div>
+      <div class="sb-name">开开华彩</div>
+      <div class="sb-sub">活动管理后台 v3.0</div>
+      <div id="user-badge" class="sb-user-tag"></div>
+    </div>
+    <div class="sb-nav">
+      <div class="snlbl">数据概览</div>
+      <div class="sni on" data-panel="p-dash" onclick="navTo('p-dash')">
+        <i class="ti ti-dashboard"></i><span>数据总览</span>
       </div>
-      <div id="user-badge" class="user-badge"></div>
+      <div class="snlbl">活动管理</div>
+      <div class="sni" data-panel="p-acts" onclick="navTo('p-acts')">
+        <i class="ti ti-calendar-event"></i><span>活动列表</span>
+      </div>
+      <div class="sni" data-panel="p-cal" onclick="navTo('p-cal')">
+        <i class="ti ti-calendar"></i><span>活动日历</span>
+      </div>
+      <div class="sni" data-panel="p-links" onclick="navTo('p-links')">
+        <i class="ti ti-link"></i><span>链接管理</span>
+      </div>
+      <div class="sni" data-panel="p-sgrec" onclick="navTo('p-sgrec')">
+        <i class="ti ti-clipboard-list"></i><span>报名记录</span>
+      </div>
+      <div class="sni" data-panel="p-share" onclick="navTo('p-share')">
+        <i class="ti ti-share"></i><span>分享归属</span>
+        <span class="sni-badge">NEW</span>
+      </div>
+      <div class="snlbl">系统配置</div>
+      <div class="sni" data-panel="p-cfg" onclick="navTo('p-cfg')">
+        <i class="ti ti-settings"></i><span>前台配置</span>
+      </div>
+      <div class="sni" id="nav-accs" data-panel="p-accs" onclick="navTo('p-accs')">
+        <i class="ti ti-users"></i><span>账号管理</span>
+      </div>
     </div>
-
-    <div class="sb-section-label">数据概览</div>
-    <div class="nav-item" data-panel="p-dash" onclick="navTo('p-dash')">
-      <i class="ti ti-dashboard"></i><span>数据总览</span>
-    </div>
-
-    <div class="sb-section-label">活动管理</div>
-    <div class="nav-item" data-panel="p-acts" onclick="navTo('p-acts')">
-      <i class="ti ti-calendar-event"></i><span>活动列表</span>
-    </div>
-    <div class="nav-item" data-panel="p-cal" onclick="navTo('p-cal')">
-      <i class="ti ti-calendar"></i><span>活动日历</span>
-    </div>
-    <div class="nav-item" data-panel="p-links" onclick="navTo('p-links')">
-      <i class="ti ti-link"></i><span>链接管理</span>
-    </div>
-    <div class="nav-item" data-panel="p-sgrec" onclick="navTo('p-sgrec')">
-      <i class="ti ti-clipboard-list"></i><span>报名记录</span>
-    </div>
-    <div class="nav-item" data-panel="p-share" onclick="navTo('p-share')">
-      <i class="ti ti-share"></i><span>分享归属</span>
-      <span class="nav-badge">NEW</span>
-    </div>
-
-    <div class="sb-section-label">系统配置</div>
-    <div class="nav-item" data-panel="p-cfg" onclick="navTo('p-cfg')">
-      <i class="ti ti-settings"></i><span>前台配置</span>
-    </div>
-    <div class="nav-item" data-panel="p-accs" onclick="navTo('p-accs')" id="nav-accs">
-      <i class="ti ti-users"></i><span>账号管理</span>
-    </div>
-
-    <div class="sb-footer">
-      <div class="sb-user" id="sb-user-info"></div>
-      <button class="sb-logout" onclick="logout()"><i class="ti ti-logout"></i></button>
+    <div class="sb-foot">
+      <div class="sb-user">
+        <div class="sb-av" id="sb-av">管</div>
+        <div class="sb-info">
+          <div class="sb-un" id="sb-user-info">超级管理员</div>
+          <div class="sb-ur" id="sb-user-role">admin</div>
+        </div>
+        <button class="sb-out" onclick="logout()" title="退出">
+          <i class="ti ti-logout"></i>
+        </button>
+      </div>
     </div>
   </div>
 
@@ -530,7 +528,7 @@ input:checked+.slider:before{transform:translateX(20px);}
         <button class="btn-primary" onclick="openActModal('new')">
           <i class="ti ti-plus"></i> 新建活动
         </button>
-        <button class="btn-outline" onclick="navTo('p-acts');setTimeout(()=>location.reload&&window.open(location.origin+location.pathname.replace('kkh_admin.html',''),'_blank'),100)">
+        <button class="btn-outline" onclick="window.open('https://xuepengjun2-cell.github.io/kkhuacai/','_blank')">
           <i class="ti ti-external-link"></i> 查看前台
         </button>
       </div>
@@ -1172,7 +1170,7 @@ function updateStats(){
 let curPanel='p-dash';
 function navTo(id){
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('on'));
-  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('on'));
+  document.querySelectorAll('.sni').forEach(n=>n.classList.remove('on'));
   const panel=document.getElementById(id);
   if(panel)panel.classList.add('on');
   document.querySelectorAll('[data-panel="'+id+'"]').forEach(n=>n.classList.add('on'));
@@ -1951,14 +1949,17 @@ function applyPermUI(){
   const badge=document.getElementById('user-badge');
   if(badge){
     const roleLabel={admin:'超级管理员',editor:'编辑者',viewer:'查看者'};
-    badge.className='user-badge role-'+curUser.role;
     badge.textContent=roleLabel[curUser.role]||curUser.role;
   }
-  const sbUser=document.getElementById('sb-user-info');
-  if(sbUser) sbUser.textContent=curUser.realname||curUser.uname;
+  const sbInfo=document.getElementById('sb-user-info');
+  if(sbInfo) sbInfo.textContent=curUser.realname||curUser.uname;
+  const sbRole=document.getElementById('sb-user-role');
+  if(sbRole) sbRole.textContent=curUser.role;
+  const sbAv=document.getElementById('sb-av');
+  if(sbAv){sbAv.textContent=(curUser.avatar||curUser.realname[0]||'管');sbAv.style.background=curUser.color||'linear-gradient(135deg,#F5A623,#E8600A)';}
   // 隐藏无权限的导航
   const navAccs=document.getElementById('nav-accs');
-  if(navAccs) navAccs.style.display=can('canManageAcc')?'':'none';
+  if(navAccs) navAccs.style.display=can('canManageAcc')?'flex':'none';
   // 显示主界面
   const mainApp=document.getElementById('mainApp');
   if(mainApp) mainApp.classList.remove('h');
