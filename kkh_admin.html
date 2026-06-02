@@ -381,7 +381,7 @@ tr:hover td{background:#FDFCFB;}
 .cfg-form{padding:16px;display:flex;flex-direction:column;gap:12px;}
 .cfg-item{display:flex;flex-direction:column;gap:5px;}
 .cfg-item label{font-size:12px;font-weight:600;color:var(--mu);}
-.cfg-switch{display:flex;align-items:center;justify-content:space-between;padding:10px 0;}
+.cfg-switch{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:.5px solid var(--bd);}.cfg-switch:last-child{border:none;}
 .switch{position:relative;display:inline-block;width:44px;height:24px;}
 .switch input{opacity:0;width:0;height:0;}
 .slider{position:absolute;cursor:pointer;inset:0;background:var(--bd);border-radius:12px;transition:.2s;}
@@ -647,34 +647,97 @@ input:checked+.slider:before{transform:translateX(20px);}
 
     <!-- 前台配置 -->
     <div class="panel" id="p-cfg">
-      <div class="tcard" style="max-width:600px;">
-        <div class="tc-head"><div class="tc-title">顶部横幅文案</div></div>
-        <div class="cfg-form">
-          <div class="cfg-item">
-            <label>小标签文字 <span style="font-size:11px;color:var(--mu);">标题上方小标签，如「✦ 社群主理人活动手册 2026」</span></label>
-            <input id="cfg-tag" type="text" placeholder="✦ 社群主理人活动手册 2026">
+      <div style="max-width:720px;">
+        <!-- 预览区 -->
+        <div class="tcard" style="margin-bottom:16px;">
+          <div class="tc-head">
+            <div>
+              <div class="tc-title">前台首屏预览</div>
+              <div class="tc-sub">修改后实时预览效果</div>
+            </div>
+            <button class="btn-outline" onclick="window.open('https://xuepengjun2-cell.github.io/kkhuacai/','_blank')">
+              <i class="ti ti-external-link"></i> 打开前台
+            </button>
           </div>
-          <div class="cfg-item">
-            <label>品牌名称 <span style="font-size:11px;color:var(--mu);">左上角 Logo 文字</span></label>
-            <input id="cfg-name" type="text" placeholder="开开华彩">
-          </div>
-          <div class="cfg-item">
-            <label>品牌 Slogan <span style="font-size:11px;color:var(--mu);">标题下方副说明</span></label>
-            <input id="cfg-sub" type="text" placeholder="同城银发社群主理人 · 一起变年轻…">
-          </div>
-          <div class="cfg-item">
-            <label>联系电话 <span style="font-size:11px;color:var(--mu);">前台展示的主理人联系电话</span></label>
-            <input id="cfg-tel" type="text" placeholder="19359956937">
+          <div style="padding:0 16px 16px;">
+            <div id="cfg-preview" style="background:linear-gradient(160deg,#1C1410,#3D1F08 55%,#5C2E0A);border-radius:14px;padding:20px 20px 24px;position:relative;overflow:hidden;">
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+                <div style="width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#F5A623,#E8600A);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:#fff;">华</div>
+                <div id="prev-name" style="font-size:14px;font-weight:700;color:#fff;">开开华彩</div>
+              </div>
+              <div id="prev-tag" style="display:inline-flex;align-items:center;background:rgba(255,255,255,.1);border:.5px solid rgba(255,255,255,.2);border-radius:20px;padding:3px 10px;font-size:11px;color:rgba(255,255,255,.8);margin-bottom:10px;">✦ 社群主理人活动手册 2026</div>
+              <div style="font-size:22px;font-weight:800;color:#fff;line-height:1.3;margin-bottom:6px;">银发社群<br><span style="color:#F5A623;">50款精品活动</span></div>
+              <div id="prev-sub" style="font-size:12px;color:rgba(255,255,255,.55);margin-bottom:10px;">线下文娱俱乐部 · 一起变年轻…</div>
+              <div id="prev-tel" style="display:none;align-items:center;gap:6px;background:rgba(255,255,255,.08);border-radius:8px;padding:5px 10px;width:fit-content;">
+                <i class="ti ti-phone" style="font-size:12px;color:#F5A623;"></i>
+                <span id="prev-tel-num" style="font-size:12px;color:rgba(255,255,255,.8);"></span>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="tc-head" style="margin-top:16px;"><div class="tc-title">前台展示控制</div></div>
-        <div class="cfg-form">
-          <div class="cfg-switch"><span>显示活动价格</span><label class="switch"><input type="checkbox" id="cfg-show-price" checked><span class="slider"></span></label></div>
-          <div class="cfg-switch"><span>显示报名人数</span><label class="switch"><input type="checkbox" id="cfg-show-sg" checked><span class="slider"></span></label></div>
-          <div class="cfg-switch"><span>显示热门标签</span><label class="switch"><input type="checkbox" id="cfg-show-hot" checked><span class="slider"></span></label></div>
+
+        <!-- 配置表单 -->
+        <div class="tcard" style="margin-bottom:16px;">
+          <div class="tc-head"><div class="tc-title"><i class="ti ti-text-size" style="color:var(--or);margin-right:6px;"></i>首屏文案配置</div></div>
+          <div style="padding:16px;display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+            <div class="ff">
+              <label style="font-size:12px;font-weight:600;color:var(--mu);">品牌名称
+                <span style="font-weight:400;margin-left:4px;">左上角Logo文字</span>
+              </label>
+              <input id="cfg-name" type="text" placeholder="开开华彩" oninput="updatePreview()">
+            </div>
+            <div class="ff">
+              <label style="font-size:12px;font-weight:600;color:var(--mu);">联系电话
+                <span style="font-weight:400;margin-left:4px;">主理人手机号，留空则不显示</span>
+              </label>
+              <input id="cfg-tel" type="text" placeholder="19359956937" oninput="updatePreview()">
+            </div>
+            <div class="ff" style="grid-column:1/-1;">
+              <label style="font-size:12px;font-weight:600;color:var(--mu);">顶部小标签
+                <span style="font-weight:400;margin-left:4px;">标题上方的引导文字</span>
+              </label>
+              <input id="cfg-tag" type="text" placeholder="✦ 社群主理人活动手册 2026" oninput="updatePreview()">
+            </div>
+            <div class="ff" style="grid-column:1/-1;">
+              <label style="font-size:12px;font-weight:600;color:var(--mu);">品牌 Slogan
+                <span style="font-weight:400;margin-left:4px;">大标题下方副说明</span>
+              </label>
+              <input id="cfg-sub" type="text" placeholder="同城银发社群主理人 · 一起变年轻…" oninput="updatePreview()">
+            </div>
+          </div>
         </div>
-        <button class="btn-primary" style="margin-top:20px;width:100%;" onclick="saveCfg()">
-          <i class="ti ti-check"></i> 保存配置并同步前台
+
+        <!-- 展示控制 -->
+        <div class="tcard" style="margin-bottom:16px;">
+          <div class="tc-head"><div class="tc-title"><i class="ti ti-eye" style="color:var(--or);margin-right:6px;"></i>前台展示控制</div></div>
+          <div style="padding:4px 16px;">
+            <div class="cfg-switch">
+              <div>
+                <div style="font-size:13px;font-weight:500;color:var(--tx);">显示活动价格</div>
+                <div style="font-size:11px;color:var(--mu);">在活动卡片上显示收费金额</div>
+              </div>
+              <label class="switch"><input type="checkbox" id="cfg-show-price" checked><span class="slider"></span></label>
+            </div>
+            <div class="cfg-switch">
+              <div>
+                <div style="font-size:13px;font-weight:500;color:var(--tx);">显示报名人数</div>
+                <div style="font-size:11px;color:var(--mu);">在活动卡片上显示已报名人数</div>
+              </div>
+              <label class="switch"><input type="checkbox" id="cfg-show-sg" checked><span class="slider"></span></label>
+            </div>
+            <div class="cfg-switch">
+              <div>
+                <div style="font-size:13px;font-weight:500;color:var(--tx);">显示热门标签</div>
+                <div style="font-size:11px;color:var(--mu);">在热门活动上显示🔥标识</div>
+              </div>
+              <label class="switch"><input type="checkbox" id="cfg-show-hot" checked><span class="slider"></span></label>
+            </div>
+          </div>
+        </div>
+
+        <!-- 保存按钮 -->
+        <button class="btn-primary" style="width:100%;padding:13px;font-size:14px;border-radius:12px;justify-content:center;" onclick="saveCfg()">
+          <i class="ti ti-device-floppy"></i>&nbsp; 保存配置并同步前台
         </button>
       </div>
     </div>
@@ -1830,6 +1893,20 @@ function renderModalImgs(){
 function removeImg(i){modalImgs.splice(i,1);renderModalImgs();}
 
 // ══ 配置 ══
+function updatePreview(){
+  const name = document.getElementById('cfg-name').value||'开开华彩';
+  const tag  = document.getElementById('cfg-tag').value||'✦ 社群主理人活动手册 2026';
+  const sub  = document.getElementById('cfg-sub').value||'线下文娱俱乐部 · 一起变年轻…';
+  const tel  = (document.getElementById('cfg-tel').value||'').trim();
+  const pn=document.getElementById('prev-name'); if(pn) pn.textContent=name;
+  const pt=document.getElementById('prev-tag');  if(pt) pt.textContent=tag;
+  const ps=document.getElementById('prev-sub');  if(ps) ps.textContent=sub;
+  const telWrap=document.getElementById('prev-tel');
+  const telNum=document.getElementById('prev-tel-num');
+  if(telWrap){telWrap.style.display=tel?'flex':'none';}
+  if(telNum) telNum.textContent=tel;
+}
+
 async function loadCfgFields(){
   // 先用本地数据填充
   const c=loadD('kkh_cfg',{});
@@ -1856,6 +1933,8 @@ async function loadCfgFields(){
       }
     }catch(e){console.warn('配置加载失败:',e);}
   }
+  // 更新预览
+  setTimeout(updatePreview, 100);
 }
 function saveCfg(){
   const get=id=>(document.getElementById(id)||{}).value||'';
